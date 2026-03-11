@@ -145,6 +145,60 @@ oc config set EMBEDDING_MODEL "text-embedding-3-small"
 oc index build
 ```
 
+### LM Studio (Local Embeddings — no API key required)
+
+LM Studio exposes an OpenAI-compatible `/v1/embeddings` endpoint, so OpenContext can use it as a local embedding provider.
+
+**Step 1 — Load an embedding model in LM Studio**
+
+In the LM Studio app, go to **Discover** and download an embedding model:
+
+| Model | Size | Notes |
+|-------|------|-------|
+| `nomic-ai/nomic-embed-text-v1.5-GGUF` | ~90 MB | General purpose, recommended |
+| `CompendiumLabs/bge-large-en-v1.5-gguf` | ~330 MB | Higher accuracy |
+| `second-state/All-MiniLM-L6-v2-Embedding-GGUF` | ~23 MB | Lightweight |
+
+**Step 2 — Start the LM Studio server**
+
+```bash
+lms server start
+# Verify the embeddings endpoint is available
+curl http://localhost:1234/v1/models
+```
+
+**Step 3 — Configure OpenContext**
+
+```bash
+# Point to LM Studio's local server
+oc config set EMBEDDING_API_BASE "http://localhost:1234/v1"
+
+# LM Studio requires any non-empty value for the key field
+oc config set EMBEDDING_API_KEY "lm-studio"
+
+# Set the embedding model ID (must match what is loaded in LM Studio)
+oc config set EMBEDDING_MODEL "nomic-ai/nomic-embed-text-v1.5-GGUF"
+
+# Build the index
+oc index build
+```
+
+**Verify**
+
+```bash
+# Quick curl test
+curl -s http://localhost:1234/v1/embeddings \
+  -H "Content-Type: application/json" \
+  -d '{"model":"nomic-ai/nomic-embed-text-v1.5-GGUF","input":"hello"}' \
+  | jq '.data[0].embedding | length'
+# → should print a non-zero dimension (e.g. 768)
+
+# Then test OpenContext search
+oc search "your query" --mode vector
+```
+
+> **Note**: LM Studio must be running whenever you run `oc index build` or use `--mode vector` / `--mode hybrid` search. `--mode keyword` works without a running server.
+
 ---
 
 ## 5. MCP Tools

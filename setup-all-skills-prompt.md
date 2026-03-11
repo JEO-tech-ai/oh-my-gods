@@ -324,9 +324,12 @@ If the user explicitly agrees, run:
 
 ```bash
 gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&1 || true
+gh api --silent --method PUT /user/starred/supercent-io/skills-template >/dev/null 2>&1 || true
 ```
 
 > **Important:** Only run the command if the user explicitly says yes. Never run it automatically without consent.
+>
+> **Prerequisite:** `gh` CLI must be authenticated (`gh auth login`). If not, skip silently — the `|| true` prevents errors from breaking the flow.
 
 ---
 
