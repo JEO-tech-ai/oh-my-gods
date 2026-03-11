@@ -1,45 +1,47 @@
 #!/bin/bash
 
-# Agent Skills One-Liner Installer v1.3.1
-# Usage: curl -fsSL https://raw.githubusercontent.com/supercent-io/skills-template/main/install.sh | bash
+# oh-my-gods — AI Agent Skills Installer v2.0.0
+# Repository: https://github.com/JEO-tech-ai/oh-my-gods
 #
-# Options (via environment variables):
-#   INSTALL_GLOBAL=true   - Install to ~/.agent-skills (global) instead of current directory
-#   INSTALL_MCP=true      - Auto-install MCP servers (opencontext required, gemini/codex optional)
-#   SKIP_BACKUP=true      - Skip backup of existing .agent-skills
-#   INSTALL_MODE=silent   - silent, auto, quick, interactive (default: silent)
+# Usage:
+#   curl -fsSL https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/install.sh | bash
 #
-# IMPORTANT: Shell RC Configuration
-#   The Shell RC (.zshrc/.bashrc) modification is for DEVELOPER CONVENIENCE only.
-#   AI agents access MCP tools through registered configs, NOT shell environment.
-#   Default mode (silent) automatically skips Shell RC modification.
+# Options (environment variables):
+#   INSTALL_GLOBAL=true   - Install to ~/.agent-skills (default: true)
+#   INSTALL_MODE=silent   - silent | auto | interactive (default: silent)
+#   SKIP_BACKUP=true      - Skip backup of existing install
+#   WITH_LANGCHAIN=true   - Also install langchain-ai/langchain-skills (default: false)
+#   PLATFORM=all          - claude | gemini | codex | opencode | all (default: all)
 #
 # Security Note:
-#   For security-conscious users, download and inspect the script first:
-#     curl -fsSLO https://raw.githubusercontent.com/supercent-io/skills-template/main/install.sh
-#     cat install.sh  # Review the script
-#     bash install.sh
+#   Review before running:
+#     curl -fsSLO https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/install.sh
+#     cat install.sh && bash install.sh
 
 set -euo pipefail
 
 # --- Configuration ---
-REPO_URL="https://github.com/supercent-io/skills-template.git"
-TEMP_DIR="/tmp/_skills_setup_temp_$$"
-AGENT_SKILLS_DIR_NAME=".agent-skills"
-VERSION="1.3.1"
+REPO_URL="https://github.com/JEO-tech-ai/oh-my-gods.git"
+SKILLS_SOURCE_DIR=".god-skills"
+TEMP_DIR="/tmp/_omg_setup_$$"
+VERSION="2.0.0"
 
 # Environment variable defaults
-INSTALL_GLOBAL="${INSTALL_GLOBAL:-true}"  # Default: global installation to ~/.agent-skills
-INSTALL_MCP="${INSTALL_MCP:-true}"
-SKIP_BACKUP="${SKIP_BACKUP:-false}"
+INSTALL_GLOBAL="${INSTALL_GLOBAL:-true}"
 INSTALL_MODE="${INSTALL_MODE:-silent}"
+SKIP_BACKUP="${SKIP_BACKUP:-false}"
+WITH_LANGCHAIN="${WITH_LANGCHAIN:-false}"
+PLATFORM="${PLATFORM:-all}"
 
-# Determine installation path
-if [ "$INSTALL_GLOBAL" = "true" ]; then
-    AGENT_SKILLS_DIR="$HOME/$AGENT_SKILLS_DIR_NAME"
-else
-    AGENT_SKILLS_DIR="./$AGENT_SKILLS_DIR_NAME"
-fi
+# Destination paths (npx skills add canonical paths)
+CANONICAL_DIR="$HOME/.agent-skills"
+SKILL_DESTS=(
+  "$HOME/.claude/skills"
+  "$HOME/.codex/skills"
+  "$HOME/.gemini/skills"
+  "$HOME/.opencode/skills"
+  "$HOME/.config/opencode/skills"
+)
 
 # --- Colors ---
 GREEN='\033[0;32m'
@@ -49,189 +51,317 @@ RED='\033[0;31m'
 BOLD='\033[1m'
 NC='\033[0m'
 
-# --- Helper Functions ---
-print_banner() {
-    echo -e "${BLUE}"
-    cat << 'BANNER'
-    _                    _     ____  _    _ _ _
-   / \   __ _  ___ _ __ | |_  / ___|| | _(_) | |___
-  / _ \ / _` |/ _ \ '_ \| __| \___ \| |/ / | | / __|
- / ___ \ (_| |  __/ | | | |_   ___) |   <| | | \__ \
-/_/   \_\__, |\___|_| |_|\__| |____/|_|\_\_|_|_|___/
-        |___/
-BANNER
-    echo -e "${NC}"
-    echo -e "${BOLD}One-Liner Installer v${VERSION}${NC}"
-    echo ""
-}
+# --- Helpers ---
+info()    { echo -e "${BLUE}[INFO]${NC} $1"; }
+ok()      { echo -e "${GREEN}[OK]${NC} $1"; }
+warn()    { echo -e "${YELLOW}[WARN]${NC} $1"; }
+err()     { echo -e "${RED}[ERROR]${NC} $1"; }
+fatal()   { echo -e "${RED}[FATAL]${NC} $1"; exit 1; }
 
-print_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-print_success() { echo -e "${GREEN}[OK]${NC} $1"; }
-print_warning() { echo -e "${YELLOW}[WARN]${NC} $1"; }
-print_error() { echo -e "${RED}[ERROR]${NC} $1"; }
-print_fatal() { echo -e "${RED}[FATAL]${NC} $1"; exit 1; }
-
-check_dependencies() {
-    print_info "Checking dependencies..."
-    local missing_required=false
-
-    # Check required: git
-    if ! command -v git &> /dev/null; then
-        print_error "Git is required but not installed."
-        echo "  Install: https://git-scm.com/downloads"
-        missing_required=true
-    else
-        print_success "Git installed ($(git --version | cut -d' ' -f3))"
-    fi
-
-    # Check required: curl or wget (for potential downloads)
-    if ! command -v curl &> /dev/null && ! command -v wget &> /dev/null; then
-        print_warning "Neither curl nor wget found. Some features may be limited."
-    fi
-
-    # Exit if required dependencies missing
-    if [ "$missing_required" = true ]; then
-        echo ""
-        print_error "Required dependencies missing. Please install them and try again."
-        exit 1
-    fi
-
-    # Check optional: Claude CLI
-    if command -v claude &> /dev/null; then
-        print_success "Claude CLI installed ($(claude --version 2>/dev/null | head -n1 || echo 'version unknown'))"
-        HAS_CLAUDE=true
-    else
-        print_warning "Claude CLI not installed. Some features may be limited."
-        print_info "  Install: npm install -g @anthropic-ai/claude-code"
-        HAS_CLAUDE=false
-    fi
-
-    # Check optional: Python3 (for token optimization)
-    if command -v python3 &> /dev/null; then
-        print_success "Python3 installed ($(python3 --version | cut -d' ' -f2))"
-    else
-        print_warning "Python3 not installed. Token optimization disabled."
-    fi
-
-    # Check optional: Node.js (for MCP servers)
-    if command -v node &> /dev/null; then
-        print_success "Node.js installed ($(node --version))"
-    else
-        print_warning "Node.js not installed. MCP server installation may fail."
-        print_info "  Install: https://nodejs.org/"
-    fi
-}
-
-cleanup() {
-    if [ -d "$TEMP_DIR" ]; then
-        rm -rf "$TEMP_DIR"
-    fi
-}
-
-# Set trap for cleanup on exit
+cleanup() { [ -d "$TEMP_DIR" ] && rm -rf "$TEMP_DIR" || true; }
 trap cleanup EXIT
 
-# --- Main Logic ---
+print_banner() {
+  echo -e "${BLUE}"
+  cat << 'BANNER'
+   ___  _   _       __  ____   __  ___   ___  ___
+  / _ \| | | |     |  \/  \ \ / / / __| / _ \|   \
+ | (_) | |_| |  _  | |\/| |\ V /  | (_ || (_) | |) |
+  \___/ \___/  (_) |_|  |_| |_|    \___| \___/|___/
+
+BANNER
+  echo -e "${NC}"
+  echo -e "${BOLD}oh-my-gods — AI Agent Skills Installer v${VERSION}${NC}"
+  echo -e "  Repository: https://github.com/JEO-tech-ai/oh-my-gods"
+  echo ""
+}
+
+# --- Dependency Checks ---
+check_dependencies() {
+  info "Checking dependencies..."
+  local missing=false
+
+  # Required: git
+  if command -v git &>/dev/null; then
+    ok "git $(git --version | cut -d' ' -f3)"
+  else
+    err "git is required. Install: https://git-scm.com/downloads"
+    missing=true
+  fi
+
+  # Required: node / npm
+  if command -v node &>/dev/null; then
+    ok "Node.js $(node --version)"
+  else
+    err "Node.js 18+ is required. Install: https://nodejs.org/"
+    missing=true
+  fi
+
+  [ "$missing" = true ] && fatal "Required dependencies missing."
+
+  # Check/install skills CLI
+  if command -v skills &>/dev/null; then
+    ok "skills CLI available"
+    HAS_SKILLS_CLI=true
+  else
+    warn "skills CLI not found — installing now..."
+    if npm install -g skills &>/dev/null; then
+      ok "skills CLI installed"
+      HAS_SKILLS_CLI=true
+    else
+      warn "skills CLI install failed — will fall back to direct copy"
+      HAS_SKILLS_CLI=false
+    fi
+  fi
+
+  # Optional: Claude Code
+  if command -v claude &>/dev/null; then
+    ok "claude $(claude --version 2>/dev/null | head -1 || echo '(version unknown)')"
+    HAS_CLAUDE=true
+  else
+    warn "Claude Code not installed (optional)"
+    HAS_CLAUDE=false
+  fi
+
+  # Optional: Gemini CLI
+  if command -v gemini &>/dev/null; then
+    ok "gemini CLI available"
+  else
+    warn "Gemini CLI not installed (optional)"
+  fi
+
+  # Optional: Codex CLI
+  if command -v codex &>/dev/null; then
+    ok "codex CLI available"
+  else
+    warn "Codex CLI not installed (optional)"
+  fi
+
+  # Optional: Python3
+  if command -v python3 &>/dev/null; then
+    ok "python3 $(python3 --version | cut -d' ' -f2)"
+  else
+    warn "python3 not installed (some scripts may be limited)"
+  fi
+}
+
+# --- Install via skills CLI ---
+install_via_skills_cli() {
+  info "Installing skills via npx skills add..."
+
+  # Core JEO stack
+  info "Installing core JEO stack..."
+  npx skills add "https://github.com/JEO-tech-ai/oh-my-gods" \
+    --skill jeo --skill survey --skill plannotator --skill agentation \
+    --skill ralph --skill ralphmode --skill omc --skill omx --skill ohmg \
+    --skill bmad --skill bmad-idea \
+    2>/dev/null || warn "Some core skills may have failed — continuing..."
+
+  # Full skill set
+  info "Installing full skill set..."
+  npx skills add "https://github.com/JEO-tech-ai/oh-my-gods" \
+    --skill agent-configuration --skill agent-evaluation \
+    --skill agent-development-principles --skill agent-principles \
+    --skill agent-workflow \
+    --skill bmad-gds \
+    --skill prompt-repetition --skill api-design \
+    --skill api-documentation --skill authentication-setup \
+    --skill backend-testing --skill database-schema-design \
+    --skill design-system --skill frontend-design-system \
+    --skill react-best-practices --skill vercel-react-best-practices \
+    --skill responsive-design --skill state-management \
+    --skill ui-component-patterns --skill web-design-guidelines \
+    --skill code-refactoring --skill code-review --skill debugging \
+    --skill performance-optimization --skill testing-strategies \
+    --skill deployment-automation --skill firebase-ai-logic \
+    --skill genkit --skill monitoring-observability \
+    --skill security-best-practices --skill environment-setup \
+    --skill vercel-deploy --skill changelog-maintenance \
+    --skill presentation-builder --skill technical-writing \
+    --skill user-guide-writing --skill sprint-retrospective \
+    --skill standup-meeting --skill task-estimation \
+    --skill task-planning --skill codebase-search \
+    --skill data-analysis --skill log-analysis \
+    --skill pattern-detection --skill llm-monitoring-dashboard \
+    --skill image-generation --skill pollinations-ai \
+    --skill video-production --skill marketing-automation \
+    --skill agent-browser --skill ai-tool-compliance \
+    --skill file-organization --skill git-submodule --skill git-workflow \
+    --skill opencontext --skill playwriter \
+    --skill skill-standardization --skill vibe-kanban \
+    --skill workflow-automation --skill fabric --skill autoresearch \
+    2>/dev/null || warn "Some extended skills may have failed — continuing..."
+
+  ok "Skills installed via skills CLI"
+}
+
+# --- Install via direct copy (fallback) ---
+install_via_direct_copy() {
+  info "Installing via direct copy from repository..."
+
+  # Clone repo
+  info "Cloning oh-my-gods..."
+  if ! git clone --depth 1 --quiet "$REPO_URL" "$TEMP_DIR"; then
+    fatal "Failed to clone repository. Check network connection."
+  fi
+  ok "Repository cloned"
+
+  # Backup existing
+  if [ -d "$CANONICAL_DIR" ]; then
+    if [ "$SKIP_BACKUP" = "true" ]; then
+      rm -rf "$CANONICAL_DIR"
+    else
+      local backup="${CANONICAL_DIR}.bak.$(date +%Y%m%d_%H%M%S)"
+      mv "$CANONICAL_DIR" "$backup"
+      ok "Backed up existing skills to $backup"
+    fi
+  fi
+
+  # Copy .god-skills/ → ~/.agent-skills/
+  mkdir -p "$CANONICAL_DIR"
+  if ! cp -r "$TEMP_DIR/$SKILLS_SOURCE_DIR"/. "$CANONICAL_DIR/"; then
+    fatal "Failed to copy skills."
+  fi
+  ok "Skills installed to $CANONICAL_DIR"
+
+  # Sync to platform-specific directories
+  info "Syncing to platform skill directories..."
+  for dest in "${SKILL_DESTS[@]}"; do
+    mkdir -p "$dest"
+    if command -v rsync &>/dev/null; then
+      rsync -a --delete "$CANONICAL_DIR/" "$dest/" 2>/dev/null || true
+    else
+      cp -R "$CANONICAL_DIR"/. "$dest/"
+    fi
+  done
+  ok "Synced to all platform directories"
+}
+
+# --- Install LangChain skills ---
+install_langchain_skills() {
+  if [ "$WITH_LANGCHAIN" = "true" ]; then
+    info "Installing LangChain skills (langchain-ai/langchain-skills)..."
+    npx skills add langchain-ai/langchain-skills --skill '*' --yes 2>/dev/null && \
+      ok "LangChain skills installed" || \
+      warn "LangChain skills install failed — install manually: npx skills add langchain-ai/langchain-skills --skill '*' --yes"
+  fi
+}
+
+# --- Platform-specific setup ---
+setup_platforms() {
+  local skills_root="$CANONICAL_DIR"
+
+  # Claude Code setup
+  if [ "$PLATFORM" = "claude" ] || [ "$PLATFORM" = "all" ]; then
+    if [ "$HAS_CLAUDE" = "true" ]; then
+      info "Setting up Claude Code JEO hooks..."
+      if [ -f "$skills_root/jeo/scripts/setup-claude.sh" ]; then
+        bash "$skills_root/jeo/scripts/setup-claude.sh" 2>/dev/null && \
+          ok "Claude Code setup complete" || \
+          warn "Claude Code setup had issues — run manually: bash $skills_root/jeo/scripts/setup-claude.sh"
+      fi
+    fi
+  fi
+
+  # Gemini CLI setup
+  if [ "$PLATFORM" = "gemini" ] || [ "$PLATFORM" = "all" ]; then
+    if command -v gemini &>/dev/null; then
+      info "Setting up Gemini CLI JEO hooks..."
+      if [ -f "$skills_root/jeo/scripts/setup-gemini.sh" ]; then
+        bash "$skills_root/jeo/scripts/setup-gemini.sh" 2>/dev/null && \
+          ok "Gemini CLI setup complete" || \
+          warn "Gemini CLI setup had issues — run manually: bash $skills_root/jeo/scripts/setup-gemini.sh"
+      fi
+    fi
+  fi
+
+  # Codex CLI setup
+  if [ "$PLATFORM" = "codex" ] || [ "$PLATFORM" = "all" ]; then
+    if command -v codex &>/dev/null; then
+      info "Setting up Codex CLI JEO configuration..."
+      if [ -f "$skills_root/jeo/scripts/setup-codex.sh" ]; then
+        bash "$skills_root/jeo/scripts/setup-codex.sh" 2>/dev/null && \
+          ok "Codex CLI setup complete" || \
+          warn "Codex CLI setup had issues — run manually: bash $skills_root/jeo/scripts/setup-codex.sh"
+      fi
+    fi
+  fi
+}
+
+# --- Verification ---
+verify_install() {
+  info "Verifying installation..."
+  local skill_count=0
+  if [ -d "$CANONICAL_DIR" ]; then
+    skill_count=$(ls "$CANONICAL_DIR" 2>/dev/null | wc -l | tr -d ' ')
+    ok "$skill_count skills found in $CANONICAL_DIR"
+  else
+    warn "$CANONICAL_DIR not found — check installation"
+  fi
+
+  # Check key skills
+  for skill in jeo ralph plannotator agentation bmad survey; do
+    if [ -f "$CANONICAL_DIR/$skill/SKILL.md" ]; then
+      ok "  ✓ $skill"
+    else
+      warn "  ✗ $skill (missing)"
+    fi
+  done
+}
+
+# --- Main ---
 main() {
-    print_banner
+  [ "$INSTALL_MODE" != "silent" ] && print_banner
 
-    # Check dependencies
-    check_dependencies
-    echo ""
+  check_dependencies
+  echo ""
 
-    # 1. Clone repository to a temporary directory
-    print_info "Cloning skills-template repository..."
-    if [ -d "$TEMP_DIR" ]; then
-        rm -rf "$TEMP_DIR"
-    fi
-    if ! git clone --depth 1 --quiet "$REPO_URL" "$TEMP_DIR"; then
-        print_fatal "Failed to clone repository. Check your network connection."
-    fi
-    print_success "Repository cloned"
+  # Install skills
+  if [ "$HAS_SKILLS_CLI" = "true" ]; then
+    install_via_skills_cli
+  else
+    install_via_direct_copy
+  fi
+  echo ""
 
-    # 2. Backup existing .agent-skills if exists
-    if [ -d "$AGENT_SKILLS_DIR" ]; then
-        if [ "$SKIP_BACKUP" = "true" ]; then
-            print_info "Removing existing $AGENT_SKILLS_DIR (backup skipped)..."
-            rm -rf "$AGENT_SKILLS_DIR"
-        else
-            BACKUP_NAME="${AGENT_SKILLS_DIR}.bak.$(date +%Y%m%d_%H%M%S)"
-            print_info "Backing up existing $AGENT_SKILLS_DIR to $BACKUP_NAME..."
-            mv "$AGENT_SKILLS_DIR" "$BACKUP_NAME"
-            print_success "Backup created: $BACKUP_NAME"
-        fi
-    fi
+  # LangChain skills (optional)
+  install_langchain_skills
 
-    # 3. Copy .agent-skills directory
-    if [ "$INSTALL_GLOBAL" = "true" ]; then
-        print_info "Installing agent skills to $AGENT_SKILLS_DIR (global)..."
-    else
-        print_info "Installing agent skills to current directory..."
-    fi
-    if ! cp -r "$TEMP_DIR/$AGENT_SKILLS_DIR_NAME" "$AGENT_SKILLS_DIR"; then
-        print_fatal "Failed to copy agent skills. Check directory permissions."
-    fi
-    chmod +x "$AGENT_SKILLS_DIR/setup.sh"
-    print_success "Agent skills installed at $AGENT_SKILLS_DIR"
+  # Platform-specific setup
+  setup_platforms
+  echo ""
 
-    # 4. Run setup.sh with appropriate flags
-    echo ""
-    print_info "Running setup ($INSTALL_MODE mode)..."
-    echo ""
+  # Verification
+  verify_install
+  echo ""
 
-    SETUP_FLAGS="--$INSTALL_MODE"
-    if [ "$INSTALL_MCP" = "true" ]; then
-        SETUP_FLAGS="$SETUP_FLAGS --install-mcp"
-    fi
-
-    if ! (cd "$AGENT_SKILLS_DIR" && ./setup.sh $SETUP_FLAGS); then
-        print_error "setup.sh encountered issues. Running diagnostics..."
-        (cd "$AGENT_SKILLS_DIR" && ./setup.sh --diagnose) || true
-        print_warning "Setup completed with warnings. Check the output above."
-    fi
-
-    # 5. Final message (skip in silent mode for AI agents)
-    if [ "$INSTALL_MODE" = "silent" ]; then
-        # Silent mode: minimal output for AI agents
-        echo ""
-        print_success "Installation complete. Agent Skills ready at $AGENT_SKILLS_DIR"
-        if [ "$INSTALL_GLOBAL" = "true" ]; then
-            print_info "For shell convenience, add to ~/.zshrc or ~/.bashrc:"
-            echo "  source $AGENT_SKILLS_DIR/mcp-shell-config.sh"
-        fi
-    else
-        # Interactive/auto/quick mode: show full guide for developers
-        echo ""
-        echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-        echo -e "${BOLD}${GREEN}Installation Complete!${NC}"
-        echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-        echo ""
-        echo -e "${BOLD}For AI Agents:${NC}"
-        echo "  Installation is complete. No additional steps needed."
-        echo "  AI agents access MCP tools through registered configs (not shell environment)."
-        echo ""
-        echo -e "${BOLD}For Developers (optional):${NC}"
-        if [ "$INSTALL_GLOBAL" = "true" ]; then
-            echo "  Global installation at: $AGENT_SKILLS_DIR"
-            echo "  To enable shell aliases, add to ~/.zshrc or ~/.bashrc:"
-            echo "    source $AGENT_SKILLS_DIR/mcp-shell-config.sh"
-        else
-            echo "  To enable shell aliases (gemini-skill, mcp-status, etc.):"
-            echo "    source ~/.zshrc   # or ~/.bashrc"
-        fi
-        echo "  Note: This is for terminal convenience only, not required for agent workflows."
-        echo ""
-        echo -e "${BOLD}Verification:${NC}"
-        if [ "$HAS_CLAUDE" = "true" ]; then
-            echo "  claude mcp list                          # Check MCP servers"
-        fi
-        echo "  ./$AGENT_SKILLS_DIR/setup.sh --diagnose  # System diagnostics"
-        echo ""
-        echo -e "${BOLD}Documentation:${NC}"
-        echo "  README.md                # Full documentation"
-        echo "  CLAUDE.md                # Agent configuration"
-        echo ""
-    fi
+  # Final output
+  echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  echo -e "${BOLD}${GREEN}Installation Complete — oh-my-gods v${VERSION}${NC}"
+  echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+  echo ""
+  echo -e "${BOLD}First run:${NC}"
+  echo "  Claude Code : jeo \"your task\""
+  echo "  Gemini CLI  : /jeo \"your task\""
+  echo "  Codex CLI   : /jeo \"your task\""
+  echo ""
+  echo -e "${BOLD}Key skills installed:${NC}"
+  echo "  jeo         — Integrated orchestration (PLAN→EXECUTE→VERIFY→CLEANUP)"
+  echo "  ralph       — Persistent completion loop (ooo ralph \"task\")"
+  echo "  bmad        — Structured phase-based development"
+  echo "  survey      — Pre-implementation landscape scan"
+  echo "  plannotator — Visual plan review UI"
+  echo "  agentation  — UI annotation → agent code fix (annotate keyword)"
+  echo ""
+  echo -e "${BOLD}Install LangChain skills separately:${NC}"
+  echo "  npx skills add langchain-ai/langchain-skills --skill '*' --yes"
+  echo ""
+  echo -e "${BOLD}Full documentation:${NC}"
+  echo "  https://github.com/JEO-tech-ai/oh-my-gods"
+  echo ""
+  echo -e "${BOLD}Send to your LLM agent for setup:${NC}"
+  echo "  curl -s https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/setup-all-skills-prompt.md"
+  echo ""
 }
 
 main "$@"

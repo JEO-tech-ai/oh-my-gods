@@ -25,9 +25,32 @@
 
 *LLM 기반 AI 에이전트 개발의 A to Z — Plan → Execute → Verify → Ship*
 
-[Quick Start](#quick-start) · [JEO Core](#jeo--core-orchestration-skill) · [Hidden Features](#hidden-power-features) · [LangChain](#langchain-integration) · [Full Catalog](#full-skill-catalog)
+[Quick Start](#quick-start-for-llm-agents) · [JEO Core](#jeo--core-orchestration-skill) · [Hidden Features](#hidden-power-features) · [LangChain](#langchain-integration) · [Full Catalog](#full-skill-catalog) · [한국어](README.ko.md)
 
 </div>
+
+---
+
+## Quick Start (For LLM Agents)
+
+> **Prerequisite**: Install `skills` CLI before running any `npx skills add` commands.
+
+```bash
+npm install -g skills
+```
+
+```bash
+# Send to your LLM agent: read this guide and proceed with installation
+curl -s https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/setup-all-skills-prompt.md
+```
+
+Or install directly in one line:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/install.sh | bash
+```
+
+More skill installs → [Installation Reference](#installation-reference) | Platform-specific guides → [Platform Support](#platform-support)
 
 ---
 
@@ -79,14 +102,17 @@ graph TD
 ## Quick Start
 
 ```bash
+# Prerequisite: install skills CLI
+npm install -g skills
+
 # Install all skills (recommended — 85+ skills)
-npx skills add https://github.com/supercent-io/skills-template
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods
 
 # Install core JEO stack only
-npx skills add https://github.com/supercent-io/skills-template \
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill jeo --skill plannotator --skill agentation --skill survey
 
-# Install LangChain skills
+# Install LangChain skills (optional)
 npx skills add langchain-ai/langchain-skills --skill '*' --yes
 ```
 
@@ -445,8 +471,14 @@ jeo "build a RAG system for our docs" annotate
 ### Full Install (Recommended)
 
 ```bash
-# Wipe and reinstall everything clean
-npx skills add https://github.com/supercent-io/skills-template \
+# Prerequisite
+npm install -g skills
+
+# One-liner (recommended)
+curl -fsSL https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/install.sh | bash
+
+# Or manually — install all skills
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill agent-configuration --skill agent-evaluation \
   --skill agent-development-principles --skill agent-principles \
   --skill agent-workflow --skill bmad \
@@ -496,7 +528,7 @@ bash ~/.agent-skills/jeo/scripts/setup-claude.sh
 
 # Gemini CLI
 bash ~/.agent-skills/jeo/scripts/setup-gemini.sh
-gemini extensions install https://github.com/supercent-io/skills-template
+gemini extensions install https://github.com/JEO-tech-ai/oh-my-gods
 
 # Codex CLI
 bash ~/.agent-skills/jeo/scripts/setup-codex.sh
