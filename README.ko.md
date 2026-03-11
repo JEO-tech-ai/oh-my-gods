@@ -7,7 +7,7 @@
 [![라이선스](https://img.shields.io/badge/라이선스-MIT-green?style=for-the-badge)](LICENSE)
 [![버전](https://img.shields.io/badge/버전-2.0.0-purple?style=for-the-badge)](CHANGELOG.md)
 [![LangChain](https://img.shields.io/badge/LangChain-통합됨-1C3C3C?style=for-the-badge&logo=chainlink)](https://github.com/langchain-ai/langchain-skills)
-[![커피 후원](https://img.shields.io/badge/커피%20후원-감사합니다-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://www.buymeacoffee.com/akillness3q)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/akillness3q)
 
 </div>
 
