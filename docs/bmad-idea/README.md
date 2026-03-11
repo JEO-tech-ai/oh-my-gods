@@ -10,7 +10,7 @@
 ## Installation
 
 ```bash
-npx skills add https://github.com/supercent-io/skills-template --skill bmad-idea
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill bmad-idea
 ```
 
 Activate in conversation:

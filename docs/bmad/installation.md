@@ -17,10 +17,10 @@
 
 ```bash
 # Install bmad only
-npx skills add https://github.com/supercent-io/skills-template --skill bmad
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill bmad
 
 # Or install all 60 core skills at once
-npx skills add https://github.com/supercent-io/skills-template
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods
 ```
 
 This installs the skill to `~/.agents/skills/bmad/`.
@@ -105,7 +105,7 @@ Phase 4: Implementation
 
 ```bash
 # Reinstall to get latest version
-npx skills add https://github.com/supercent-io/skills-template --skill bmad
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill bmad
 
 # Then re-activate in Claude Code
 bmad 스킬을 설정하고 사용해줘. 기억해.
