@@ -2,11 +2,12 @@
 
 <div align="center">
 
-[![Skills](https://img.shields.io/badge/Skills-85%2B-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMiAxNWwtNS01IDEuNDEtMS40MUwxMCAxNC4xN2w3LjU5LTcuNTlMMTkgOGwtOSA5eiIvPjwvc3ZnPg==)](https://github.com/supercent-io/skills-template)
-[![Platform](https://img.shields.io/badge/Platform-Claude%20%7C%20Gemini%20%7C%20Codex%20%7C%20OpenCode-orange?style=for-the-badge)](https://github.com/supercent-io/skills-template)
+[![Skills](https://img.shields.io/badge/Skills-85%2B-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMiAxNWwtNS01IDEuNDEtMS40MUwxMCAxNC4xN2w3LjU5LTcuNTlMMTkgOGwtOSA5eiIvPjwvc3ZnPg==)](https://github.com/JEO-tech-ai/oh-my-gods)
+[![Platform](https://img.shields.io/badge/Platform-Claude%20%7C%20Gemini%20%7C%20Codex%20%7C%20OpenCode-orange?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.3.0-purple?style=for-the-badge)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-2.0.0-purple?style=for-the-badge)](CHANGELOG.md)
 [![LangChain](https://img.shields.io/badge/LangChain-Integrated-1C3C3C?style=for-the-badge&logo=chainlink)](https://github.com/langchain-ai/langchain-skills)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://www.buymeacoffee.com/akillness3q)
 
 </div>
 
@@ -21,17 +22,17 @@
 
 <div align="center">
 
-**AI Agent 개발을 위한 완전한 워크플로우 & 스킬셋**
+**Complete Workflow & Skillset for LLM-based AI Agent Development**
 
-*LLM 기반 AI 에이전트 개발의 A to Z — Plan → Execute → Verify → Ship*
+*Plan → Execute → Verify → Ship*
 
-[Quick Start](#quick-start-for-llm-agents) · [JEO Core](#jeo--core-orchestration-skill) · [Hidden Features](#hidden-power-features) · [LangChain](#langchain-integration) · [Full Catalog](#full-skill-catalog) · [한국어](README.ko.md)
+[Quick Start](#-quick-start) · [JEO Core](#-jeo--core-orchestration-skill) · [Hidden Features](#-hidden-power-features) · [LangChain](#-langchain-integration) · [Full Catalog](#-full-skill-catalog) · [한국어](README.ko.md)
 
 </div>
 
 ---
 
-## Quick Start (For LLM Agents)
+## 🚀 Quick Start
 
 > **Prerequisite**: Install `skills` CLI before running any `npx skills add` commands.
 
@@ -44,17 +45,28 @@ npm install -g skills
 curl -s https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/setup-all-skills-prompt.md
 ```
 
-Or install directly in one line:
-
 ```bash
+# Or install directly in one line
 curl -fsSL https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/install.sh | bash
 ```
 
-More skill installs → [Installation Reference](#installation-reference) | Platform-specific guides → [Platform Support](#platform-support)
+```bash
+# Manual — core JEO stack
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
+  --skill jeo --skill plannotator --skill agentation --skill survey \
+  --skill ralph --skill omc --skill bmad
+```
+
+| Platform | First Command |
+|----------|--------------|
+| Claude Code | `jeo "task description"` or `/omc:team "task"` |
+| Gemini CLI | `/jeo "task description"` |
+| Codex CLI | `/jeo "task description"` |
+| OpenCode | `/jeo "task description"` |
 
 ---
 
-## What is oh-my-gods?
+## 🎯 What is oh-my-gods?
 
 `oh-my-gods` is a curated collection of **85+ AI agent skills** designed for LLM-based development workflows. Built around the `jeo` orchestration protocol, it provides:
 
@@ -65,7 +77,7 @@ More skill installs → [Installation Reference](#installation-reference) | Plat
 
 ---
 
-## Architecture
+## 🏗 Architecture
 
 ```mermaid
 graph TD
@@ -99,33 +111,7 @@ graph TD
 
 ---
 
-## Quick Start
-
-```bash
-# Prerequisite: install skills CLI
-npm install -g skills
-
-# Install all skills (recommended — 85+ skills)
-npx skills add https://github.com/JEO-tech-ai/oh-my-gods
-
-# Install core JEO stack only
-npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
-  --skill jeo --skill plannotator --skill agentation --skill survey
-
-# Install LangChain skills (optional)
-npx skills add langchain-ai/langchain-skills --skill '*' --yes
-```
-
-| Platform | First Command |
-|----------|--------------|
-| Claude Code | `jeo "task description"` or `/omc:team "task"` |
-| Gemini CLI | `/jeo "task description"` |
-| Codex CLI | `/jeo "task description"` |
-| OpenCode | `/jeo "task description"` |
-
----
-
-## JEO — Core Orchestration Skill
+## 🧠 JEO — Core Orchestration Skill
 
 > **Keyword**: `jeo` · `annotate` · `UI검토`
 > **The central nervous system of oh-my-gods**
@@ -151,29 +137,14 @@ JEO orchestrates a complete, automated development pipeline across all AI agent 
 
 ```mermaid
 stateDiagram-v2
-    [*] --> plan: jeo keyword detected
-    plan --> execute: plan_approved = true
-    plan --> plan: feedback received → revise
-    execute --> verify: execution complete
-    verify --> verify_ui: annotate keyword
-    verify --> cleanup: no annotate
-    verify_ui --> cleanup: annotations resolved
-    cleanup --> [*]: phase = done
-
-    note right of plan
-        ralph + plannotator
-        Visual browser review
-        Hash-guarded re-review
-    end note
-    note right of execute
-        Claude: /omc:team
-        Others: /bmad workflow
-    end note
-    note right of verify_ui
-        agentation watch loop
-        Submit-gated processing
-        CSS selector code fixes
-    end note
+    [*] --> plan : jeo keyword detected
+    plan --> execute : plan_approved = true
+    plan --> plan : feedback received
+    execute --> verify : execution complete
+    verify --> verify_ui : annotate keyword
+    verify --> cleanup : no annotate
+    verify_ui --> cleanup : annotations resolved
+    cleanup --> [*] : done
 ```
 
 ### Platform Support
@@ -187,7 +158,7 @@ stateDiagram-v2
 
 ---
 
-## Hidden Power Features
+## 🔮 Hidden Power Features
 
 > These features unlock the full potential of the oh-my-gods ecosystem.
 
@@ -210,8 +181,6 @@ stateDiagram-v2
 ╚══════════════╩═══════════════════════════════════════════════════╝
 ```
 
-### Feature Details
-
 | Skill | Keyword | Description | Source |
 |-------|---------|-------------|--------|
 | `omc` | `omc`, `autopilot` | 32 specialized Claude Code agents with smart model routing, persistent loops, real-time HUD | [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) |
@@ -229,79 +198,32 @@ stateDiagram-v2
 
 ---
 
-## LangChain Integration
+## 🔗 LangChain Integration
 
 > **Source**: [`langchain-ai/langchain-skills`](https://github.com/langchain-ai/langchain-skills/tree/main)
 > MIT License — Official LangChain AI skills for agent development
 
 oh-my-gods integrates the official LangChain skills collection, providing framework-aware guidance for building LangChain/LangGraph/Deep Agents applications.
 
-### Installation
-
 ```bash
 # Install all LangChain skills
 npx skills add langchain-ai/langchain-skills --skill '*' --yes
-
-# Or install specific skills
-npx skills add langchain-ai/langchain-skills \
-  --skill framework-selection \
-  --skill langchain-rag \
-  --skill langgraph-fundamentals \
-  --skill deep-agents-core \
-  --yes
 ```
 
-### LangChain Skill Catalog
+### LangChain Skill Map
 
 ```mermaid
-mindmap
-  root((LangChain Skills))
-    Getting Started
-      framework-selection
-        Which framework to use?
-        LangChain vs LangGraph vs Deep Agents
-      langchain-dependencies
-        Package versions
-        Python/TypeScript setup
-    Deep Agents
-      deep-agents-core
-        create_deep_agent()
-        Middleware architecture
-        SKILL.md format
-      deep-agents-memory
-        StateBackend ephemeral
-        StoreBackend persistent
-        FilesystemMiddleware
-      deep-agents-orchestration
-        SubAgentMiddleware
-        TodoListMiddleware
-        HITL interrupts
-    LangChain
-      langchain-fundamentals
-        create_agent()
-        @tool decorator
-        Structured output
-      langchain-middleware
-        HumanInTheLoopMiddleware
-        Custom middleware
-        Approval workflows
-      langchain-rag
-        Document loaders
-        RecursiveCharacterTextSplitter
-        Chroma / FAISS / Pinecone
-    LangGraph
-      langgraph-fundamentals
-        StateGraph
-        Nodes and edges
-        Send fan-out
-      langgraph-persistence
-        Checkpointers
-        PostgresSaver production
-        Time travel
-      langgraph-human-in-the-loop
-        interrupt()
-        Command resume
-        Idempotency rules
+graph TD
+    LC(("🔗 LangChain\nSkills"))
+    LC --> GS["📚 Getting Started\nframework-selection\nlangchain-dependencies"]
+    LC --> LCH["🔗 LangChain\nlangchain-fundamentals\nlangchain-middleware\nlangchain-rag"]
+    LC --> LG["📊 LangGraph\nlanggraph-fundamentals\nlanggraph-persistence\nlanggraph-human-in-the-loop"]
+    LC --> DA["🤖 Deep Agents\ndeep-agents-core\ndeep-agents-memory\ndeep-agents-orchestration"]
+
+    classDef group fill:#1C3C3C,stroke:#0D1F1F,color:#fff,font-weight:bold
+    classDef leaf fill:#2D6A4F,stroke:#1B4332,color:#fff
+    class LC group
+    class GS,LCH,LG,DA leaf
 ```
 
 ### Framework Selection Guide
@@ -313,50 +235,25 @@ mindmap
 | Simple single-purpose agent with tools | **LangChain** `create_agent()` |
 | Pure model call / retrieval pipeline | **LangChain LCEL** |
 
-### Key Integration Scripts
+### LangChain Skill Catalog
 
-```bash
-# Verify LangChain environment
-python3 -c "import langchain; import langgraph; print('LangChain', langchain.__version__)"
-
-# Check required packages
-pip show langchain-core langchain-community langgraph langsmith
-
-# Quick RAG pipeline test
-python3 -c "
-from langchain_community.document_loaders import TextLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-loader = TextLoader('./README.md')
-docs = loader.load()
-splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
-chunks = splitter.split_documents(docs)
-print(f'Created {len(chunks)} chunks from README')
-"
-```
-
-### Integration with JEO
-
-When using LangChain/LangGraph within a JEO workflow:
-
-```
-jeo "build a RAG system for our docs" annotate
-  │
-  ▼
-[PLAN] framework-selection → langgraph-fundamentals → langchain-rag
-  │         (plannotator visual review)
-  ▼
-[EXECUTE] /omc:team 3:executor
-  │   → implements StateGraph with RAG nodes
-  │   → uses langchain-rag patterns
-  ▼
-[VERIFY_UI] annotate
-  │   → agentation captures UI feedback
-  └── → agent applies targeted fixes
-```
+| Skill | Trigger | Description |
+|-------|---------|-------------|
+| `framework-selection` | "which framework", "LangChain vs" | Choose LangChain/LangGraph/Deep Agents |
+| `langchain-dependencies` | "install langchain", "package versions" | Package setup and version management |
+| `langchain-fundamentals` | "langchain agent", "create_agent" | Agent creation, tools, HITL patterns |
+| `langchain-middleware` | "human in the loop", "approval workflow" | HITL approval, custom middleware |
+| `langchain-rag` | "RAG", "retrieval", "vector store" | Complete RAG pipeline implementation |
+| `langgraph-fundamentals` | "langgraph", "StateGraph" | Graph nodes, edges, streaming |
+| `langgraph-persistence` | "persist state", "checkpointer" | State persistence, PostgresSaver |
+| `langgraph-human-in-the-loop` | "interrupt", "pause for approval" | HITL patterns, idempotency |
+| `deep-agents-core` | "deep agent", "create_deep_agent" | Deep Agents architecture & middleware |
+| `deep-agents-memory` | "agent memory", "StoreBackend" | Memory, persistence, filesystem |
+| `deep-agents-orchestration` | "subagent", "todo list", "HITL" | Subagents, task planning, approval |
 
 ---
 
-## Full Skill Catalog
+## 📚 Full Skill Catalog
 
 ### Core Orchestration
 
@@ -448,25 +345,9 @@ jeo "build a RAG system for our docs" annotate
 | `pollinations-ai` | Free image generation (no API key needed) |
 | `marketing-automation` | 23 sub-skills: CRO, copywriting, SEO, growth |
 
-### LangChain / LangGraph (from langchain-ai/langchain-skills)
-
-| Skill | Trigger | Description |
-|-------|---------|-------------|
-| `framework-selection` | "which framework", "LangChain vs" | Choose LangChain/LangGraph/Deep Agents |
-| `langchain-dependencies` | "install langchain", "package versions" | Package setup and version management |
-| `langchain-fundamentals` | "langchain agent", "create_agent" | Agent creation, tools, HITL patterns |
-| `langchain-middleware` | "human in the loop", "approval workflow" | HITL approval, custom middleware |
-| `langchain-rag` | "RAG", "retrieval", "vector store" | Complete RAG pipeline implementation |
-| `langgraph-fundamentals` | "langgraph", "StateGraph" | Graph nodes, edges, streaming |
-| `langgraph-persistence` | "persist state", "checkpointer" | State persistence, PostgresSaver |
-| `langgraph-human-in-the-loop` | "interrupt", "pause for approval" | HITL patterns, idempotency |
-| `deep-agents-core` | "deep agent", "create_deep_agent" | Deep Agents architecture & middleware |
-| `deep-agents-memory` | "agent memory", "StoreBackend" | Memory, persistence, filesystem |
-| `deep-agents-orchestration` | "subagent", "todo list", "HITL" | Subagents, task planning, approval |
-
 ---
 
-## Installation Reference
+## 📦 Installation Reference
 
 ### Full Install (Recommended)
 
@@ -537,9 +418,7 @@ bash ~/.agent-skills/jeo/scripts/setup-codex.sh
 bash ~/.agent-skills/jeo/scripts/setup-opencode.sh
 ```
 
----
-
-## Environment Requirements
+### Environment Requirements
 
 ```bash
 # Required
@@ -556,11 +435,25 @@ npm install -g agent-browser  # browser verification
 
 ---
 
-## References & Sources
+## 💛 Support the Project
+
+If oh-my-gods has been helpful to you, consider supporting the project!
+
+<div align="center">
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/akillness3q)
+
+<img src="qr-code.png" alt="Buy Me A Coffee QR Code" width="180">
+
+</div>
+
+---
+
+## 📎 References & Sources
 
 | Component | Source | License |
 |-----------|--------|---------|
-| `jeo` | [supercent-io/skills-template](https://github.com/supercent-io/skills-template) | MIT |
+| `jeo` | [JEO-tech-ai/oh-my-gods](https://github.com/JEO-tech-ai/oh-my-gods) | MIT |
 | `omc` | [Yeachan-Heo/oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) | MIT |
 | `ralph` | [Q00/ouroboros](https://github.com/Q00/ouroboros) | MIT |
 | `plannotator` | [backnotprop/plannotator](https://plannotator.ai) | MIT |
@@ -576,12 +469,12 @@ npm install -g agent-browser  # browser verification
 
 <div align="center">
 
-Made with ❤️ by [supercent-io](https://github.com/supercent-io)
+Made with ❤️ by [JEO-tech-ai](https://github.com/JEO-tech-ai)
 
 ⭐ If this helps you, please star the repository!
 
 ```bash
-gh api --silent --method PUT /user/starred/supercent-io/skills-template >/dev/null 2>&1
+gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&1
 ```
 
 </div>

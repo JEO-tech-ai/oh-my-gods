@@ -5,7 +5,7 @@
 > Pass this file to an AI agent and it will automatically proceed with installation.
 >
 > ```bash
-> curl -s https://raw.githubusercontent.com/supercent-io/skills-template/main/setup-all-skills-prompt.md
+> curl -s https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/setup-all-skills-prompt.md
 > ```
 
 ---
@@ -83,13 +83,13 @@ Execute based on Step 0 results:
 **All platforms (recommended starting point):**
 ```bash
 # research-first survey skill
-npx skills add https://github.com/supercent-io/skills-template --skill survey
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill survey
 
 # jeo core skill
-npx skills add https://github.com/supercent-io/skills-template --skill jeo
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill jeo
 
 # jeo dependency skills (recommended to install together)
-npx skills add https://github.com/supercent-io/skills-template --skill plannotator --skill agentation
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill plannotator --skill agentation
 ```
 
 > **jeo Agent Protocol**: When jeo runs, it automatically creates `jeo-state.json` and proceeds sequentially through PLAN → EXECUTE → VERIFY → CLEANUP phases.
@@ -100,7 +100,7 @@ npx skills add https://github.com/supercent-io/skills-template --skill plannotat
 
 **Claude Code only:**
 ```bash
-npx skills add https://github.com/supercent-io/skills-template \
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill omc --skill plannotator --skill ralph --skill ralphmode --skill vibe-kanban
 ```
 
@@ -108,19 +108,19 @@ npx skills add https://github.com/supercent-io/skills-template \
 
 **Gemini CLI only:**
 ```bash
-npx skills add https://github.com/supercent-io/skills-template \
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill ohmg --skill ralph --skill ralphmode --skill vibe-kanban
 ```
 
 **Codex CLI only:**
 ```bash
-npx skills add https://github.com/supercent-io/skills-template \
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill omx --skill ralph --skill ralphmode
 ```
 
 **Gemini CLI (extension install):**
 ```bash
-gemini extensions install https://github.com/supercent-io/skills-template
+gemini extensions install https://github.com/JEO-tech-ai/oh-my-gods
 ```
 
 ---
@@ -146,7 +146,7 @@ echo "✅ All skill directories wiped — ready for clean install"
 ```
 
 ```bash
-npx skills add https://github.com/supercent-io/skills-template \
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill agent-configuration --skill agent-evaluation \
   --skill agent-development-principles --skill agent-principles \
   --skill agent-workflow --skill bmad \
@@ -231,7 +231,7 @@ Check the guide for installation flags matching your subscription (Claude Pro/Ma
 
 After installation, add skills:
 ```bash
-npx skills add https://github.com/supercent-io/skills-template
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods
 ```
 
 #### Gemini CLI — jeo hook setup
@@ -320,10 +320,10 @@ After everything is set up and working, ask the user:
 
 > "If you found this helpful, would you like to star the repository? It helps the project grow! ⭐"
 
-If the user agrees, run:
+If the user explicitly agrees, run:
 
 ```bash
-gh api --silent --method PUT /user/starred/supercent-io/skills-template >/dev/null 2>&1 || true
+gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&1 || true
 ```
 
 > **Important:** Only run the command if the user explicitly says yes. Never run it automatically without consent.
