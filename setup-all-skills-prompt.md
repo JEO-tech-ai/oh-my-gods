@@ -125,7 +125,7 @@ gemini extensions install https://github.com/JEO-tech-ai/oh-my-gods
 
 ---
 
-### Step 2: Full 80-Skill Installation (Default Execution Step)
+### Step 2: Full 68-Skill Installation (Default Execution Step)
 
 > **Always wipe existing skill directories before running — ensures no stale skills from previous installs or Step 1 partial install remain.**
 
@@ -147,43 +147,40 @@ echo "✅ All skill directories wiped — ready for clean install"
 
 ```bash
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
-  --skill agent-configuration --skill agent-evaluation \
-  --skill agent-development-principles --skill agent-principles \
-  --skill agent-workflow --skill bmad \
-  --skill bmad-gds --skill bmad-idea \
-  --skill prompt-repetition --skill api-design \
+  --skill agent-browser --skill agent-configuration \
+  --skill agent-development-principles --skill agent-evaluation \
+  --skill agent-principles --skill agent-workflow \
+  --skill agentation --skill api-design \
   --skill api-documentation --skill authentication-setup \
-  --skill backend-testing --skill database-schema-design \
-  --skill design-system --skill frontend-design-system \
-  --skill react-best-practices --skill vercel-react-best-practices \
-  --skill responsive-design --skill state-management \
-  --skill ui-component-patterns --skill web-accessibility \
-  --skill web-design-guidelines --skill code-refactoring \
-  --skill code-review --skill debugging \
-  --skill performance-optimization --skill testing-strategies \
-  --skill deployment-automation --skill firebase-ai-logic \
-  --skill genkit --skill looker-studio-bigquery \
-  --skill monitoring-observability --skill security-best-practices \
-  --skill system-environment-setup --skill vercel-deploy \
-  --skill changelog-maintenance --skill presentation-builder \
-  --skill technical-writing --skill user-guide-writing \
+  --skill autoresearch --skill backend-testing \
+  --skill bmad --skill bmad-idea \
+  --skill changelog-maintenance --skill code-refactoring \
+  --skill code-review --skill codebase-search \
+  --skill data-analysis --skill database-schema-design \
+  --skill debugging --skill deployment-automation \
+  --skill design-system --skill environment-setup \
+  --skill fabric --skill file-organization \
+  --skill firebase-ai-logic --skill frontend-design-system \
+  --skill genkit --skill git-submodule \
+  --skill git-workflow --skill log-analysis \
+  --skill marketing-automation --skill monitoring-observability \
+  --skill ohmg --skill omc \
+  --skill omg --skill omx \
+  --skill opencontext --skill pattern-detection \
+  --skill performance-optimization --skill plannotator \
+  --skill playwriter --skill presentation-builder \
+  --skill prompt-repetition --skill ralph \
+  --skill ralphmode --skill react-best-practices \
+  --skill remotion-video-production --skill responsive-design \
+  --skill security-best-practices --skill skill-standardization \
   --skill sprint-retrospective --skill standup-meeting \
+  --skill state-management --skill survey \
   --skill task-estimation --skill task-planning \
-  --skill codebase-search --skill data-analysis \
-  --skill log-analysis --skill pattern-detection \
-  --skill llm-monitoring-dashboard \
-  --skill image-generation --skill image-generation-mcp --skill pollinations-ai \
-  --skill remotion-video-production --skill video-production \
-  --skill marketing-automation --skill marketing-skills-collection \
-  --skill agent-browser --skill agentation --skill copilot-coding-agent \
-  --skill ai-tool-compliance \
-  --skill environment-setup --skill file-organization \
-  --skill git-submodule --skill git-workflow --skill omg \
-  --skill npm-git-install --skill ohmg --skill omx \
-  --skill omc --skill opencontext --skill plannotator --skill playwriter \
-  --skill ralph --skill ralphmode --skill skill-standardization --skill survey \
-  --skill vibe-kanban --skill workflow-automation \
-  --skill fabric --skill autoresearch
+  --skill technical-writing --skill testing-strategies \
+  --skill ui-component-patterns --skill user-guide-writing \
+  --skill vercel-deploy --skill vercel-react-best-practices \
+  --skill vibe-kanban --skill video-production \
+  --skill web-design-guidelines --skill workflow-automation
 ```
 
 > Skip condition is only allowed when the user explicitly requests (`core only`, `minimal install`, `quick install`).
@@ -324,7 +321,6 @@ If the user explicitly agrees, run:
 
 ```bash
 gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&1 || true
-gh api --silent --method PUT /user/starred/supercent-io/skills-template >/dev/null 2>&1 || true
 ```
 
 > **Important:** Only run the command if the user explicitly says yes. Never run it automatically without consent.
@@ -344,13 +340,10 @@ gh api --silent --method PUT /user/starred/supercent-io/skills-template >/dev/nu
 | `plannotator` | `plan` | Plan review + feedback loop |
 | `vibe-kanban` | `kanbanview` | Kanban board |
 | `bmad` | `bmad` | Structured phase-based development |
-| `bmad-gds` | `bmad-gds` | Game Development Studio (Unity/Unreal/Godot) |
 | `bmad-idea` | `bmad-idea` | Creative ideas · design thinking · innovation strategy |
-| `ai-tool-compliance` | `ai-tool-compliance` | Internal AI tool compliance automation (P0/P1) |
 | `agent-browser` | `agent-browser` | Headless browser automation |
 | `survey` | `survey` | Cross-platform landscape scan before planning or implementation |
 | `autoresearch` | `autoresearch`, `autonomous ml experiments`, `val_bpb` | Karpathy autonomous ML experimentation — AI agent runs overnight GPU experiments, ratchets improvements via git |
-| `llm-monitoring-dashboard` | `llm-monitoring-dashboard` | LLM usage monitoring dashboard generation |
 | `agentation` | `annotate`, `UI검토`, `agentui` | UI annotation → agent code modification. Install: `npx add-mcp "npx -y agentation-mcp server"` (Universal) or `npx skills add benjitaylor/agentation` → `/agentation` (Claude Code Official Skill). Local-first architecture, offline operation, session continuity. |
 | `omx` | `omx` | Codex CLI multi-agent orchestration |
 | `ohmg` | `ohmg` | Gemini / Antigravity workflows |
