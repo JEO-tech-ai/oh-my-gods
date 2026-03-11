@@ -234,3 +234,7 @@ curl -X POST http://localhost:8080/chat \
 - [Pattern Library](https://github.com/danielmiessler/Fabric/tree/main/patterns)
 - [Installation Guide](https://github.com/danielmiessler/Fabric#installation)
 - [Custom Pattern Guide](https://github.com/danielmiessler/Fabric/blob/main/patterns/README.md)
+
+## Provider Configuration
+
+- [**LM Studio 설정 가이드**](../../docs/fabric/README.md) — LM Studio를 로컬 AI 백엔드로 설정하는 방법 (오프라인·프라이버시 환경)

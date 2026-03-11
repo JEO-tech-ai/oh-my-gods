@@ -326,7 +326,7 @@ graph TD
 | 스킬 | 설명 |
 |------|------|
 | `autoresearch` | 자율 ML 실험 (Karpathy 방법론) |
-| `fabric` | AI 프롬프트 패턴 — YouTube 요약, 문서 분석 |
+| `fabric` | AI 프롬프트 패턴 — YouTube 요약, 문서 분석 · [LM Studio 설정](docs/fabric/README.md) |
 | `genkit` | Firebase Genkit AI 플로우 및 RAG 파이프라인 |
 | `firebase-ai-logic` | Firebase Gemini 통합 |
 | `data-analysis` | 데이터셋 분석, 시각화, 통계 |

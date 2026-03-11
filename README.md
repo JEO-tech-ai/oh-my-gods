@@ -326,7 +326,7 @@ graph TD
 | Skill | Description |
 |-------|-------------|
 | `autoresearch` | Autonomous ML experiments (Karpathy methodology) |
-| `fabric` | AI prompt patterns — YouTube summaries, doc analysis |
+| `fabric` | AI prompt patterns — YouTube summaries, doc analysis · [LM Studio 설정](docs/fabric/README.md) |
 | `genkit` | Firebase Genkit AI flows and RAG pipelines |
 | `firebase-ai-logic` | Gemini in Firebase integration |
 | `data-analysis` | Dataset analysis, visualizations, statistics |
