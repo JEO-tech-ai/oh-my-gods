@@ -35,7 +35,7 @@ To run the same flow directly in Codex, we recommend operating BMAD stages via a
 
 ## Control Model
 
-BMAD phase routing should be treated with the same three-layer abstraction used by JEO:
+BMAD phase routing should be treated with the same three-layer abstraction used by OMG:
 
 - `settings`: platform-specific runtime configuration such as Claude hooks, Codex/Gemini instructions, and MCP setup
 - `rules`: phase constraints such as "do not advance before the current phase document is approved" and "do not reopen the same unchanged phase document for review"

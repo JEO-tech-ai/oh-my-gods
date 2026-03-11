@@ -23,7 +23,7 @@ metadata:
 
 - Before building a new feature, tool, workflow, or agent capability
 - When the user asks "what exists?", "scan the landscape", "research this space", or "survey solutions"
-- When you need problem context, current workarounds, and solution gaps before `/plan`, `jeo`, `ralph`, or implementation
+- When you need problem context, current workarounds, and solution gaps before `/plan`, `omg`, `ralph`, or implementation
 - When the topic spans multiple agent platforms and you need a single vendor-neutral picture
 
 ## Do not use this skill when
@@ -328,7 +328,7 @@ Do not move into planning or implementation unless the user asks.
 | Reuse existing results | Check `.survey/{slug}/` first |
 | Search strategy | Search in English, write in the user's language |
 | Parallel lanes | Context + Solutions + Behavior + Alternatives/Platform Map |
-| Next step after survey | `/plan`, `jeo`, `ralph`, or implementation if the user asks |
+| Next step after survey | `/plan`, `omg`, `ralph`, or implementation if the user asks |
 
 ---
 

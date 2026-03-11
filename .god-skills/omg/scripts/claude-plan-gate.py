@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""JEO Claude plan gate wrapper.
+"""OMG Claude plan gate wrapper.
 
-Wraps the Claude Code ExitPlanMode hook so JEO can skip redundant plannotator
+Wraps the Claude Code ExitPlanMode hook so OMG can skip redundant plannotator
 launches when the current plan content has already been reviewed.
 """
 
@@ -33,7 +33,7 @@ def git_root() -> Path:
 
 
 def state_path(root: Path) -> Path:
-    return root / ".omc" / "state" / "jeo-state.json"
+    return root / ".omc" / "state" / "omg-state.json"
 
 
 def load_state(root: Path) -> dict[str, Any]:
@@ -55,7 +55,7 @@ def save_state(root: Path, state: dict[str, Any]) -> None:
 
 def find_plan_text(root: Path, payload: str) -> str:
     for candidate in (
-        root / ".omc" / "plans" / "jeo-plan.md",
+        root / ".omc" / "plans" / "omg-plan.md",
         root / "plan.md",
         root / "docs" / "plan.md",
     ):
@@ -123,7 +123,7 @@ def main() -> int:
     if should_skip(state, current_hash):
         status = state.get("plan_gate_status", "unknown")
         print(
-            f"[JEO][PLAN] Claude hook skipped: plan gate already recorded for current hash ({status}).",
+            f"[OMG][PLAN] Claude hook skipped: plan gate already recorded for current hash ({status}).",
             file=sys.stderr,
         )
         return 0

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""JEO Claude UserPromptSubmit wrapper for agentation.
+"""OMG Claude UserPromptSubmit wrapper for agentation.
 
 Only exposes pending annotations after an explicit submit-style prompt arrives
 during the VERIFY_UI gate.
@@ -42,7 +42,7 @@ def git_root() -> Path:
 
 
 def state_path(root: Path) -> Path:
-    return root / ".omc" / "state" / "jeo-state.json"
+    return root / ".omc" / "state" / "omg-state.json"
 
 
 def load_state(root: Path) -> dict[str, Any]:

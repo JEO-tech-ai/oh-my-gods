@@ -26,7 +26,7 @@
 
 *Plan → Execute → Verify → Ship*
 
-[Quick Start](#-quick-start) · [JEO Core](#-jeo--core-orchestration-skill) · [Hidden Features](#-hidden-power-features) · [LangChain](#-langchain-integration) · [Full Catalog](#-full-skill-catalog) · [한국어](README.ko.md)
+[Quick Start](#-quick-start) · [OMG Core](#-omg--core-orchestration-skill) · [Hidden Features](#-hidden-power-features) · [LangChain](#-langchain-integration) · [Full Catalog](#-full-skill-catalog) · [한국어](README.ko.md)
 
 </div>
 
@@ -51,24 +51,24 @@ curl -fsSL https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/install
 ```
 
 ```bash
-# Manual — core JEO stack
+# Manual — core OMG stack
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
-  --skill jeo --skill plannotator --skill agentation --skill survey \
+  --skill omg --skill plannotator --skill agentation --skill survey \
   --skill ralph --skill omc --skill bmad
 ```
 
 | Platform | First Command |
 |----------|--------------|
-| Claude Code | `jeo "task description"` or `/omc:team "task"` |
-| Gemini CLI | `/jeo "task description"` |
-| Codex CLI | `/jeo "task description"` |
-| OpenCode | `/jeo "task description"` |
+| Claude Code | `omg "task description"` or `/omc:team "task"` |
+| Gemini CLI | `/omg "task description"` |
+| Codex CLI | `/omg "task description"` |
+| OpenCode | `/omg "task description"` |
 
 ---
 
 ## 🎯 What is oh-my-gods?
 
-`oh-my-gods` is a curated collection of **85+ AI agent skills** designed for LLM-based development workflows. Built around the `jeo` orchestration protocol, it provides:
+`oh-my-gods` is a curated collection of **85+ AI agent skills** designed for LLM-based development workflows. Built around the `omg` orchestration protocol, it provides:
 
 - **Unified orchestration** across Claude Code, Gemini CLI, OpenAI Codex, and OpenCode
 - **Plan → Execute → Verify → Cleanup** automated pipelines
@@ -81,11 +81,11 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
 
 ```mermaid
 graph TD
-    JEO["🎯 JEO\nCore Orchestration"] --> PLAN["📋 PLAN\nralph + plannotator"]
-    JEO --> EXEC["⚡ EXECUTE\nteam / bmad"]
-    JEO --> VERIFY["🔍 VERIFY\nagent-browser"]
-    JEO --> UI["🎨 VERIFY_UI\nagentation annotate"]
-    JEO --> CLEAN["🧹 CLEANUP\nworktree prune"]
+    OMG["🎯 OMG\nCore Orchestration"] --> PLAN["📋 PLAN\nralph + plannotator"]
+    OMG --> EXEC["⚡ EXECUTE\nteam / bmad"]
+    OMG --> VERIFY["🔍 VERIFY\nagent-browser"]
+    OMG --> UI["🎨 VERIFY_UI\nagentation annotate"]
+    OMG --> CLEAN["🧹 CLEANUP\nworktree prune"]
 
     PLAN --> |"Claude Code"| OMC["omc\noh-my-claudecode"]
     PLAN --> |"Gemini CLI"| OHMG["ohmg\noh-my-gemini"]
@@ -94,8 +94,8 @@ graph TD
     EXEC --> BMAD["bmad\nBMAD Workflow"]
     EXEC --> RALPH["ralph\nOuroboros Loop"]
 
-    SURVEY["🔭 survey\nlandscape scan"] -.-> JEO
-    FABRIC["🧵 fabric\npattern AI"] -.-> JEO
+    SURVEY["🔭 survey\nlandscape scan"] -.-> OMG
+    FABRIC["🧵 fabric\npattern AI"] -.-> OMG
     AUTORESEARCH["🔬 autoresearch\nML experiments"] -.-> EXEC
 
     classDef core fill:#4A90D9,stroke:#2C5F8A,color:#fff,font-weight:bold
@@ -103,7 +103,7 @@ graph TD
     classDef platform fill:#27AE60,stroke:#1A7A40,color:#fff
     classDef support fill:#E67E22,stroke:#A85000,color:#fff
 
-    class JEO core
+    class OMG core
     class SURVEY,FABRIC,AUTORESEARCH,BMAD,RALPH hidden
     class OMC,OHMG,OMX platform
     class PLAN,EXEC,VERIFY,UI,CLEAN support
@@ -111,16 +111,16 @@ graph TD
 
 ---
 
-## 🧠 JEO — Core Orchestration Skill
+## 🧠 OMG — Core Orchestration Skill
 
-> **Keyword**: `jeo` · `annotate` · `UI검토`
+> **Keyword**: `omg` · `annotate` · `UI검토`
 > **The central nervous system of oh-my-gods**
 
-JEO orchestrates a complete, automated development pipeline across all AI agent platforms.
+OMG orchestrates a complete, automated development pipeline across all AI agent platforms.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     JEO WORKFLOW                                │
+│                     OMG WORKFLOW                                │
 ├──────────┬──────────┬──────────┬──────────┬────────────────────┤
 │  STEP 0  │  STEP 1  │  STEP 2  │  STEP 3  │  STEP 4            │
 │ Bootstrap│   PLAN   │ EXECUTE  │  VERIFY  │  CLEANUP           │
@@ -133,11 +133,11 @@ JEO orchestrates a complete, automated development pipeline across all AI agent 
 └──────────┴──────────┴──────────┴──────────┴────────────────────┘
 ```
 
-### JEO State Machine
+### OMG State Machine
 
 ```mermaid
 stateDiagram-v2
-    [*] --> plan : jeo keyword detected
+    [*] --> plan : omg keyword detected
     plan --> execute : plan_approved = true
     plan --> plan : feedback received
     execute --> verify : execution complete
@@ -259,7 +259,7 @@ graph TD
 
 | Skill | Keyword | Platform | Description |
 |-------|---------|----------|-------------|
-| `jeo` | `jeo` | All | Integrated orchestration: PLAN→EXECUTE→VERIFY→CLEANUP |
+|  | `omg` |  | `omg` | All | Integrated orchestration: PLAN→EXECUTE→VERIFY→CLEANUP |
 | `omc` | `omc`, `autopilot` | Claude Code | 32-agent multi-agent orchestration layer |
 | `omx` | `omx` | Codex CLI | 40+ workflow skills, tmux team orchestration |
 | `ohmg` | `ohmg` | Gemini CLI | Antigravity multi-agent framework |
@@ -388,7 +388,7 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill video-production --skill marketing-automation \
   --skill agent-browser --skill agentation \
   --skill ai-tool-compliance --skill file-organization \
-  --skill git-submodule --skill git-workflow --skill jeo \
+  --skill git-submodule --skill git-workflow --skill omg \
   --skill ohmg --skill omx --skill omc \
   --skill opencontext --skill plannotator --skill playwriter \
   --skill ralph --skill ralphmode --skill skill-standardization \
@@ -405,17 +405,17 @@ npx skills add langchain-ai/langchain-skills --skill '*' --yes
 # Claude Code (oh-my-claudecode)
 /plugin marketplace add https://github.com/Yeachan-Heo/oh-my-claudecode
 /omc:omc-setup
-bash ~/.agent-skills/jeo/scripts/setup-claude.sh
+bash ~/.agent-skills/omg/scripts/setup-claude.sh
 
 # Gemini CLI
-bash ~/.agent-skills/jeo/scripts/setup-gemini.sh
+bash ~/.agent-skills/omg/scripts/setup-gemini.sh
 gemini extensions install https://github.com/JEO-tech-ai/oh-my-gods
 
 # Codex CLI
-bash ~/.agent-skills/jeo/scripts/setup-codex.sh
+bash ~/.agent-skills/omg/scripts/setup-codex.sh
 
 # OpenCode
-bash ~/.agent-skills/jeo/scripts/setup-opencode.sh
+bash ~/.agent-skills/omg/scripts/setup-opencode.sh
 ```
 
 ### Environment Requirements
@@ -453,7 +453,7 @@ If oh-my-gods has been helpful to you, consider supporting the project!
 
 | Component | Source | License |
 |-----------|--------|---------|
-| `jeo` | [JEO-tech-ai/oh-my-gods](https://github.com/JEO-tech-ai/oh-my-gods) | MIT |
+|  | `omg` | [JEO-tech-ai/oh-my-gods](https://github.com/JEO-tech-ai/oh-my-gods) | MIT |
 | `omc` | [Yeachan-Heo/oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) | MIT |
 | `ralph` | [Q00/ouroboros](https://github.com/Q00/ouroboros) | MIT |
 | `plannotator` | [backnotprop/plannotator](https://plannotator.ai) | MIT |

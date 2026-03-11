@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# JEO Skill — Master Installation Script
+# OMG Skill — Master Installation Script
 # Installs and configures: ralph, omc, omx, ohmg, bmad, agent-browser, playwriter, plannotator, agentation
 # Usage: bash install.sh [--all] [--with-omc] [--with-plannotator] [--with-browser] [--with-agentation] [--dry-run]
 
@@ -38,7 +38,7 @@ for arg in "$@"; do
     --with-agentation) INSTALL_AGENTATION=true ;;
     --dry-run)         DRY_RUN=true ;;
     -h|--help)
-      echo "JEO Master Installer"
+      echo "OMG Master Installer"
       echo "Usage: bash install.sh [options]"
       echo "Options:"
       echo "  --all              Install all components"
@@ -62,7 +62,7 @@ fi
 
 echo ""
 echo "╔══════════════════════════════════════════╗"
-echo "║   JEO Skill — Integrated Orchestration  ║"
+echo "║   OMG Skill — Integrated Orchestration  ║"
 echo "║   Version 1.1.0                          ║"
 echo "╚══════════════════════════════════════════╝"
 echo ""
@@ -237,14 +237,14 @@ fi
 # ── Done ──────────────────────────────────────────────────────────────────────
 echo ""
 echo "╔══════════════════════════════════════════╗"
-echo "║   JEO Installation Complete!             ║"
+echo "║   OMG Installation Complete!             ║"
 echo "╚══════════════════════════════════════════╝"
 echo ""
-ok "JEO skill installed successfully"
+ok "OMG skill installed successfully"
 echo ""
 echo "Next steps:"
 echo "  1. bash scripts/check-status.sh    — Verify all integrations"
 echo "  2. Restart your AI tools (Claude Code, Gemini CLI, OpenCode, Codex)"
-echo "  3. Use keyword 'jeo' to activate the orchestration workflow"
-echo "  4. Use keyword 'annotate' inside jeo to start agentation watch loop (agentui is a deprecated alias)"
+echo "  3. Use keyword 'omg' to activate the orchestration workflow"
+echo "  4. Use keyword 'annotate' inside omg to start agentation watch loop (agentui is a deprecated alias)"
 echo ""

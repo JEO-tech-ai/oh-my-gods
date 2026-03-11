@@ -653,9 +653,9 @@ import {
 
 ---
 
-## 12. jeo Integration (annotate keyword)
+## 12. omg Integration (annotate keyword)
 
-> agentation integrates as the **VERIFY_UI** phase of the jeo skill.
+> agentation integrates as the **VERIFY_UI** phase of the omg skill.
 > This follows the same pattern as plannotator operating in `planui` / `ExitPlanMode`.
 > `annotate` is the primary keyword. `agentui` is kept as a backward-compatible alias.
 
@@ -679,19 +679,19 @@ Enter EXECUTE                 Next step or loop
 | Keyword | Platform | Action |
 |--------|----------|------|
 | `annotate` | Claude Code | `agentation_watch_annotations` MCP blocking call |
-| `annotate` | Codex | `ANNOTATE_READY` signal → `jeo-notify.py` HTTP polling |
+| `annotate` | Codex | `ANNOTATE_READY` signal → `omg-notify.py` HTTP polling |
 | `annotate` | Gemini | GEMINI.md instruction: HTTP REST polling pattern |
-| `/jeo-annotate` | OpenCode | opencode.json `mcp.agentation` + instructions |
+| `/omg-annotate` | OpenCode | opencode.json `mcp.agentation` + instructions |
 | `agentui` *(deprecated)* | All platforms | Same behavior as above — backward-compatible alias |
 | `UI review` | All platforms | Same as `annotate` |
 
-### Using with jeo
+### Using with omg
 
 ```bash
-# 1. agentation auto-registered when installing jeo
-bash .agent-skills/jeo/scripts/install.sh --with-agentation
+# 1. agentation auto-registered when installing omg
+bash .agent-skills/omg/scripts/install.sh --with-agentation
 # Or full install:
-bash .agent-skills/jeo/scripts/install.sh --all
+bash .agent-skills/omg/scripts/install.sh --all
 
 # 2. Mount agentation component in app
 # app/layout.tsx or pages/_app.tsx:
@@ -704,7 +704,7 @@ npx agentation-mcp server
 # Claude Code: direct MCP tool call
 # Codex: output ANNOTATE_READY (or AGENTUI_READY) → notify hook auto-polls
 # Gemini: GEMINI.md HTTP polling pattern
-# OpenCode: /jeo-annotate slash command (or /jeo-agentui — deprecated)
+# OpenCode: /omg-annotate slash command (or /omg-agentui — deprecated)
 ```
 
 ### Separation from plannotator (Phase Guard)
@@ -713,10 +713,10 @@ plannotator and agentation use the same blocking loop pattern but **only operate
 
 | Tool | Allowed phase | Hook Guard |
 |------|-----------|------------|
-| **plannotator** | `plan` only | `jeo-state.json` → `phase === "plan"` |
-| **agentation** | `verify` / `verify_ui` only | `jeo-state.json` → `phase === "verify_ui"` |
+| **plannotator** | `plan` only | `omg-state.json` → `phase === "plan"` |
+| **agentation** | `verify` / `verify_ui` only | `omg-state.json` → `phase === "verify_ui"` |
 
-Each platform's hook script checks the `phase` field in `jeo-state.json` to prevent execution in the wrong phase.
+Each platform's hook script checks the `phase` field in `omg-state.json` to prevent execution in the wrong phase.
 Without this guard, both tools could run simultaneously in Gemini's `AfterAgent` hook.
 
 ### Pre-flight Check
@@ -726,7 +726,7 @@ Without this guard, both tools could run simultaneously in Gemini's `AfterAgent`
 2. **Session exists**: `GET /sessions` — whether `<Agentation>` component is mounted
 3. **Pending annotations**: `GET /pending` — number of annotations to process
 
-After passing, set `phase` in `jeo-state.json` to `"verify_ui"` and `agentation.active` to `true`.
+After passing, set `phase` in `omg-state.json` to `"verify_ui"` and `agentation.active` to `true`.
 
 ### Loop Verification Test
 
@@ -740,10 +740,10 @@ bash .agent-skills/agentation/scripts/verify-loop.sh --quick
 
 4-step verification: Server Health → Annotation CRUD → ACK-RESOLVE Cycle → Error Cases
 
-### Evaluation Flow (jeo VERIFY_UI phase)
+### Evaluation Flow (omg VERIFY_UI phase)
 
 ```
-jeo "<task>"
+omg "<task>"
     │
 [1] PLAN (plannotator loop)    ← approve plan.md
 [2] EXECUTE (team/bmad)
@@ -753,11 +753,11 @@ jeo "<task>"
     └─ annotate → VERIFY_UI (agentation loop)   ← this phase (agentui also backward-compatible)
         ├─ ACK → FIND → FIX → RESOLVE
         ├─ RE-SNAPSHOT (agent-browser)  ← re-check after fix
-        └─ update agentation fields in jeo-state.json
+        └─ update agentation fields in omg-state.json
 [4] CLEANUP
 ```
 
-> For detailed jeo integration: see [jeo SKILL.md](../jeo/SKILL.md) Section 3.3.1 detailed workflow
+> For detailed omg integration: see [omg SKILL.md](../omg/SKILL.md) Section 3.3.1 detailed workflow
 
 
 ## References

@@ -149,10 +149,10 @@ check_dependencies() {
 install_via_skills_cli() {
   info "Installing skills via npx skills add..."
 
-  # Core JEO stack
-  info "Installing core JEO stack..."
+  # Core OMG stack
+  info "Installing core OMG stack..."
   npx skills add "https://github.com/JEO-tech-ai/oh-my-gods" \
-    --skill jeo --skill survey --skill plannotator --skill agentation \
+    --skill omg --skill survey --skill plannotator --skill agentation \
     --skill ralph --skill ralphmode --skill omc --skill omx --skill ohmg \
     --skill bmad --skill bmad-idea \
     2>/dev/null || warn "Some core skills may have failed — continuing..."
@@ -254,11 +254,11 @@ setup_platforms() {
   # Claude Code setup
   if [ "$PLATFORM" = "claude" ] || [ "$PLATFORM" = "all" ]; then
     if [ "$HAS_CLAUDE" = "true" ]; then
-      info "Setting up Claude Code JEO hooks..."
-      if [ -f "$skills_root/jeo/scripts/setup-claude.sh" ]; then
-        bash "$skills_root/jeo/scripts/setup-claude.sh" 2>/dev/null && \
+      info "Setting up Claude Code OMG hooks..."
+      if [ -f "$skills_root/omg/scripts/setup-claude.sh" ]; then
+        bash "$skills_root/omg/scripts/setup-claude.sh" 2>/dev/null && \
           ok "Claude Code setup complete" || \
-          warn "Claude Code setup had issues — run manually: bash $skills_root/jeo/scripts/setup-claude.sh"
+          warn "Claude Code setup had issues — run manually: bash $skills_root/omg/scripts/setup-claude.sh"
       fi
     fi
   fi
@@ -266,11 +266,11 @@ setup_platforms() {
   # Gemini CLI setup
   if [ "$PLATFORM" = "gemini" ] || [ "$PLATFORM" = "all" ]; then
     if command -v gemini &>/dev/null; then
-      info "Setting up Gemini CLI JEO hooks..."
-      if [ -f "$skills_root/jeo/scripts/setup-gemini.sh" ]; then
-        bash "$skills_root/jeo/scripts/setup-gemini.sh" 2>/dev/null && \
+      info "Setting up Gemini CLI OMG hooks..."
+      if [ -f "$skills_root/omg/scripts/setup-gemini.sh" ]; then
+        bash "$skills_root/omg/scripts/setup-gemini.sh" 2>/dev/null && \
           ok "Gemini CLI setup complete" || \
-          warn "Gemini CLI setup had issues — run manually: bash $skills_root/jeo/scripts/setup-gemini.sh"
+          warn "Gemini CLI setup had issues — run manually: bash $skills_root/omg/scripts/setup-gemini.sh"
       fi
     fi
   fi
@@ -278,11 +278,11 @@ setup_platforms() {
   # Codex CLI setup
   if [ "$PLATFORM" = "codex" ] || [ "$PLATFORM" = "all" ]; then
     if command -v codex &>/dev/null; then
-      info "Setting up Codex CLI JEO configuration..."
-      if [ -f "$skills_root/jeo/scripts/setup-codex.sh" ]; then
-        bash "$skills_root/jeo/scripts/setup-codex.sh" 2>/dev/null && \
+      info "Setting up Codex CLI OMG configuration..."
+      if [ -f "$skills_root/omg/scripts/setup-codex.sh" ]; then
+        bash "$skills_root/omg/scripts/setup-codex.sh" 2>/dev/null && \
           ok "Codex CLI setup complete" || \
-          warn "Codex CLI setup had issues — run manually: bash $skills_root/jeo/scripts/setup-codex.sh"
+          warn "Codex CLI setup had issues — run manually: bash $skills_root/omg/scripts/setup-codex.sh"
       fi
     fi
   fi
@@ -300,7 +300,7 @@ verify_install() {
   fi
 
   # Check key skills
-  for skill in jeo ralph plannotator agentation bmad survey; do
+  for skill in omg ralph plannotator agentation bmad survey; do
     if [ -f "$CANONICAL_DIR/$skill/SKILL.md" ]; then
       ok "  ✓ $skill"
     else
@@ -341,12 +341,12 @@ main() {
   echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
   echo ""
   echo -e "${BOLD}First run:${NC}"
-  echo "  Claude Code : jeo \"your task\""
-  echo "  Gemini CLI  : /jeo \"your task\""
-  echo "  Codex CLI   : /jeo \"your task\""
+  echo "  Claude Code : omg \"your task\""
+  echo "  Gemini CLI  : /omg \"your task\""
+  echo "  Codex CLI   : /omg \"your task\""
   echo ""
   echo -e "${BOLD}Key skills installed:${NC}"
-  echo "  jeo         — Integrated orchestration (PLAN→EXECUTE→VERIFY→CLEANUP)"
+  echo "  omg         — Integrated orchestration (PLAN→EXECUTE→VERIFY→CLEANUP)"
   echo "  ralph       — Persistent completion loop (ooo ralph \"task\")"
   echo "  bmad        — Structured phase-based development"
   echo "  survey      — Pre-implementation landscape scan"

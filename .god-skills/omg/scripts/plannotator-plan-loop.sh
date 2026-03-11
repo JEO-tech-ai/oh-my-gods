@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# JEO PLAN gate for plannotator.
+# OMG PLAN gate for plannotator.
 # Guarantees blocking review, retries dead sessions, and requires explicit stop decision.
 
 set -euo pipefail
@@ -19,7 +19,7 @@ PORT_ERROR_REGEX='Failed to start server\. Is port .* in use|EADDRINUSE|EPERM|op
 
 if ! command -v plannotator >/dev/null 2>&1; then
   if ! bash "$SCRIPT_DIR/ensure-plannotator.sh" --quiet; then
-    echo "[JEO][PLAN] plannotator is required in PLAN phase." >&2
+    echo "[OMG][PLAN] plannotator is required in PLAN phase." >&2
     exit 127
   fi
 fi
@@ -27,12 +27,12 @@ fi
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 
 if [[ ! -f "$PLAN_FILE" ]]; then
-  echo "[JEO][PLAN] plan file not found: $PLAN_FILE" >&2
+  echo "[OMG][PLAN] plan file not found: $PLAN_FILE" >&2
   exit 2
 fi
 
 if ! [[ "$MAX_RESTARTS" =~ ^[0-9]+$ ]] || [[ "$MAX_RESTARTS" -lt 1 ]]; then
-  echo "[JEO][PLAN] invalid MAX_RESTARTS: $MAX_RESTARTS" >&2
+  echo "[OMG][PLAN] invalid MAX_RESTARTS: $MAX_RESTARTS" >&2
   exit 2
 fi
 
@@ -48,7 +48,7 @@ PYEOF
 )"
 
 SESSION_KEY="$(python3 -c "import hashlib,os; print(hashlib.md5(os.getcwd().encode()).hexdigest()[:8])" 2>/dev/null || echo "default")"
-FEEDBACK_DIR="${_TMPDIR}/jeo-${SESSION_KEY}"
+FEEDBACK_DIR="${_TMPDIR}/omg-${SESSION_KEY}"
 RUNTIME_HOME="${FEEDBACK_DIR}/.plannotator"
 mkdir -p "$FEEDBACK_DIR" "$RUNTIME_HOME"
 
@@ -67,7 +67,7 @@ path, approved_raw, note = sys.argv[1], sys.argv[2], sys.argv[3]
 approved = approved_raw.lower() == "true"
 payload = {
     "approved": approved,
-    "source": "jeo-manual-fallback",
+    "source": "omg-manual-fallback",
     "note": note,
 }
 with open(path, "w", encoding="utf-8") as f:
@@ -77,13 +77,13 @@ PYEOF
 
 write_state_gate_status() {
   local status="$1"
-  JEO_GATE_STATUS="$status" python3 -c "
+  OMG_GATE_STATUS="$status" python3 -c "
 import json, os, subprocess, datetime
 try:
     root = subprocess.check_output(['git','rev-parse','--show-toplevel'], stderr=subprocess.DEVNULL).decode().strip()
 except Exception:
     root = os.getcwd()
-f = os.path.join(root, '.omc/state/jeo-state.json')
+f = os.path.join(root, '.omc/state/omg-state.json')
 if os.path.exists(f):
     try:
         import fcntl
@@ -91,7 +91,7 @@ if os.path.exists(f):
             fcntl.flock(fh, fcntl.LOCK_EX)
             try:
                 d = json.load(fh)
-                d['plan_gate_status'] = os.environ['JEO_GATE_STATUS']
+                d['plan_gate_status'] = os.environ['OMG_GATE_STATUS']
                 d['updated_at'] = datetime.datetime.utcnow().isoformat() + 'Z'
                 fh.seek(0); json.dump(d, fh, indent=2); fh.truncate()
             finally:
@@ -106,11 +106,11 @@ persist_plan_state() {
   local approved="$2"
   local review_method="${3:-plannotator}"
   local feedback_path="${4:-}"
-  JEO_GATE_STATUS="$gate_status" \
-  JEO_APPROVED="$approved" \
-  JEO_REVIEW_METHOD="$review_method" \
-  JEO_PLAN_HASH="$PLAN_HASH" \
-  JEO_FEEDBACK_FILE="$feedback_path" \
+  OMG_GATE_STATUS="$gate_status" \
+  OMG_APPROVED="$approved" \
+  OMG_REVIEW_METHOD="$review_method" \
+  OMG_PLAN_HASH="$PLAN_HASH" \
+  OMG_FEEDBACK_FILE="$feedback_path" \
   python3 - <<'PYEOF'
 import datetime
 import json
@@ -126,7 +126,7 @@ try:
 except Exception:
     root = os.getcwd()
 
-state_path = os.path.join(root, ".omc", "state", "jeo-state.json")
+state_path = os.path.join(root, ".omc", "state", "omg-state.json")
 if not os.path.exists(state_path):
     raise SystemExit(0)
 
@@ -136,7 +136,7 @@ except Exception:
     fcntl = None
 
 feedback_payload = None
-feedback_file = os.environ.get("JEO_FEEDBACK_FILE", "")
+feedback_file = os.environ.get("OMG_FEEDBACK_FILE", "")
 if feedback_file and os.path.exists(feedback_file):
     try:
         feedback_payload = json.load(open(feedback_file))
@@ -148,10 +148,10 @@ with open(state_path, "r+", encoding="utf-8") as fh:
         fcntl.flock(fh, fcntl.LOCK_EX)
     try:
         state = json.load(fh)
-        gate_status = os.environ.get("JEO_GATE_STATUS", "pending")
-        approved = os.environ.get("JEO_APPROVED", "false").lower() == "true"
-        review_method = os.environ.get("JEO_REVIEW_METHOD", "plannotator")
-        plan_hash = os.environ.get("JEO_PLAN_HASH", "")
+        gate_status = os.environ.get("OMG_GATE_STATUS", "pending")
+        approved = os.environ.get("OMG_APPROVED", "false").lower() == "true"
+        review_method = os.environ.get("OMG_REVIEW_METHOD", "plannotator")
+        plan_hash = os.environ.get("OMG_PLAN_HASH", "")
         state["plan_gate_status"] = gate_status
         state["plan_approved"] = approved
         state["plan_review_method"] = review_method
@@ -173,7 +173,7 @@ PYEOF
 }
 
 prepare_state_for_plan_hash() {
-  JEO_PLAN_HASH="$PLAN_HASH" python3 - <<'PYEOF'
+  OMG_PLAN_HASH="$PLAN_HASH" python3 - <<'PYEOF'
 import datetime
 import json
 import os
@@ -189,12 +189,12 @@ try:
 except Exception:
     root = os.getcwd()
 
-state_path = os.path.join(root, ".omc", "state", "jeo-state.json")
+state_path = os.path.join(root, ".omc", "state", "omg-state.json")
 if not os.path.exists(state_path):
     raise SystemExit(0)
 
 state = json.load(open(state_path, encoding="utf-8"))
-current_hash = os.environ.get("JEO_PLAN_HASH", "")
+current_hash = os.environ.get("OMG_PLAN_HASH", "")
 last_hash = state.get("last_reviewed_plan_hash")
 gate_status = state.get("plan_gate_status", "pending")
 
@@ -222,19 +222,19 @@ PYEOF
 STATE_PLAN_GUARD="$(prepare_state_for_plan_hash 2>/dev/null || true)"
 case "$STATE_PLAN_GUARD" in
   SKIP_APPROVED)
-    echo "[JEO][PLAN] plan gate already approved for current plan hash — skipping re-entry." >&2
+    echo "[OMG][PLAN] plan gate already approved for current plan hash — skipping re-entry." >&2
     exit 0
     ;;
   SKIP_FEEDBACK)
-    echo "[JEO][PLAN] feedback already recorded for current plan hash — revise the plan before re-opening plannotator." >&2
+    echo "[OMG][PLAN] feedback already recorded for current plan hash — revise the plan before re-opening plannotator." >&2
     exit 10
     ;;
   SKIP_BLOCKED)
-    echo "[JEO][PLAN] infrastructure-blocked state already recorded for current plan hash — waiting for manual approval path." >&2
+    echo "[OMG][PLAN] infrastructure-blocked state already recorded for current plan hash — waiting for manual approval path." >&2
     exit 32
     ;;
   RESET_FOR_NEW_HASH)
-    echo "[JEO][PLAN] detected revised plan content — resetting gate status to pending." >&2
+    echo "[OMG][PLAN] detected revised plan content — resetting gate status to pending." >&2
     ;;
 esac
 
@@ -243,30 +243,30 @@ manual_fallback_gate() {
     return 32
   fi
 
-  echo "[JEO][PLAN] plannotator UI를 열 수 없는 환경입니다. 수동 PLAN gate로 전환합니다." >&2
-  echo "[JEO][PLAN] 선택: [a]pprove / [f]eedback / [s]top" >&2
+  echo "[OMG][PLAN] plannotator UI를 열 수 없는 환경입니다. 수동 PLAN gate로 전환합니다." >&2
+  echo "[OMG][PLAN] 선택: [a]pprove / [f]eedback / [s]top" >&2
   read -r -p "선택하세요 [a/f/s]: " choice
 
   case "${choice,,}" in
     a|approve)
       write_manual_feedback_json "true" "manual-approve (fallback gate)"
       persist_plan_state "manual_approved" "true" "manual" "$FEEDBACK_FILE"
-      echo "[JEO][PLAN] manual approved=true" >&2
+      echo "[OMG][PLAN] manual approved=true" >&2
       return 0
       ;;
     f|feedback)
       read -r -p "피드백 내용을 입력하세요: " fb
       write_manual_feedback_json "false" "${fb:-manual-feedback (fallback gate)}"
       persist_plan_state "feedback_required" "false" "manual" "$FEEDBACK_FILE"
-      echo "[JEO][PLAN] manual approved=false (feedback)" >&2
+      echo "[OMG][PLAN] manual approved=false (feedback)" >&2
       return 10
       ;;
     s|stop|n|no)
-      echo "[JEO][PLAN] user requested PLAN stop." >&2
+      echo "[OMG][PLAN] user requested PLAN stop." >&2
       return 30
       ;;
     *)
-      echo "[JEO][PLAN] invalid choice. stopping PLAN." >&2
+      echo "[OMG][PLAN] invalid choice. stopping PLAN." >&2
       return 31
       ;;
   esac
@@ -349,13 +349,13 @@ except Exception:
 }
 
 # Pre-launch probe: verify the dedicated port is available before starting plannotator.
-if [[ "${JEO_SKIP_LISTEN_PROBE:-0}" != "1" ]]; then
+if [[ "${OMG_SKIP_LISTEN_PROBE:-0}" != "1" ]]; then
   set +e
   probe_plannotator_port "$PLANNOTATOR_PORT"
   probe_port_rc=$?
   set -e
   if [[ "$probe_port_rc" -eq 2 ]]; then
-    echo "[JEO][PLAN] localhost bind probe failed — listen not permitted (sandbox/CI)." >&2
+    echo "[OMG][PLAN] localhost bind probe failed — listen not permitted (sandbox/CI)." >&2
     set +e
     manual_fallback_gate
     probe_rc=$?
@@ -365,11 +365,11 @@ if [[ "${JEO_SKIP_LISTEN_PROBE:-0}" != "1" ]]; then
     fi
     exit "$probe_rc"
   elif [[ "$probe_port_rc" -eq 1 ]]; then
-    echo "[JEO][PLAN] port ${PLANNOTATOR_PORT} already in use — another plannotator instance may be running." >&2
-    echo "[JEO][PLAN] override with: PLANNOTATOR_PORT=<free-port> or kill the existing process." >&2
+    echo "[OMG][PLAN] port ${PLANNOTATOR_PORT} already in use — another plannotator instance may be running." >&2
+    echo "[OMG][PLAN] override with: PLANNOTATOR_PORT=<free-port> or kill the existing process." >&2
     exit 32
   fi
-  echo "[JEO][PLAN] port ${PLANNOTATOR_PORT} is available — starting plannotator." >&2
+  echo "[OMG][PLAN] port ${PLANNOTATOR_PORT} is available — starting plannotator." >&2
 fi
 
 attempt=1
@@ -396,16 +396,16 @@ sys.stdout.write(json.dumps({'tool_input': {'plan': plan, 'permission_mode': 'ac
   set -e
   case "$listen_rc" in
     0)
-      echo "[JEO][PLAN] plannotator listening on port ${PLANNOTATOR_PORT} — waiting for user input." >&2
+      echo "[OMG][PLAN] plannotator listening on port ${PLANNOTATOR_PORT} — waiting for user input." >&2
       ;;
     1)
-      echo "[JEO][PLAN] plannotator exited during startup (attempt ${attempt}/${MAX_RESTARTS})." >&2
+      echo "[OMG][PLAN] plannotator exited during startup (attempt ${attempt}/${MAX_RESTARTS})." >&2
       wait "$PLANNOTATOR_PID" 2>/dev/null || true
       ((attempt++)) || true
       continue
       ;;
     2)
-      echo "[JEO][PLAN] plannotator startup timeout (${PLANNOTATOR_START_TIMEOUT}s) — port ${PLANNOTATOR_PORT} not bound yet; continuing to wait." >&2
+      echo "[OMG][PLAN] plannotator startup timeout (${PLANNOTATOR_START_TIMEOUT}s) — port ${PLANNOTATOR_PORT} not bound yet; continuing to wait." >&2
       ;;
   esac
 
@@ -434,19 +434,19 @@ PYEOF
   set -e
 
   if [[ "$rc" -eq 0 ]]; then
-    echo "[JEO][PLAN] approved=true"
+    echo "[OMG][PLAN] approved=true"
     persist_plan_state "approved" "true" "plannotator" "$FEEDBACK_FILE"
     exit 0
   fi
 
   if [[ "$rc" -eq 10 ]]; then
-    echo "[JEO][PLAN] approved=false (feedback)"
+    echo "[OMG][PLAN] approved=false (feedback)"
     persist_plan_state "feedback_required" "false" "plannotator" "$FEEDBACK_FILE"
     exit 10
   fi
 
   if grep -Eiq "$PORT_ERROR_REGEX" "$FEEDBACK_FILE"; then
-    echo "[JEO][PLAN] plannotator server bind failure detected (EADDRINUSE/EPERM)." >&2
+    echo "[OMG][PLAN] plannotator server bind failure detected (EADDRINUSE/EPERM)." >&2
     set +e
     manual_fallback_gate
     fallback_rc=$?
@@ -459,23 +459,23 @@ PYEOF
 
   # Classify crash type for clearer diagnostics before retrying
   if [[ -s "$FEEDBACK_FILE" ]]; then
-    echo "[JEO][PLAN] browser crash detected (non-JSON output, attempt ${attempt}/${MAX_RESTARTS}). restarting..." >&2
+    echo "[OMG][PLAN] browser crash detected (non-JSON output, attempt ${attempt}/${MAX_RESTARTS}). restarting..." >&2
   else
-    echo "[JEO][PLAN] plannotator exited without output (attempt ${attempt}/${MAX_RESTARTS}). restarting..." >&2
+    echo "[OMG][PLAN] plannotator exited without output (attempt ${attempt}/${MAX_RESTARTS}). restarting..." >&2
   fi
   ((attempt++))
 done
 
-echo "[JEO][PLAN] plannotator session ended ${MAX_RESTARTS} times." >&2
+echo "[OMG][PLAN] plannotator session ended ${MAX_RESTARTS} times." >&2
 set +e
 manual_fallback_gate
 fallback_rc=$?
 set -e
 if [[ "$fallback_rc" -eq 32 ]]; then
-  echo "[JEO][PLAN] confirmation required. stop and ask user whether to continue PLAN." >&2
+  echo "[OMG][PLAN] confirmation required. stop and ask user whether to continue PLAN." >&2
   write_state_gate_status "infrastructure_blocked"
   # Write a structured blocked-state file so agent frameworks can parse the situation
-  python3 - "$FEEDBACK_DIR/jeo-blocked.json" "$PLAN_FILE" <<'PYEOF'
+  python3 - "$FEEDBACK_DIR/omg-blocked.json" "$PLAN_FILE" <<'PYEOF'
 import json, sys
 out_path, plan_file = sys.argv[1], sys.argv[2]
 try:
@@ -489,7 +489,7 @@ try:
             "instruction": (
                 "Review the plan file and manually approve or reject: "
                 "run the hook script again in a TTY, or set plan_gate_status "
-                "in .omc/state/jeo-state.json to 'manual_approved'."
+                "in .omc/state/omg-state.json to 'manual_approved'."
             ),
         }, f, ensure_ascii=False, indent=2)
 except Exception:

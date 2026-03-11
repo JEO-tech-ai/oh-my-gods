@@ -1,12 +1,12 @@
-# JEO Workflow — Detailed Reference
+# OMG Workflow — Detailed Reference
 
 ## Complete Execution Flow
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                      JEO WORKFLOW                               │
+│                      OMG WORKFLOW                               │
 │                                                                 │
-│  [START] User activates "jeo" keyword with task description     │
+│  [START] User activates "omg" keyword with task description     │
 │                          │                                      │
 │          ┌───────────────▼──────────────────┐                  │
 │          │         PHASE 1: PLAN             │                  │
@@ -66,7 +66,7 @@ annotate keyword detected (or agentui alias — or user requests UI annotation r
     │
     ├─ FAIL (server down) → retry 3x, 5s interval → ERROR (exit with message)
     │
-    ▼  OK → update jeo-state.json: phase="verify_ui", agentation.active=true
+    ▼  OK → update omg-state.json: phase="verify_ui", agentation.active=true
 [SUBMIT GATE]  wait for explicit Send Annotations / onSubmit
          state: agentation.submit_gate_status="waiting_for_submit"
     │
@@ -100,11 +100,11 @@ annotate keyword detected (or agentui alias — or user requests UI annotation r
     │   └─ Next annotation → repeat ACK→FIND→FIX→RESOLVE→RE-SNAPSHOT
     │
     ├─ count=0 (all resolved)
-    │   └─ update jeo-state.json: agentation.exit_reason="all_resolved"
+    │   └─ update omg-state.json: agentation.exit_reason="all_resolved"
     │   └─ VERIFY_UI complete → proceed to CLEANUP
     │
     └─ timeout (120s)
-        └─ update jeo-state.json: agentation.exit_reason="timeout"
+        └─ update omg-state.json: agentation.exit_reason="timeout"
         └─ summarize what was/wasn't addressed → proceed to CLEANUP
 ```
 
@@ -153,7 +153,7 @@ LOOP:
 ### plannotator-agentation Phase Separation
 
 ```
-Phase Guard: hooks check jeo-state.json phase before executing
+Phase Guard: hooks check omg-state.json phase before executing
 
   PLAN phase:
     plannotator ✅ (allowed)
@@ -176,7 +176,7 @@ Phase Guard: hooks check jeo-state.json phase before executing
 ### Claude Code (Primary)
 
 ```
-jeo keyword detected
+omg keyword detected
     │
     ├─ omc available? → /omc:team N:executor (team orchestration)
     │   ├─ team-plan: explore + planner agents
@@ -185,25 +185,25 @@ jeo keyword detected
     │   ├─ team-verify: verifier + reviewers
     │   └─ team-fix: debugger/executor (loop until done)
     │
-    └─ plannotator hook: ExitPlanMode → JEO plan-gate wrapper
+    └─ plannotator hook: ExitPlanMode → OMG plan-gate wrapper
         └─ skips same reviewed hash, otherwise opens browser UI
 ```
 
-**State file**: `{worktree}/.omc/state/jeo-state.json`
+**State file**: `{worktree}/.omc/state/omg-state.json`
 
 ### Codex CLI
 
 ```
-/prompts:jeo activated
+/prompts:omg activated
     │
     ├─ Plan: Write plan.md manually or via ralph prompt
     ├─ Execute: BMAD /workflow-init (no native team support)
     ├─ Verify: agent-browser snapshot <url>
-    └─ Cleanup: bash .agent-skills/jeo/scripts/worktree-cleanup.sh
+    └─ Cleanup: bash .agent-skills/omg/scripts/worktree-cleanup.sh
 ```
 
 **Config**: `~/.codex/config.toml` (developer_instructions)
-**Prompt**: `~/.codex/prompts/jeo.md`
+**Prompt**: `~/.codex/prompts/omg.md`
 
 ### Gemini CLI
 
@@ -213,7 +213,7 @@ gemini --approval-mode plan
     ├─ Plan mode: write plan → exit → plannotator fires
     ├─ Execute: ohmg (bunx oh-my-ag) or BMAD /workflow-init
     ├─ Verify: agent-browser snapshot <url>
-    └─ Cleanup: bash .agent-skills/jeo/scripts/worktree-cleanup.sh
+    └─ Cleanup: bash .agent-skills/omg/scripts/worktree-cleanup.sh
 ```
 
 **Config**: `~/.gemini/settings.json` (AfterAgent hook)
@@ -222,7 +222,7 @@ gemini --approval-mode plan
 ### OpenCode
 
 ```
-/jeo-plan → /jeo-exec → /jeo-status → /jeo-cleanup
+/omg-plan → /omg-exec → /omg-status → /omg-cleanup
     │
     ├─ omx (oh-my-opencode): /omx:team N:executor "<task>"
     ├─ BMAD fallback: /workflow-init
@@ -252,7 +252,7 @@ Transitions:
   cleanup  → done     (worktrees removed, prune complete)
 ```
 
-State persisted in: `.omc/state/jeo-state.json`
+State persisted in: `.omc/state/omg-state.json`
 
 ```json
 {
@@ -317,7 +317,7 @@ State persisted in: `.omc/state/jeo-state.json`
 | Condition | Executor | Notes |
 |-----------|----------|-------|
 | Claude Code + omc + AGENT_TEAMS=1 | **team** | Best option — parallel staged pipeline |
-| Claude Code + omc (no teams) | **blocked** | Re-run setup and enable experimental teams; JEO should not silently downgrade |
+| Claude Code + omc (no teams) | **blocked** | Re-run setup and enable experimental teams; OMG should not silently downgrade |
 | Codex CLI | **BMAD** | Structured phases, no native team |
 | Gemini CLI + ohmg | **ohmg** | Multi-agent via oh-my-ag |
 | Gemini CLI (basic) | **BMAD** | Fallback structured workflow |
@@ -364,7 +364,7 @@ git worktree prune
 | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` | Enable native team orchestration | `1` |
 | `PLANNOTATOR_REMOTE` | Remote mode (no auto browser open) | unset |
 | `PLANNOTATOR_PORT` | Fixed plannotator port | auto |
-| `JEO_MAX_ITERATIONS` | Max ralph loop iterations | `20` |
+| `OMG_MAX_ITERATIONS` | Max ralph loop iterations | `20` |
 
 | `AGENTATION_PORT` | agentation MCP server port | `4747` |
 | `AGENTATION_TIMEOUT` | annotate watch loop timeout (seconds) | `120` |

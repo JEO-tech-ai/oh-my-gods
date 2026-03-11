@@ -6,7 +6,7 @@ U[5]:
   Compare existing tools, workflows, and market gaps
   Normalize agent-platform differences into settings rules hooks
   Produce reusable research artifacts in a neutral shared folder
-  Hand off clean discovery outputs to plan jeo ralph or implementation
+  Hand off clean discovery outputs to plan omg ralph or implementation
 S[6]{n,action,details}:
   1,Triage,Clarify what who why and reuse-or-overwrite existing .survey/{slug} results
   2,Choose adapter,Map execution to OMC OMX OHMG or generic web-capable agents without changing output shape

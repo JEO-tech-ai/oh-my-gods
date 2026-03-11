@@ -34,10 +34,10 @@ Before installation, confirm:
 
 1. **Which AI platform are you using?**
    - Claude Code → recommend `omc`, `plannotator`, `ralph`, `ralphmode`, `bmad`
-   - Gemini CLI → recommend `ohmg`, `ralph`, `ralphmode`, `jeo`
-   - OpenAI Codex CLI → recommend `omx`, `ralph`, `ralphmode`, `jeo`
+   - Gemini CLI → recommend `ohmg`, `ralph`, `ralphmode`, `omg`
+   - OpenAI Codex CLI → recommend `omx`, `ralph`, `ralphmode`, `omg`
    - OpenCode → requires oh-my-opencode installation (see Step 3)
-   - All / Unsure → install `jeo` + `survey` (`survey` for discovery, `jeo` for delivery)
+   - All / Unsure → install `omg` + `survey` (`survey` for discovery, `omg` for delivery)
 
 2. **Is the `skills` CLI installed?**
 
@@ -85,14 +85,14 @@ Execute based on Step 0 results:
 # research-first survey skill
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill survey
 
-# jeo core skill
-npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill jeo
+# omg core skill
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill omg
 
-# jeo dependency skills (recommended to install together)
+# omg dependency skills (recommended to install together)
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill plannotator --skill agentation
 ```
 
-> **jeo Agent Protocol**: When jeo runs, it automatically creates `jeo-state.json` and proceeds sequentially through PLAN → EXECUTE → VERIFY → CLEANUP phases.
+> **omg Agent Protocol**: When omg runs, it automatically creates `omg-state.json` and proceeds sequentially through PLAN → EXECUTE → VERIFY → CLEANUP phases.
 > The PLAN phase uses `plannotator`, and the VERIFY_UI phase (`annotate` keyword) uses `agentation`, so both skills are required.
 >
 > **agentation MCP install (recommended)**: `npx add-mcp "npx -y agentation-mcp server"` — auto-detects 9+ agents including Claude/Gemini/Codex/OpenCode.
@@ -104,7 +104,7 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill omc --skill plannotator --skill ralph --skill ralphmode --skill vibe-kanban
 ```
 
-> **Claude Code + jeo**: jeo EXECUTE phase requires `/omc:team` and will **not** fall back to single-agent execution. Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` before running jeo.
+> **Claude Code + omg**: omg EXECUTE phase requires `/omc:team` and will **not** fall back to single-agent execution. Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` before running omg.
 
 **Gemini CLI only:**
 ```bash
@@ -178,7 +178,7 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill agent-browser --skill agentation --skill copilot-coding-agent \
   --skill ai-tool-compliance \
   --skill environment-setup --skill file-organization \
-  --skill git-submodule --skill git-workflow --skill jeo \
+  --skill git-submodule --skill git-workflow --skill omg \
   --skill npm-git-install --skill ohmg --skill omx \
   --skill omc --skill opencontext --skill plannotator --skill playwriter \
   --skill ralph --skill ralphmode --skill skill-standardization --skill survey \
@@ -203,12 +203,12 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
 
 Or in Claude Code conversation:
 ```
-configure and use the jeo skill. remember it.
+configure and use the omg skill. remember it.
 ```
 
 ```bash
-# jeo ExitPlanMode hook setup (plannotator auto-integration)
-bash ~/.agent-skills/jeo/scripts/setup-claude.sh
+# omg ExitPlanMode hook setup (plannotator auto-integration)
+bash ~/.agent-skills/omg/scripts/setup-claude.sh
 
 # agentation Claude Code Official Skill install (recommended)
 npx skills add benjitaylor/agentation
@@ -234,11 +234,11 @@ After installation, add skills:
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods
 ```
 
-#### Gemini CLI — jeo hook setup
+#### Gemini CLI — omg hook setup
 
 ```bash
-# jeo AfterAgent hook auto-setup (plannotator + agentation integration)
-bash ~/.agent-skills/jeo/scripts/setup-gemini.sh
+# omg AfterAgent hook auto-setup (plannotator + agentation integration)
+bash ~/.agent-skills/omg/scripts/setup-gemini.sh
 ```
 
 > **TOON Format Hook**: If `~/.gemini/hooks/toon-skill-inject.sh` is installed, the skill catalog is auto-loaded at session start via `includeDirectories`. Codex CLI references `~/.codex/skills-toon-catalog.toon` in `developer_instructions`.
@@ -300,17 +300,17 @@ ls "${HOME}/.opencode/skills" 2>/dev/null
 ls "${HOME}/.config/opencode/skills" 2>/dev/null
 
 # Verify individual skill
-npx skills info jeo
+npx skills info omg
 ```
 
 First run after installation by platform:
 
 | Platform | Command |
 |----------|---------|
-| Claude Code | `jeo "task description"` or `/omc:team "task"` |
-| Gemini CLI | `/jeo "task description"` |
-| Codex CLI | `/jeo "task description"` |
-| OpenCode | `/jeo "task description"` |
+| Claude Code | `omg "task description"` or `/omc:team "task"` |
+| Gemini CLI | `/omg "task description"` |
+| Codex CLI | `/omg "task description"` |
+| OpenCode | `/omg "task description"` |
 
 ---
 
@@ -334,7 +334,7 @@ gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&
 
 | Skill | Activation Keyword | Description |
 |-------|-------------------|-------------|
-| `jeo` | `jeo` | Integrated orchestration (recommended starting point) — built-in agent execution protocol (STEP 0: state bootstrap → PLAN/plannotator → EXECUTE → VERIFY → CLEANUP). PLAN auto-installs `plannotator` if missing. **Claude Code**: requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`; EXECUTE must use `/omc:team`. Requires: plannotator, agentation |
+| `omg` | `omg` | Integrated orchestration (recommended starting point) — built-in agent execution protocol (STEP 0: state bootstrap → PLAN/plannotator → EXECUTE → VERIFY → CLEANUP). PLAN auto-installs `plannotator` if missing. **Claude Code**: requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`; EXECUTE must use `/omc:team`. Requires: plannotator, agentation |
 | `omc` | `omc`, `autopilot` | Claude Code multi-agent orchestration |
 | `ralph` | `ralph`, `ooo`, `ooo ralph`, `ooo interview` | Ouroboros specification-first development (Interview→Seed→Execute→Evaluate→Evolve) + persistent completion loop |
 | `ralphmode` | `ralphmode` | Ralph automation permission profiles for Claude Code, Codex CLI, Gemini CLI. Repo boundary enforcement, sandbox-first, secret denylist focused |

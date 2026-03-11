@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# JEO Skill — Claude Code Plugin & Hook Setup
-# Configures: omc plugin, plannotator hook, agentation MCP, jeo workflow in ~/.claude/settings.json
+# OMG Skill — Claude Code Plugin & Hook Setup
+# Configures: omc plugin, plannotator hook, agentation MCP, omg workflow in ~/.claude/settings.json
 # Usage: bash setup-claude.sh [--dry-run]
 
 set -euo pipefail
@@ -14,11 +14,11 @@ info() { echo -e "${BLUE}→${NC} $*"; }
 DRY_RUN=false
 [[ "${1:-}" == "--dry-run" ]] && DRY_RUN=true
 
-JEO_SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+OMG_SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CLAUDE_SETTINGS="${HOME}/.claude/settings.json"
 
 echo ""
-echo "JEO — Claude Code Setup"
+echo "OMG — Claude Code Setup"
 echo "========================"
 
 # ── 1. Check Claude Code ──────────────────────────────────────────────────────
@@ -44,22 +44,22 @@ mkdir -p "$(dirname "$CLAUDE_SETTINGS")"
 
 if [[ -f "$CLAUDE_SETTINGS" ]]; then
   if ! $DRY_RUN; then
-    cp "$CLAUDE_SETTINGS" "${CLAUDE_SETTINGS}.jeo.bak"
-    ok "Backup created: ${CLAUDE_SETTINGS}.jeo.bak"
+    cp "$CLAUDE_SETTINGS" "${CLAUDE_SETTINGS}.omg.bak"
+    ok "Backup created: ${CLAUDE_SETTINGS}.omg.bak"
   fi
 fi
 
 if $DRY_RUN; then
   echo -e "${YELLOW}[DRY-RUN]${NC} Would sync plannotator hook, agent teams, agentation MCP, and UserPromptSubmit hook in $CLAUDE_SETTINGS"
 else
-  JEO_SKILL_DIR="$JEO_SKILL_DIR" python3 - <<'PYEOF'
+  OMG_SKILL_DIR="$OMG_SKILL_DIR" python3 - <<'PYEOF'
 import json
 import os
 
 settings_path = os.path.expanduser("~/.claude/settings.json")
-jeo_skill_dir = os.environ["JEO_SKILL_DIR"]
-plan_gate_cmd = f'python3 "{jeo_skill_dir}/scripts/claude-plan-gate.py"'
-agentation_cmd = f'python3 "{jeo_skill_dir}/scripts/claude-agentation-submit-hook.py"'
+omg_skill_dir = os.environ["OMG_SKILL_DIR"]
+plan_gate_cmd = f'python3 "{omg_skill_dir}/scripts/claude-plan-gate.py"'
+agentation_cmd = f'python3 "{omg_skill_dir}/scripts/claude-agentation-submit-hook.py"'
 
 try:
     with open(settings_path) as f:
@@ -94,7 +94,7 @@ if existing_plan_hook is None:
         "timeout": 1800,
     })
     changed = True
-    messages.append("✓ JEO plan gate wrapper added to ExitPlanMode")
+    messages.append("✓ OMG plan gate wrapper added to ExitPlanMode")
 else:
     if existing_plan_hook.get("command") != plan_gate_cmd:
         existing_plan_hook["command"] = plan_gate_cmd
@@ -102,7 +102,7 @@ else:
     if existing_plan_hook.get("timeout") != 1800:
         existing_plan_hook["timeout"] = 1800
         changed = True
-    messages.append("✓ JEO plan gate wrapper synced")
+    messages.append("✓ OMG plan gate wrapper synced")
 
 env = settings.setdefault("env", {})
 if env.get("CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS") != "1":
@@ -212,5 +212,5 @@ echo "  # Then restart Claude Code"
 echo ""
 ok "Claude Code setup complete"
 echo "  IMPORTANT: Restart Claude Code to activate all hooks and plugins"
-echo "  JEO requires /omc:team execution in Claude Code. Verify CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 after restart."
+echo "  OMG requires /omc:team execution in Claude Code. Verify CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 after restart."
 echo ""

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# JEO Skill — Codex CLI Setup
-# Configures: developer_instructions + agentation MCP in ~/.codex/config.toml + /prompts:jeo
+# OMG Skill — Codex CLI Setup
+# Configures: developer_instructions + agentation MCP in ~/.codex/config.toml + /prompts:omg
 # Usage: bash setup-codex.sh [--dry-run]
 
 set -euo pipefail
@@ -13,14 +13,14 @@ info() { echo -e "${BLUE}→${NC} $*"; }
 DRY_RUN=false
 [[ "${1:-}" == "--dry-run" ]] && DRY_RUN=true
 
-JEO_SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+OMG_SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 CODEX_CONFIG="${HOME}/.codex/config.toml"
 CODEX_PROMPTS_DIR="${HOME}/.codex/prompts"
-JEO_PROMPT_FILE="${CODEX_PROMPTS_DIR}/jeo.md"
+OMG_PROMPT_FILE="${CODEX_PROMPTS_DIR}/omg.md"
 
 echo ""
-echo "JEO — Codex CLI Setup"
+echo "OMG — Codex CLI Setup"
 echo "======================"
 
 # ── 1. Check Codex CLI ────────────────────────────────────────────────────────
@@ -32,34 +32,34 @@ fi
 info "Configuring ~/.codex/config.toml..."
 
 HOOK_DIR="${HOME}/.codex/hooks"
-HOOK_FILE="${HOOK_DIR}/jeo-notify.py"
+HOOK_FILE="${HOOK_DIR}/omg-notify.py"
 
 if $DRY_RUN; then
   echo -e "${YELLOW}[DRY-RUN]${NC} Would create/update $CODEX_CONFIG"
-  echo -e "${YELLOW}[DRY-RUN]${NC} Would create $JEO_PROMPT_FILE"
+  echo -e "${YELLOW}[DRY-RUN]${NC} Would create $OMG_PROMPT_FILE"
 else
   mkdir -p "$(dirname "$CODEX_CONFIG")" "$CODEX_PROMPTS_DIR"
 
   # Backup existing config
-  [[ -f "$CODEX_CONFIG" ]] && cp "$CODEX_CONFIG" "${CODEX_CONFIG}.jeo.bak"
+  [[ -f "$CODEX_CONFIG" ]] && cp "$CODEX_CONFIG" "${CODEX_CONFIG}.omg.bak"
 
-  JEO_INSTRUCTION=$(cat <<JEOEOF
-# JEO Orchestration Workflow
-# Keyword: jeo | Platforms: Codex, Claude, Gemini, OpenCode
+  OMG_INSTRUCTION=$(cat <<OMGEOF
+# OMG Orchestration Workflow
+# Keyword: omg | Platforms: Codex, Claude, Gemini, OpenCode
 #
-# JEO provides integrated AI orchestration:
+# OMG provides integrated AI orchestration:
 #   1. PLAN: ralph+plannotator for visual plan review
 #   2. EXECUTE: team (if available) or bmad workflow
 #   3. VERIFY: agent-browser snapshot for UI verification
 #   4. CLEANUP: auto worktree cleanup after completion
 #
-# Trigger with: jeo "<task description>"
-# Use /prompts:jeo for full workflow activation
+# Trigger with: omg "<task description>"
+# Use /prompts:omg for full workflow activation
 #
 # PLAN phase protocol (Codex):
 #   1. Write plan to plan.md
 #   2. Run mandatory PLAN gate (auto-installs plannotator if missing, blocks for feedback/approve, retries dead sessions up to 3):
-#      bash ${JEO_SKILL_DIR}/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3
+#      bash ${OMG_SKILL_DIR}/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3
 #      Rule: if the current plan hash already has a terminal gate result
 #      (approved/manual_approved/feedback_required/infrastructure_blocked), do not reopen plannotator.
 #      Only a revised plan.md resets the gate to pending.
@@ -81,14 +81,14 @@ else
 #   /workflow-status — check current BMAD phase
 #
 # Tools: agent-browser, playwriter, plannotator
-JEOEOF
+OMGEOF
 )
 
   python3 - <<PYEOF
 import re, os
 
 config_path = os.path.expanduser("~/.codex/config.toml")
-jeo_instruction = """${JEO_INSTRUCTION}"""
+omg_instruction = """${OMG_INSTRUCTION}"""
 
 try:
     content = open(config_path).read() if os.path.exists(config_path) else ""
@@ -96,9 +96,9 @@ except Exception:
     content = ""
 
 content = re.sub(r'(?ms)^\[developer_instructions\]\s*\n.*?(?=^\[|\Z)', '', content).strip() + "\n"
-# Only strip legacy bare JEO block if it is NOT inside a developer_instructions value
+# Only strip legacy bare OMG block if it is NOT inside a developer_instructions value
 if not re.search(r'(?ms)^developer_instructions\s*=\s*"""', content):
-    content = re.sub(r'(?ms)^# JEO Orchestration Workflow\n.*?^"""\s*\n', '', content)
+    content = re.sub(r'(?ms)^# OMG Orchestration Workflow\n.*?^"""\s*\n', '', content)
 
 def parse_existing_instructions(text: str) -> str:
     m = re.search(r'(?ms)^developer_instructions\s*=\s*"""\n?(.*?)\n?"""\s*$', text)
@@ -112,13 +112,13 @@ def parse_existing_instructions(text: str) -> str:
     return ""
 
 existing = parse_existing_instructions(content)
-jeo_pattern = re.compile(
-    r'(?ms)^# JEO Orchestration Workflow\n.*?^# Tools: agent-browser, playwriter, plannotator\s*$'
+omg_pattern = re.compile(
+    r'(?ms)^# OMG Orchestration Workflow\n.*?^# Tools: agent-browser, playwriter, plannotator\s*$'
 )
-if jeo_pattern.search(existing):
-    merged = jeo_pattern.sub(jeo_instruction.strip(), existing).strip()
+if omg_pattern.search(existing):
+    merged = omg_pattern.sub(omg_instruction.strip(), existing).strip()
 else:
-    merged = (existing.rstrip() + "\n\n" if existing.strip() else "") + jeo_instruction.strip()
+    merged = (existing.rstrip() + "\n\n" if existing.strip() else "") + omg_instruction.strip()
 
 new_assignment = 'developer_instructions = """\n' + merged + '\n"""\n'
 
@@ -146,15 +146,15 @@ except Exception:
     with open(config_path, "w") as f:
         f.write(cleaned)
 
-print("✓ JEO developer_instructions synced (top-level string)")
+print("✓ OMG developer_instructions synced (top-level string)")
 PYEOF
-  ok "JEO developer_instructions synced in ~/.codex/config.toml"
+  ok "OMG developer_instructions synced in ~/.codex/config.toml"
 
-  # ── 3. Create /prompts:jeo prompt file ──────────────────────────────────────
-  cat > "$JEO_PROMPT_FILE" <<'PROMPTEOF'
-# JEO — Integrated Agent Orchestration Prompt
+  # ── 3. Create /prompts:omg prompt file ──────────────────────────────────────
+  cat > "$OMG_PROMPT_FILE" <<'PROMPTEOF'
+# OMG — Integrated Agent Orchestration Prompt
 
-You are now operating in **JEO mode** — Integrated AI Agent Orchestration.
+You are now operating in **OMG mode** — Integrated AI Agent Orchestration.
 
 ## Your Workflow
 
@@ -163,7 +163,7 @@ Before writing any code, create and review a plan:
 1. Write a detailed implementation plan in \`plan.md\` (objectives, steps, risks, acceptance criteria)
 2. Run plannotator PLAN gate (blocking, mandatory; auto-installs plannotator if missing):
    \`\`\`bash
-   bash .agent-skills/jeo/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3
+   bash .agent-skills/omg/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3
    echo "PLAN_READY"
    \`\`\`
    Same-hash guard:
@@ -176,7 +176,7 @@ Before writing any code, create and review a plan:
    - Output the full contents of \`plan.md\` to the user in the conversation
    - Ask explicitly: "⚠️ plannotator UI unavailable in this environment. Please review the plan above and reply 'approve' to proceed, or provide feedback."
    - **STOP and wait for user response. Do NOT proceed to EXECUTE until user approves.**
-   - On 'approve'/'yes'/'ok': update \`jeo-state.json\` \`plan_approved=true, plan_gate_status="manual_approved"\` → EXECUTE
+   - On 'approve'/'yes'/'ok': update \`omg-state.json\` \`plan_approved=true, plan_gate_status="manual_approved"\` → EXECUTE
    - On feedback text: revise \`plan.md\`, retry \`plannotator-plan-loop.sh\`, repeat
 NEVER skip plannotator. NEVER proceed to EXECUTE without approved=true or explicit user approval in conversation.
 
@@ -196,7 +196,7 @@ If the task has browser UI:
 
 ### Step 3.1: VERIFY_UI (agentation submit gate)
 If \`annotate\` / \`agentui\` is requested:
-1. Update \`.omc/state/jeo-state.json\` to \`phase="verify_ui"\`
+1. Update \`.omc/state/omg-state.json\` to \`phase="verify_ui"\`
 2. Set \`agentation.submit_gate_status="waiting_for_submit"\`
 3. Wait until the human actually clicks **Send Annotations** / triggers \`onSubmit\`
 4. Only then emit \`ANNOTATE_READY\`
@@ -206,7 +206,7 @@ Never read \`/pending\` before the submit gate opens.
 ### Step 4: CLEANUP (worktree)
 After all tasks complete:
 - Run: git worktree prune
-- Run: bash ${JEO_SKILL_DIR}/scripts/worktree-cleanup.sh
+- Run: bash ${OMG_SKILL_DIR}/scripts/worktree-cleanup.sh
 
 ## Key Commands
 - Plan review — run plannotator BLOCKING (no &), then output PLAN_READY:
@@ -217,7 +217,7 @@ After all tasks complete:
   - After 3 dead sessions, stop and ask whether PLAN should be terminated
   - If loop exits 32: localhost bind blocked. use local TTY/manual PLAN gate
   \`\`\`bash
-  bash .agent-skills/jeo/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3
+  bash .agent-skills/omg/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3
   # Output PLAN_READY to trigger notify hook as backup signal
   echo "PLAN_READY"
   # Check result
@@ -232,10 +232,10 @@ except Exception:
   \`\`\`
 - Browser verify: \`agent-browser snapshot http://localhost:3000\`
 - BMAD init: \`/workflow-init\`
-- Worktree cleanup: \`bash ${JEO_SKILL_DIR}/scripts/worktree-cleanup.sh\`
+- Worktree cleanup: \`bash ${OMG_SKILL_DIR}/scripts/worktree-cleanup.sh\`
 
 ## State File
-Save progress to: \`.omc/state/jeo-state.json\`
+Save progress to: \`.omc/state/omg-state.json\`
 \`\`\`json
 {
   "phase": "plan|execute|verify|verify_ui|cleanup|done",
@@ -261,13 +261,13 @@ Save progress to: \`.omc/state/jeo-state.json\`
 Always check state file on resume to continue from last phase.
 PROMPTEOF
 
-  # Fix absolute paths in prompt file (replace relative .agent-skills paths with absolute JEO_SKILL_DIR)
+  # Fix absolute paths in prompt file (replace relative .agent-skills paths with absolute OMG_SKILL_DIR)
   sed -i.bak \
-    -e "s|bash .agent-skills/jeo/scripts/plannotator-plan-loop.sh|bash ${JEO_SKILL_DIR}/scripts/plannotator-plan-loop.sh|g" \
-    -e "s|\\\${JEO_SKILL_DIR}|${JEO_SKILL_DIR}|g" \
-    "$JEO_PROMPT_FILE"
-  rm -f "${JEO_PROMPT_FILE}.bak"
-  ok "JEO prompt file created: $JEO_PROMPT_FILE"
+    -e "s|bash .agent-skills/omg/scripts/plannotator-plan-loop.sh|bash ${OMG_SKILL_DIR}/scripts/plannotator-plan-loop.sh|g" \
+    -e "s|\\\${OMG_SKILL_DIR}|${OMG_SKILL_DIR}|g" \
+    "$OMG_PROMPT_FILE"
+  rm -f "${OMG_PROMPT_FILE}.bak"
+  ok "OMG prompt file created: $OMG_PROMPT_FILE"
 
   # ── 4. Create plannotator notify hook ────────────────────────────────────────
   info "Setting up plannotator notify hook..."
@@ -275,7 +275,7 @@ PROMPTEOF
 
   cat > "$HOOK_FILE" << 'HOOKEOF'
 #!/usr/bin/env python3
-"""JEO Codex notify hook — detects PLAN_READY / ANNOTATE_READY and triggers plannotator / agentation."""
+"""OMG Codex notify hook — detects PLAN_READY / ANNOTATE_READY and triggers plannotator / agentation."""
 import hashlib, json, os, re, subprocess, sys, urllib.request, urllib.error, time
 
 # Exact signal strings (matched as standalone lines, allowing surrounding whitespace)
@@ -283,9 +283,9 @@ PLAN_SIGNALS = ["PLAN_READY"]
 ANNOTATE_SIGNALS = ["ANNOTATE_READY", "AGENTUI_READY"]
 PLAN_TERMINAL_STATUSES = {"approved", "manual_approved", "feedback_required", "infrastructure_blocked"}
 
-def get_jeo_phase(cwd: str) -> str:
-    """Read current JEO phase from state file. Returns empty string if not available."""
-    state_path = os.path.join(cwd, ".omc", "state", "jeo-state.json")
+def get_omg_phase(cwd: str) -> str:
+    """Read current OMG phase from state file. Returns empty string if not available."""
+    state_path = os.path.join(cwd, ".omc", "state", "omg-state.json")
     try:
         with open(state_path) as f:
             return json.load(f).get("phase", "")
@@ -294,7 +294,7 @@ def get_jeo_phase(cwd: str) -> str:
 
 
 def get_state_path(cwd: str) -> str:
-    return os.path.join(cwd, ".omc", "state", "jeo-state.json")
+    return os.path.join(cwd, ".omc", "state", "omg-state.json")
 
 
 def load_state(cwd: str) -> dict:
@@ -333,14 +333,14 @@ def update_state(cwd: str, mutator) -> None:
 def get_feedback_file(cwd: str) -> str:
     """Return session-isolated feedback file path based on cwd MD5."""
     _session_key = hashlib.md5(cwd.encode()).hexdigest()[:8]
-    feedback_dir = f"/tmp/jeo-{_session_key}"
+    feedback_dir = f"/tmp/omg-{_session_key}"
     os.makedirs(feedback_dir, exist_ok=True)
     return os.path.join(feedback_dir, "plannotator_feedback.txt")
 
 
 def get_plannotator_env(cwd: str) -> dict:
     _session_key = hashlib.md5(cwd.encode()).hexdigest()[:8]
-    runtime_home = f"/tmp/jeo-{_session_key}/.plannotator"
+    runtime_home = f"/tmp/omg-{_session_key}/.plannotator"
     os.makedirs(runtime_home, exist_ok=True)
     env = os.environ.copy()
     env["HOME"] = runtime_home
@@ -350,9 +350,9 @@ def get_plannotator_env(cwd: str) -> dict:
 
 def get_plan_loop_script(cwd: str):
     candidates = [
-        os.path.join(cwd, ".agent-skills", "jeo", "scripts", "plannotator-plan-loop.sh"),
-        os.path.expanduser("~/.codex/skills/jeo/scripts/plannotator-plan-loop.sh"),
-        os.path.expanduser("~/.agent-skills/jeo/scripts/plannotator-plan-loop.sh"),
+        os.path.join(cwd, ".agent-skills", "omg", "scripts", "plannotator-plan-loop.sh"),
+        os.path.expanduser("~/.codex/skills/omg/scripts/plannotator-plan-loop.sh"),
+        os.path.expanduser("~/.agent-skills/omg/scripts/plannotator-plan-loop.sh"),
     ]
     for p in candidates:
         if os.path.exists(p):
@@ -380,8 +380,8 @@ def should_skip_plan_gate(cwd: str, plan_path: str) -> bool:
     )
 
 def write_plan_gate_result(cwd: str, rc: int, feedback_file: str) -> None:
-    """Write plannotator gate result to jeo-state.json."""
-    state_path = os.path.join(cwd, '.omc', 'state', 'jeo-state.json')
+    """Write plannotator gate result to omg-state.json."""
+    state_path = os.path.join(cwd, '.omc', 'state', 'omg-state.json')
     if not os.path.exists(state_path):
         return
     try:
@@ -423,12 +423,12 @@ def main() -> int:
 
     msg = notification.get("last-assistant-message", "").strip()
     cwd = notification.get("cwd", os.getcwd())
-    phase = get_jeo_phase(cwd)
+    phase = get_omg_phase(cwd)
 
     # PLAN_READY: trigger plannotator (only during plan phase)
     if phase in ("plan",):
         if any(re.search(rf'(?m)^{re.escape(sig)}\s*$', msg or '') for sig in PLAN_SIGNALS):
-            plan_candidates = ["plan.md", ".omc/plans/jeo-plan.md", "docs/plan.md"]
+            plan_candidates = ["plan.md", ".omc/plans/omg-plan.md", "docs/plan.md"]
             plan_path = None
             for candidate in plan_candidates:
                 p = os.path.join(cwd, candidate)
@@ -436,12 +436,12 @@ def main() -> int:
                     plan_path = p
                     break
             if plan_path is None:
-                print("[JEO] plan.md not found in known locations")
+                print("[OMG] plan.md not found in known locations")
                 return 0
             if should_skip_plan_gate(cwd, plan_path):
                 state = load_state(cwd)
                 print(
-                    f"[JEO] plan gate skipped: current hash already reviewed ({state.get('plan_gate_status', 'unknown')})"
+                    f"[OMG] plan gate skipped: current hash already reviewed ({state.get('plan_gate_status', 'unknown')})"
                 )
                 return 0
             feedback_file = get_feedback_file(cwd)
@@ -459,18 +459,18 @@ def main() -> int:
                     print(result.stdout.strip())
                 write_plan_gate_result(cwd, result.returncode, feedback_file)
                 if result.returncode == 32:
-                    print("[JEO] plannotator unavailable: localhost bind blocked (sandbox/CI).")
-                    print("[JEO] CONVERSATION APPROVAL MODE: agent must output plan.md and request explicit user approval.")
-                print(f"[JEO] plannotator loop result code={result.returncode} feedback={feedback_file}")
+                    print("[OMG] plannotator unavailable: localhost bind blocked (sandbox/CI).")
+                    print("[OMG] CONVERSATION APPROVAL MODE: agent must output plan.md and request explicit user approval.")
+                print(f"[OMG] plannotator loop result code={result.returncode} feedback={feedback_file}")
             else:
                 plan_content = open(plan_path).read()
                 payload = json.dumps({"tool_input": {"plan": plan_content, "permission_mode": "acceptEdits"}})
                 try:
                     with open(feedback_file, "w") as f:
                         subprocess.run(["plannotator"], input=payload, stdout=f, stderr=f, text=True, env=get_plannotator_env(cwd))
-                    print(f"[JEO] plannotator feedback \u2192 {feedback_file}")
+                    print(f"[OMG] plannotator feedback \u2192 {feedback_file}")
                 except FileNotFoundError:
-                    print("[JEO] plannotator not found \u2014 skipping")
+                    print("[OMG] plannotator not found \u2014 skipping")
             return 0
 
     # ANNOTATE_READY: poll agentation HTTP API only after explicit submit signal in VERIFY_UI
@@ -479,7 +479,7 @@ def main() -> int:
             state = load_state(cwd)
             agentation = state.get("agentation", {})
             if agentation.get("submit_gate_status") == "submitted":
-                print("[JEO] agentation submit gate already opened for this turn")
+                print("[OMG] agentation submit gate already opened for this turn")
             else:
                 def mark_submitted(data):
                     agentation_state = data.setdefault("agentation", {})
@@ -501,15 +501,15 @@ def main() -> int:
                         agentation_state["submit_gate_status"] = "waiting_for_submit"
                 update_state(cwd, record_count)
                 if count == 0:
-                    print("[JEO] agentation: no pending annotations")
+                    print("[OMG] agentation: no pending annotations")
                 else:
-                    print(f"[JEO] agentation: {count} pending annotations")
+                    print(f"[OMG] agentation: {count} pending annotations")
                     for ann in annotations:
                         sev = ann.get("severity", "suggestion")
                         print(f"  [{sev}] {ann.get('element','?')} | {ann.get('comment','')[:80]}")
                         print(f"    elementPath: {ann.get('elementPath','?')}")
             except (urllib.error.URLError, Exception) as e:
-                print(f"[JEO] agentation server not reachable ({base_url}): {e}")
+                print(f"[OMG] agentation server not reachable ({base_url}): {e}")
             return 0
 
     return 0
@@ -518,19 +518,19 @@ if __name__ == "__main__":
 HOOKEOF
 
   chmod +x "$HOOK_FILE"
-  # Inject absolute JEO script path as first candidate in get_plan_loop_script()
+  # Inject absolute OMG script path as first candidate in get_plan_loop_script()
   sed -i.bak \
-    "s|os.path.join(cwd, \".agent-skills\", \"jeo\", \"scripts\", \"plannotator-plan-loop.sh\")|\"${JEO_SKILL_DIR}/scripts/plannotator-plan-loop.sh\",\n        os.path.join(cwd, \".agent-skills\", \"jeo\", \"scripts\", \"plannotator-plan-loop.sh\")|" \
+    "s|os.path.join(cwd, \".agent-skills\", \"omg\", \"scripts\", \"plannotator-plan-loop.sh\")|\"${OMG_SKILL_DIR}/scripts/plannotator-plan-loop.sh\",\n        os.path.join(cwd, \".agent-skills\", \"omg\", \"scripts\", \"plannotator-plan-loop.sh\")|" \
     "$HOOK_FILE"
   rm -f "${HOOK_FILE}.bak"
-  ok "JEO notify hook created: $HOOK_FILE"
+  ok "OMG notify hook created: $HOOK_FILE"
 
   # Add notify + tui to config.toml
   python3 - <<PYEOF
 import re, os
 
 config_path = os.path.expanduser("~/.codex/config.toml")
-hook_path = os.path.expanduser("~/.codex/hooks/jeo-notify.py")
+hook_path = os.path.expanduser("~/.codex/hooks/omg-notify.py")
 
 try:
     content = open(config_path).read() if os.path.exists(config_path) else ""
@@ -594,8 +594,8 @@ fi
 
 echo ""
 echo "Codex CLI usage after setup:"
-echo "  /prompts:jeo             ← Activate JEO orchestration workflow"
-echo "  notify hook: ~/.codex/hooks/jeo-notify.py"
+echo "  /prompts:omg             ← Activate OMG orchestration workflow"
+echo "  notify hook: ~/.codex/hooks/omg-notify.py"
 echo "    fires on: PLAN_READY / ANNOTATE_READY signals in agent output (AGENTUI_READY also accepted)"
 echo "    writes to: /tmp/plannotator_feedback.txt"
 echo ""

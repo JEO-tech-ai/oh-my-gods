@@ -1,43 +1,43 @@
 ---
-name: jeo
-description: "JEO — Integrated AI agent orchestration skill. Plan with ralph+plannotator, execute with team/bmad, verify browser behavior with agent-browser, apply UI feedback with agentation(annotate), auto-cleanup worktrees after completion. Supports Claude, Codex, Gemini CLI, and OpenCode. Install: ralph, omc, omx, ohmg, bmad, plannotator, agent-browser, agentation."
+name: omg
+description: "OMG — Integrated AI agent orchestration skill. Plan with ralph+plannotator, execute with team/bmad, verify browser behavior with agent-browser, apply UI feedback with agentation(annotate), auto-cleanup worktrees after completion. Supports Claude, Codex, Gemini CLI, and OpenCode. Install: ralph, omc, omx, ohmg, bmad, plannotator, agent-browser, agentation."
 compatibility: "Requires git, node>=18, bash. Optional: bun, docker."
 allowed-tools: Read Write Bash Grep Glob Task
 metadata:
-  tags: jeo, orchestration, ralph, plannotator, agentation, annotate, agentui, UI검토, team, bmad, omc, omx, ohmg, agent-browser, multi-agent, workflow, worktree-cleanup, browser-verification, ui-feedback
+  tags: omg, orchestration, ralph, plannotator, agentation, annotate, agentui, UI검토, team, bmad, omc, omx, ohmg, agent-browser, multi-agent, workflow, worktree-cleanup, browser-verification, ui-feedback
   platforms: Claude, Codex, Gemini, OpenCode
-  keyword: jeo
+  keyword: omg
   version: 1.3.0
   source: supercent-io/skills-template
 ---
 
 
-# JEO — Integrated Agent Orchestration
+# OMG — Integrated Agent Orchestration
 
-> Keyword: `jeo` · `annotate` · `UI검토` · `agentui (deprecated)` | Platforms: Claude Code · Codex CLI · Gemini CLI · OpenCode
+> Keyword: `omg` · `annotate` · `UI검토` · `agentui (deprecated)` | Platforms: Claude Code · Codex CLI · Gemini CLI · OpenCode
 >
 > A unified skill providing fully automated orchestration flow:
 > Plan (ralph+plannotator) → Execute (team/bmad) → UI Feedback (agentation/annotate) → Cleanup (worktree cleanup)
 
 ## Control Layers
 
-JEO uses one cross-platform abstraction for orchestration:
+OMG uses one cross-platform abstraction for orchestration:
 
 - `settings`: platform/runtime configuration such as Claude hooks, Codex `config.toml`, Gemini `settings.json`, MCP registration, and prompt parameters
 - `rules`: policy constraints that must hold on every platform
 - `hooks`: event callbacks that enforce those rules on each platform
 
-The key JEO rules are:
+The key OMG rules are:
 
 - do not reopen the PLAN gate when the current plan hash already has a terminal result
 - only a revised plan resets `plan_gate_status` to `pending`
 - do not process agentation annotations before explicit submit/onSubmit opens the submit gate
 
-The authoritative state is `.omc/state/jeo-state.json`. Hooks may help advance the workflow, but they must obey the state file.
+The authoritative state is `.omc/state/omg-state.json`. Hooks may help advance the workflow, but they must obey the state file.
 
 ---
 
-## 0. Agent Execution Protocol (follow immediately upon `jeo` keyword detection)
+## 0. Agent Execution Protocol (follow immediately upon `omg` keyword detection)
 
 > The following are commands, not descriptions. Execute them in order. Each step only proceeds after the previous one completes.
 
@@ -47,7 +47,7 @@ The authoritative state is `.omc/state/jeo-state.json`. Hooks may help advance t
 mkdir -p .omc/state .omc/plans .omc/logs
 ```
 
-If `.omc/state/jeo-state.json` does not exist, create it:
+If `.omc/state/omg-state.json` does not exist, create it:
 
 <!-- NOTE: The `worktrees` array was removed from the initial schema as it is not yet implemented.
      Add it back when multi-worktree parallel execution tracking is needed.
@@ -86,7 +86,7 @@ If `.omc/state/jeo-state.json` does not exist, create it:
 ```
 
 Notify the user:
-> "JEO activated. Phase: PLAN. Add the `annotate` keyword if a UI feedback loop is needed."
+> "OMG activated. Phase: PLAN. Add the `annotate` keyword if a UI feedback loop is needed."
 
 ---
 
@@ -94,14 +94,14 @@ Notify the user:
 
 **Checkpoint recording — immediately after entering each STEP:**
 ```python
-# Execute immediately at the start of each STEP (agent updates jeo-state.json directly)
+# Execute immediately at the start of each STEP (agent updates omg-state.json directly)
 python3 -c "
 import json, datetime, os, subprocess, tempfile
 try:
     root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], stderr=subprocess.DEVNULL).decode().strip()
 except:
     root = os.getcwd()
-f = os.path.join(root, '.omc/state/jeo-state.json')
+f = os.path.join(root, '.omc/state/omg-state.json')
 if os.path.exists(f):
     import fcntl
     with open(f, 'r+') as fh:
@@ -126,7 +126,7 @@ try:
     root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], stderr=subprocess.DEVNULL).decode().strip()
 except:
     root = os.getcwd()
-f = os.path.join(root, '.omc/state/jeo-state.json')
+f = os.path.join(root, '.omc/state/omg-state.json')
 if os.path.exists(f):
     with open(f, 'r+') as fh:
         fcntl.flock(fh, fcntl.LOCK_EX)
@@ -145,14 +145,14 @@ if os.path.exists(f):
 
 **Checkpoint-based resume on restart:**
 ```python
-# If jeo-state.json already exists, resume from checkpoint
+# If omg-state.json already exists, resume from checkpoint
 python3 -c "
 import json, os, subprocess
 try:
     root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], stderr=subprocess.DEVNULL).decode().strip()
 except:
     root = os.getcwd()
-f = os.path.join(root, '.omc/state/jeo-state.json')
+f = os.path.join(root, '.omc/state/omg-state.json')
 if os.path.exists(f):
     d=json.load(open(f))
     cp=d.get('checkpoint')
@@ -178,7 +178,7 @@ try:
     root=subprocess.check_output(['git','rev-parse','--show-toplevel'],stderr=subprocess.DEVNULL).decode().strip()
 except:
     root=os.getcwd()
-f=os.path.join(root,'.omc/state/jeo-state.json')
+f=os.path.join(root,'.omc/state/omg-state.json')
 if os.path.exists(f):
     with open(f,'r+') as fh:
         fcntl.flock(fh,fcntl.LOCK_EX)
@@ -202,7 +202,7 @@ if os.path.exists(f):
 PLAN_GATE_STATUS=$(python3 -c "
 import json, os
 try:
-    s = json.load(open('.omc/state/jeo-state.json'))
+    s = json.load(open('.omc/state/omg-state.json'))
     print(s.get('plan_gate_status', 'pending'))
 except Exception:
     print('pending')
@@ -211,7 +211,7 @@ except Exception:
 HASH_MATCH=$(python3 -c "
 import hashlib, json, os
 try:
-    s = json.load(open('.omc/state/jeo-state.json'))
+    s = json.load(open('.omc/state/omg-state.json'))
     if not os.path.exists('plan.md'):
         print('no-match')
     else:
@@ -227,30 +227,30 @@ if [[ "$HASH_MATCH" == "match" && "$PLAN_GATE_STATUS" =~ ^(approved|manual_appro
 fi
 
 # plannotator is mandatory for the PLAN step (Codex/Gemini/OpenCode).
-# If missing, JEO auto-installs it before opening the PLAN gate.
-# Resolve the JEO scripts directory (works from any CWD)
-_JEO_SCRIPTS=""
+# If missing, OMG auto-installs it before opening the PLAN gate.
+# Resolve the OMG scripts directory (works from any CWD)
+_OMG_SCRIPTS=""
 for _candidate in \
-  "${JEO_SKILL_DIR:-}/scripts" \
-  "$HOME/.agent-skills/jeo/scripts" \
-  "$HOME/.codex/skills/jeo/scripts" \
-  "$(pwd)/.agent-skills/jeo/scripts" \
+  "${OMG_SKILL_DIR:-}/scripts" \
+  "$HOME/.agent-skills/omg/scripts" \
+  "$HOME/.codex/skills/omg/scripts" \
+  "$(pwd)/.agent-skills/omg/scripts" \
   "scripts" \
   ; do
   if [ -f "${_candidate}/plannotator-plan-loop.sh" ]; then
-    _JEO_SCRIPTS="$_candidate"
+    _OMG_SCRIPTS="$_candidate"
     break
   fi
 done
 
-if [ -z "$_JEO_SCRIPTS" ]; then
-  echo "❌ JEO scripts not found. Re-run: bash setup-codex.sh (or setup-gemini.sh)"
+if [ -z "$_OMG_SCRIPTS" ]; then
+  echo "❌ OMG scripts not found. Re-run: bash setup-codex.sh (or setup-gemini.sh)"
   exit 1
 fi
 
-if ! bash "${_JEO_SCRIPTS}/ensure-plannotator.sh"; then
+if ! bash "${_OMG_SCRIPTS}/ensure-plannotator.sh"; then
   echo "❌ plannotator auto-install failed: cannot proceed with PLAN step."
-  echo "   Retry: bash ${_JEO_SCRIPTS}/../scripts/install.sh --with-plannotator"
+  echo "   Retry: bash ${_OMG_SCRIPTS}/../scripts/install.sh --with-plannotator"
   exit 1
 fi
 
@@ -258,9 +258,9 @@ fi
 # - Must wait until approve/feedback is received
 # - Auto-restart on session exit (up to 3 times)
 # - After 3 exits, ask user whether to end PLAN
-FEEDBACK_DIR=$(python3 -c "import hashlib,os; h=hashlib.md5(os.getcwd().encode()).hexdigest()[:8]; d=f'/tmp/jeo-{h}'; os.makedirs(d,exist_ok=True); print(d)" 2>/dev/null || echo '/tmp')
+FEEDBACK_DIR=$(python3 -c "import hashlib,os; h=hashlib.md5(os.getcwd().encode()).hexdigest()[:8]; d=f'/tmp/omg-{h}'; os.makedirs(d,exist_ok=True); print(d)" 2>/dev/null || echo '/tmp')
 FEEDBACK_FILE="${FEEDBACK_DIR}/plannotator_feedback.txt"
-bash "${_JEO_SCRIPTS}/plannotator-plan-loop.sh" plan.md "$FEEDBACK_FILE" 3
+bash "${_OMG_SCRIPTS}/plannotator-plan-loop.sh" plan.md "$FEEDBACK_FILE" 3
 PLAN_RC=$?
 
 if [ "$PLAN_RC" -eq 0 ]; then
@@ -289,17 +289,17 @@ mkdir -p .omc/plans .omc/logs
    - **Claude Code (hook mode — only supported method)**:
      `plannotator` is a hook-only binary. It cannot be called via MCP tool or CLI directly.
      Call `EnterPlanMode`, write the plan content in plan mode, then call `ExitPlanMode`.
-     The `ExitPlanMode` PermissionRequest hook fires the JEO Claude plan-gate wrapper automatically.
+     The `ExitPlanMode` PermissionRequest hook fires the OMG Claude plan-gate wrapper automatically.
      That wrapper must skip re-entry when the current plan hash already has a terminal review result.
      Wait for the hook to return before proceeding — approved or feedback will arrive via the hook result.
    - **Codex / Gemini / OpenCode**: run blocking CLI (never use `&`):
      ```bash
-     # _JEO_SCRIPTS must be resolved first via the dynamic path discovery block in the pre-flight above
-     bash "${_JEO_SCRIPTS}/plannotator-plan-loop.sh" plan.md /tmp/plannotator_feedback.txt 3
+     # _OMG_SCRIPTS must be resolved first via the dynamic path discovery block in the pre-flight above
+     bash "${_OMG_SCRIPTS}/plannotator-plan-loop.sh" plan.md /tmp/plannotator_feedback.txt 3
      ```
-     If `plannotator` is missing, JEO must auto-run `bash "${_JEO_SCRIPTS}/ensure-plannotator.sh"` first and continue only after the CLI is available.
+     If `plannotator` is missing, OMG must auto-run `bash "${_OMG_SCRIPTS}/ensure-plannotator.sh"` first and continue only after the CLI is available.
 3. Check result:
-   - `approved: true` (Claude Code: hook returns approved) → update `jeo-state.json` `phase` to `"execute"` and `plan_approved` to `true` → **enter STEP 2**
+   - `approved: true` (Claude Code: hook returns approved) → update `omg-state.json` `phase` to `"execute"` and `plan_approved` to `true` → **enter STEP 2**
    - Not approved (Claude Code: hook returns feedback; others: `exit 10`) → read feedback, revise `plan.md` → repeat step 2
    - Infrastructure blocked (`exit 32`) → localhost bind unavailable (e.g., sandbox/CI). Use manual gate in TTY; confirm with user and retry outside sandbox in non-TTY
    - Session exited 3 times (`exit 30/31`) → ask user whether to end PLAN and decide to abort or resume
@@ -320,7 +320,7 @@ try:
     root=subprocess.check_output(['git','rev-parse','--show-toplevel'],stderr=subprocess.DEVNULL).decode().strip()
 except:
     root=os.getcwd()
-f=os.path.join(root,'.omc/state/jeo-state.json')
+f=os.path.join(root,'.omc/state/omg-state.json')
 if os.path.exists(f):
     with open(f,'r+') as fh:
         fcntl.flock(fh,fcntl.LOCK_EX)
@@ -353,7 +353,7 @@ try:
     root=subprocess.check_output(['git','rev-parse','--show-toplevel'],stderr=subprocess.DEVNULL).decode().strip()
 except:
     root=os.getcwd()
-f=os.path.join(root,'.omc/state/jeo-state.json')
+f=os.path.join(root,'.omc/state/omg-state.json')
 if os.path.exists(f):
     with open(f,'r+') as fh:
         fcntl.flock(fh,fcntl.LOCK_EX)
@@ -366,14 +366,14 @@ if os.path.exists(f):
 " 2>/dev/null || true
 ```
 
-1. Update `jeo-state.json` `phase` to `"execute"`
+1. Update `omg-state.json` `phase` to `"execute"`
 2. **Team available (Claude Code + omc)**:
    ```
    /omc:team 3:executor "<task>"
    ```
 3. **Claude Code but no team**:
    ```
-   echo "❌ JEO requires Claude Code team mode. Re-run bash scripts/setup-claude.sh, restart Claude Code, and confirm CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1."
+   echo "❌ OMG requires Claude Code team mode. Re-run bash scripts/setup-claude.sh, restart Claude Code, and confirm CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1."
    exit 1
    ```
    Never fall back to single-agent execution in Claude Code.
@@ -387,7 +387,7 @@ if os.path.exists(f):
 
 ### STEP 3: VERIFY
 
-1. Update `jeo-state.json` `phase` to `"verify"`
+1. Update `omg-state.json` `phase` to `"verify"`
 2. **Basic verification with agent-browser** (when browser UI is present):
    ```bash
    agent-browser snapshot http://localhost:3000
@@ -409,7 +409,7 @@ try:
     root=subprocess.check_output(['git','rev-parse','--show-toplevel'],stderr=subprocess.DEVNULL).decode().strip()
 except:
     root=os.getcwd()
-f=os.path.join(root,'.omc/state/jeo-state.json')
+f=os.path.join(root,'.omc/state/omg-state.json')
 if os.path.exists(f):
     with open(f,'r+') as fh:
         fcntl.flock(fh,fcntl.LOCK_EX)
@@ -424,7 +424,7 @@ if os.path.exists(f):
      # Proceed to STEP 4 CLEANUP (no exit 1 — graceful skip)
    fi
    ```
-2. Update `jeo-state.json`: `phase = "verify_ui"`, `agentation.active = true`, `agentation.submit_gate_status = "waiting_for_submit"`
+2. Update `omg-state.json`: `phase = "verify_ui"`, `agentation.active = true`, `agentation.submit_gate_status = "waiting_for_submit"`
 3. Wait for explicit human submit:
    - **Claude Code**: wait for `UserPromptSubmit` after the user presses **Send Annotations** / `onSubmit`
    - **Codex / Gemini / OpenCode**: wait until the human confirms submission and the agent emits `ANNOTATE_READY` (or compatibility alias `AGENTUI_READY`)
@@ -450,7 +450,7 @@ try:
     root=subprocess.check_output(['git','rev-parse','--show-toplevel'],stderr=subprocess.DEVNULL).decode().strip()
 except:
     root=os.getcwd()
-f=os.path.join(root,'.omc/state/jeo-state.json')
+f=os.path.join(root,'.omc/state/omg-state.json')
 if os.path.exists(f):
     with open(f,'r+') as fh:
         fcntl.flock(fh,fcntl.LOCK_EX)
@@ -470,24 +470,24 @@ else
 fi
 ```
 
-1. Update `jeo-state.json` `phase` to `"cleanup"`
+1. Update `omg-state.json` `phase` to `"cleanup"`
 2. Worktree cleanup:
    ```bash
    bash scripts/worktree-cleanup.sh || git worktree prune
    ```
-3. Update `jeo-state.json` `phase` to `"done"`
+3. Update `omg-state.json` `phase` to `"done"`
 
 ---
 
 ## 1. Quick Start
 
 > **Source of truth**: `https://github.com/supercent-io/skills-template`
-> Local paths like `~/.claude/skills/jeo/` are copies installed via `npx skills add`.
+> Local paths like `~/.claude/skills/omg/` are copies installed via `npx skills add`.
 > To update to the latest version, reinstall using the command below.
 
 ```bash
-# Install JEO (npx skills add — recommended)
-npx skills add https://github.com/supercent-io/skills-template --skill jeo
+# Install OMG (npx skills add — recommended)
+npx skills add https://github.com/supercent-io/skills-template --skill omg
 
 # Full install (all AI tools + all components)
 bash scripts/install.sh --all
@@ -506,7 +506,7 @@ bash scripts/setup-opencode.sh    # OpenCode plugin registration
 
 ## 2. Installed Components
 
-Tools that JEO installs and configures:
+Tools that OMG installs and configures:
 
 | Tool | Description | Install Command |
 |------|------|-----------|
@@ -522,12 +522,12 @@ Tools that JEO installs and configures:
 
 ---
 
-## 3. JEO Workflow
+## 3. OMG Workflow
 
 ### Full Flow
 
 ```
-jeo "<task>"
+omg "<task>"
     │
     ▼
 [1] PLAN (ralph + plannotator)
@@ -560,19 +560,19 @@ jeo "<task>"
 
 **Claude Code (omc):**
 ```bash
-/ralph "jeo-plan: <task>" --completion-promise="PLAN_APPROVED" --max-iterations=5
+/ralph "omg-plan: <task>" --completion-promise="PLAN_APPROVED" --max-iterations=5
 ```
 
 **Codex / Gemini / OpenCode (alternative):**
 ```bash
 # Session-isolated feedback directory (prevents concurrent run conflicts)
-FEEDBACK_DIR=$(python3 -c "import hashlib,os; h=hashlib.md5(os.getcwd().encode()).hexdigest()[:8]; d=f'/tmp/jeo-{h}'; os.makedirs(d,exist_ok=True); print(d)" 2>/dev/null || echo '/tmp')
+FEEDBACK_DIR=$(python3 -c "import hashlib,os; h=hashlib.md5(os.getcwd().encode()).hexdigest()[:8]; d=f'/tmp/omg-{h}'; os.makedirs(d,exist_ok=True); print(d)" 2>/dev/null || echo '/tmp')
 FEEDBACK_FILE="${FEEDBACK_DIR}/plannotator_feedback.txt"
 
 # 1. Write plan.md directly, then review with plannotator (blocking — no &)
 PLANNOTATOR_RUNTIME_HOME="${FEEDBACK_DIR}/.plannotator"
 mkdir -p "$PLANNOTATOR_RUNTIME_HOME"
-touch /tmp/jeo-plannotator-direct.lock && python3 -c "
+touch /tmp/omg-plannotator-direct.lock && python3 -c "
 import json
 print(json.dumps({'tool_input': {'plan': open('plan.md').read(), 'permission_mode': 'acceptEdits'}}))
 " | env HOME="$PLANNOTATOR_RUNTIME_HOME" PLANNOTATOR_HOME="$PLANNOTATOR_RUNTIME_HOME" plannotator > "$FEEDBACK_FILE" 2>&1
@@ -605,7 +605,7 @@ Common flow:
   1. Output full `plan.md` content to user
   2. Ask: "⚠️ plannotator UI unavailable. Reply 'approve' to proceed or provide feedback."
   3. **WAIT for user response — do NOT proceed to EXECUTE**
-  4. On approval → update `jeo-state.json` `plan_approved=true, plan_gate_status="manual_approved"` → EXECUTE
+  4. On approval → update `omg-state.json` `plan_approved=true, plan_gate_status="manual_approved"` → EXECUTE
   5. On feedback → revise `plan.md`, retry loop, repeat
 
 **Claude Code manual run:**
@@ -617,14 +617,14 @@ Shift+Tab×2 → enter plan mode → plannotator runs automatically when plan is
 
 **When team is available (Claude Code + omc):**
 ```bash
-/omc:team 3:executor "jeo-exec: <task based on approved plan>"
+/omc:team 3:executor "omg-exec: <task based on approved plan>"
 ```
 - staged pipeline: team-plan → team-prd → team-exec → team-verify → team-fix
 - Maximize speed with parallel agent execution
 
 **When Claude Code team mode is unavailable:**
 ```bash
-echo "❌ JEO requires /omc:team in Claude Code. Run bash scripts/setup-claude.sh, restart Claude Code, then retry."
+echo "❌ OMG requires /omc:team in Claude Code. Run bash scripts/setup-claude.sh, restart Claude Code, then retry."
 exit 1
 ```
 - Do not degrade to single-agent mode
@@ -677,7 +677,7 @@ try:
     root=subprocess.check_output(['git','rev-parse','--show-toplevel'],stderr=subprocess.DEVNULL).decode().strip()
 except:
     root=os.getcwd()
-f=os.path.join(root,'.omc/state/jeo-state.json')
+f=os.path.join(root,'.omc/state/omg-state.json')
 if os.path.exists(f):
     with open(f,'r+') as fh:
         fcntl.flock(fh,fcntl.LOCK_EX)
@@ -699,14 +699,14 @@ else
 fi
 ```
 
-> After passing pre-flight (`else` branch), update jeo-state.json `phase` to `"verify_ui"`, set `agentation.active` to `true`, and set `agentation.submit_gate_status` to `"waiting_for_submit"`.
+> After passing pre-flight (`else` branch), update omg-state.json `phase` to `"verify_ui"`, set `agentation.active` to `true`, and set `agentation.submit_gate_status` to `"waiting_for_submit"`.
 > Do not call `/pending` yet. Draft annotations are not actionable until the user explicitly submits them.
 
 **Claude Code (direct MCP tool call):**
 ```
 # annotate keyword detected (or agentui — backward compatible)
 # 1. wait for UserPromptSubmit after the user clicks Send Annotations / onSubmit
-# 2. the JEO submit-gate hook records submit_gate_status="submitted"
+# 2. the OMG submit-gate hook records submit_gate_status="submitted"
 # 3. only then run the blocking agentation watch loop
 #
 # batchWindowSeconds:10 — receive annotations in 10-second batches
@@ -736,14 +736,14 @@ while true; do
   NOW=$(date +%s)
   ELAPSED=$((NOW - START_TIME))
   if [ $ELAPSED -ge $TIMEOUT_SECONDS ]; then
-    echo "[JEO] agentation polling timeout (${TIMEOUT_SECONDS}s) — some annotations may remain unresolved"
+    echo "[OMG] agentation polling timeout (${TIMEOUT_SECONDS}s) — some annotations may remain unresolved"
     break
   fi
 
   SUBMIT_GATE=$(python3 -c "
 import json
 try:
-    print(json.load(open('.omc/state/jeo-state.json')).get('agentation', {}).get('submit_gate_status', 'idle'))
+    print(json.load(open('.omc/state/omg-state.json')).get('agentation', {}).get('submit_gate_status', 'idle'))
 except Exception:
     print('idle')
 " 2>/dev/null || echo "idle")
@@ -814,7 +814,7 @@ bash .agent-skills/plannotator/scripts/setup-hook.sh
       "matcher": "ExitPlanMode",
       "hooks": [{
         "type": "command",
-        "command": "python3 ~/.claude/skills/jeo/scripts/claude-plan-gate.py",
+        "command": "python3 ~/.claude/skills/omg/scripts/claude-plan-gate.py",
         "timeout": 1800
       }]
     }]
@@ -836,7 +836,7 @@ bash .agent-skills/plannotator/scripts/setup-hook.sh
       "matcher": "*",
       "hooks": [{
         "type": "command",
-        "command": "python3 ~/.claude/skills/jeo/scripts/claude-agentation-submit-hook.py",
+        "command": "python3 ~/.claude/skills/omg/scripts/claude-agentation-submit-hook.py",
         "timeout": 300
       }]
     }]
@@ -853,8 +853,8 @@ bash scripts/setup-codex.sh
 
 # What gets configured:
 # - developer_instructions: ~/.codex/config.toml
-# - prompt file: ~/.codex/prompts/jeo.md
-# - notify hook: ~/.codex/hooks/jeo-notify.py
+# - prompt file: ~/.codex/prompts/omg.md
+# - notify hook: ~/.codex/hooks/omg-notify.py
 # - [tui] notifications: agent-turn-complete
 ```
 
@@ -866,7 +866,7 @@ args = ["-y", "agentation-mcp", "server"]
 ```
 
 
-**notify hook** (`~/.codex/hooks/jeo-notify.py`):
+**notify hook** (`~/.codex/hooks/omg-notify.py`):
 - Detects `PLAN_READY` signal in `last-assistant-message` when agent turn completes
 - Confirms `plan.md` exists, compares the current hash against `last_reviewed_plan_hash`, and skips the gate when the plan was already reviewed
 - Saves result to `/tmp/plannotator_feedback.txt`
@@ -876,11 +876,11 @@ args = ["-y", "agentation-mcp", "server"]
 **`~/.codex/config.toml`** config:
 ```toml
 developer_instructions = """
-# JEO Orchestration Workflow
+# OMG Orchestration Workflow
 # ...
 """
 
-notify = ["python3", "~/.codex/hooks/jeo-notify.py"]
+notify = ["python3", "~/.codex/hooks/omg-notify.py"]
 
 [tui]
 notifications = ["agent-turn-complete"]
@@ -893,7 +893,7 @@ notification_method = "osc9"
 
 Using in Codex:
 ```bash
-/prompts:jeo    # Activate JEO workflow
+/prompts:omg    # Activate OMG workflow
 # Agent writes plan.md and outputs "PLAN_READY" → notify hook runs automatically
 ```
 
@@ -904,7 +904,7 @@ Using in Codex:
 bash scripts/setup-gemini.sh
 
 # What gets configured:
-# - AfterAgent backup hook: ~/.gemini/hooks/jeo-plannotator.sh
+# - AfterAgent backup hook: ~/.gemini/hooks/omg-plannotator.sh
 # - Instructions (MANDATORY loop): ~/.gemini/GEMINI.md
 ```
 
@@ -920,7 +920,7 @@ The AfterAgent hook serves only as a safety net (runs after turn ends → inject
       "hooks": [{
         "name": "plannotator-review",
         "type": "command",
-        "command": "bash ~/.gemini/hooks/jeo-plannotator.sh",
+        "command": "bash ~/.gemini/hooks/omg-plannotator.sh",
         "description": "Run plannotator when plan.md is detected (AfterAgent backup)"
       }]
     }]
@@ -965,10 +965,10 @@ bash scripts/setup-opencode.sh
 ```
 
 OpenCode slash commands:
-- `/jeo-plan` — plan with ralph + plannotator
-- `/jeo-exec` — execute with team/bmad
-- `/jeo-annotate` — start agentation watch loop (annotate; `/jeo-agentui` is a deprecated alias)
-- `/jeo-cleanup` — worktree cleanup
+- `/omg-plan` — plan with ralph + plannotator
+- `/omg-exec` — execute with team/bmad
+- `/omg-annotate` — start agentation watch loop (annotate; `/omg-agentui` is a deprecated alias)
+- `/omg-cleanup` — worktree cleanup
 
 
 
@@ -1005,18 +1005,18 @@ bash scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3
 
 ## 5. Memory & State
 
-JEO stores state at the following paths:
+OMG stores state at the following paths:
 
 ```
-{worktree}/.omc/state/jeo-state.json   # JEO execution state
-{worktree}/.omc/plans/jeo-plan.md      # Approved plan
-{worktree}/.omc/logs/jeo-*.log         # Execution logs
+{worktree}/.omc/state/omg-state.json   # OMG execution state
+{worktree}/.omc/plans/omg-plan.md      # Approved plan
+{worktree}/.omc/logs/omg-*.log         # Execution logs
 ```
 
 **State file structure:**
 ```json
 {
-  "mode": "jeo",
+  "mode": "omg",
   "phase": "plan|execute|verify|verify_ui|cleanup|done",
   "session_id": "<uuid>",
   "task": "current task description",
@@ -1077,7 +1077,7 @@ try:
     root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], stderr=subprocess.DEVNULL).decode().strip()
 except:
     root = os.getcwd()
-f = os.path.join(root, '.omc/state/jeo-state.json')
+f = os.path.join(root, '.omc/state/omg-state.json')
 if os.path.exists(f):
     d=json.load(open(f))
     cp=d.get('checkpoint')
@@ -1105,7 +1105,7 @@ bash scripts/install.sh --all
 bash scripts/check-status.sh
 
 # Step 2: Start work
-jeo "<task description>"           # Activate with keyword
+omg "<task description>"           # Activate with keyword
 # Or in Claude: Shift+Tab×2 → plan mode
 
 # Step 3: Review plan with plannotator
@@ -1126,7 +1126,7 @@ bash scripts/worktree-cleanup.sh
 2. **Team first**: omc team mode is most efficient in Claude Code
 3. **bmad fallback**: use BMAD in environments without team (Codex, Gemini)
 4. **Worktree cleanup**: run `worktree-cleanup.sh` immediately after work completes (prevents branch pollution)
-5. **State persistence**: use `.omc/state/jeo-state.json` to maintain state across sessions
+5. **State persistence**: use `.omc/state/omg-state.json` to maintain state across sessions
 6. **annotate**: use the `annotate` keyword to run the agentation watch loop for complex UI changes (precise code changes via CSS selector). `agentui` is a backward-compatible alias.
 
 ---
@@ -1135,17 +1135,17 @@ bash scripts/worktree-cleanup.sh
 
 | Issue | Solution |
 |------|------|
-| plannotator not running | JEO first auto-runs `bash scripts/ensure-plannotator.sh`; if it still fails, run `bash .agent-skills/plannotator/scripts/check-status.sh` |
+| plannotator not running | OMG first auto-runs `bash scripts/ensure-plannotator.sh`; if it still fails, run `bash .agent-skills/plannotator/scripts/check-status.sh` |
 | plannotator not opening in Claude Code | plannotator is hook-only. Do NOT call it via MCP or CLI. Use `EnterPlanMode` → write plan → `ExitPlanMode`; the hook fires automatically. Verify hook is set: `cat ~/.claude/settings.json \| python3 -c "import sys,json;h=json.load(sys.stdin).get('hooks',{});print(h.get('PermissionRequest','missing'))"` |
 | plannotator feedback not received | Remove `&` background execution → run blocking, then check `/tmp/plannotator_feedback.txt` (Codex/Gemini/OpenCode only) |
-| Codex에서 같은 plan이 반복해서 재검토됨 | `jeo-state.json`의 `last_reviewed_plan_hash`와 현재 `plan.md` hash를 비교. 같고 `plan_gate_status`가 terminal이면 재실행 금지 |
+| Codex에서 같은 plan이 반복해서 재검토됨 | `omg-state.json`의 `last_reviewed_plan_hash`와 현재 `plan.md` hash를 비교. 같고 `plan_gate_status`가 terminal이면 재실행 금지 |
 | Codex startup failure (`invalid type: map, expected a string`) | Re-run `bash scripts/setup-codex.sh` and confirm `developer_instructions` in `~/.codex/config.toml` is a top-level string |
 | Gemini feedback loop missing | Add blocking direct call instruction to `~/.gemini/GEMINI.md` |
 | worktree conflict | `git worktree prune && git worktree list` |
-| team mode not working | JEO requires team mode in Claude Code. Run `bash scripts/setup-claude.sh`, restart Claude Code, and verify `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` before retrying |
+| team mode not working | OMG requires team mode in Claude Code. Run `bash scripts/setup-claude.sh`, restart Claude Code, and verify `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` before retrying |
 | omc install failed | Run `/omc:omc-doctor` |
 | agent-browser error | Check `agent-browser --version` |
-| annotate (agentation) not opening | Check `curl http://localhost:4747/health` and `curl http://localhost:4747/sessions`. JEO waits for explicit submit/onSubmit before polling `/pending` |
+| annotate (agentation) not opening | Check `curl http://localhost:4747/health` and `curl http://localhost:4747/sessions`. OMG waits for explicit submit/onSubmit before polling `/pending` |
 | annotation not reflected in code | Confirm `summary` field is present when calling `agentation_resolve_annotation` |
 | `agentui` keyword not activating | Use the `annotate` keyword (new). `agentui` is a deprecated alias but still works. |
 | MCP tool not registered (Codex/Gemini) | Re-run `bash scripts/setup-codex.sh` / `setup-gemini.sh` |

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# JEO Skill — Status Check
-# Verifies all JEO components and integrations
+# OMG Skill — Status Check
+# Verifies all OMG components and integrations
 # Usage: bash check-status.sh [--resume]
 
 set -euo pipefail
@@ -36,7 +36,7 @@ check_opt() {
 
 echo ""
 echo "╔══════════════════════════════════════════╗"
-echo "║   JEO Skill — Status Check               ║"
+echo "║   OMG Skill — Status Check               ║"
 echo "╚══════════════════════════════════════════╝"
 echo ""
 
@@ -83,7 +83,7 @@ except Exception:
   if $TEAMS_ENABLED; then
     ok "Claude Code — experimental agent teams enabled"; ((PASS++)) || true
   else
-    err "Claude Code — experimental agent teams not enabled (required for JEO team execution)"; ((FAIL++)) || true
+    err "Claude Code — experimental agent teams not enabled (required for OMG team execution)"; ((FAIL++)) || true
   fi
   if grep -q '"agentation"' "${HOME}/.claude/settings.json" 2>/dev/null; then
     ok "Claude Code — agentation MCP configured"; ((PASS++)) || true
@@ -106,24 +106,24 @@ import pathlib, re
 p = pathlib.Path.home() / '.codex' / 'config.toml'
 text = p.read_text(encoding='utf-8')
 m1 = re.search(r'(?ms)^developer_instructions\s*=\s*"""\n?(.*?)\n?"""\s*$', text)
-if m1 and 'Keyword: jeo | Platforms: Codex, Claude, Gemini, OpenCode' in m1.group(1):
+if m1 and 'Keyword: omg | Platforms: Codex, Claude, Gemini, OpenCode' in m1.group(1):
     raise SystemExit(0)
 m2 = re.search(r'(?m)^developer_instructions\s*=\s*"(.*)"\s*$', text)
-if m2 and 'Keyword: jeo | Platforms: Codex, Claude, Gemini, OpenCode' in bytes(m2.group(1), 'utf-8').decode('unicode_escape'):
+if m2 and 'Keyword: omg | Platforms: Codex, Claude, Gemini, OpenCode' in bytes(m2.group(1), 'utf-8').decode('unicode_escape'):
     raise SystemExit(0)
 raise SystemExit(1)
 PYEOF
   then
-    ok "Codex CLI — JEO developer_instructions configured"; ((PASS++)) || true
+    ok "Codex CLI — OMG developer_instructions configured"; ((PASS++)) || true
   else
-    warn "Codex CLI — JEO developer_instructions missing/invalid in config.toml"; ((WARN++)) || true
+    warn "Codex CLI — OMG developer_instructions missing/invalid in config.toml"; ((WARN++)) || true
   fi
-  if [[ -f "${HOME}/.codex/prompts/jeo.md" ]]; then
-    ok "Codex CLI — /prompts:jeo available"; ((PASS++)) || true
+  if [[ -f "${HOME}/.codex/prompts/omg.md" ]]; then
+    ok "Codex CLI — /prompts:omg available"; ((PASS++)) || true
   else
-    warn "Codex CLI — /prompts:jeo not found"; ((WARN++)) || true
+    warn "Codex CLI — /prompts:omg not found"; ((WARN++)) || true
   fi
-  if grep -q "jeo-notify.py" "${HOME}/.codex/config.toml" 2>/dev/null; then
+  if grep -q "omg-notify.py" "${HOME}/.codex/config.toml" 2>/dev/null; then
     ok "Codex CLI — notify hook configured"; ((PASS++)) || true
   else
     warn "Codex CLI — notify hook missing"; ((WARN++)) || true
@@ -148,10 +148,10 @@ else
   warn "Gemini CLI — ~/.gemini/settings.json not found"; ((WARN++)) || true
 fi
 if [[ -f "${HOME}/.gemini/GEMINI.md" ]]; then
-  if grep -q "JEO Orchestration" "${HOME}/.gemini/GEMINI.md" 2>/dev/null; then
-    ok "Gemini CLI — JEO instructions in GEMINI.md"; ((PASS++)) || true
+  if grep -q "OMG Orchestration" "${HOME}/.gemini/GEMINI.md" 2>/dev/null; then
+    ok "Gemini CLI — OMG instructions in GEMINI.md"; ((PASS++)) || true
   else
-    warn "Gemini CLI — JEO not in GEMINI.md"; ((WARN++)) || true
+    warn "Gemini CLI — OMG not in GEMINI.md"; ((WARN++)) || true
   fi
 fi
 
@@ -168,10 +168,10 @@ for candidate in "./opencode.json" "${HOME}/opencode.json" "${HOME}/.config/open
 done
 echo ""
 
-# ── JEO State ─────────────────────────────────────────────────────────────────
-info "JEO State"
+# ── OMG State ─────────────────────────────────────────────────────────────────
+info "OMG State"
 GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-STATE_FILE="$GIT_ROOT/.omc/state/jeo-state.json"
+STATE_FILE="$GIT_ROOT/.omc/state/omg-state.json"
 PHASE="unknown"
 if [[ -f "$STATE_FILE" ]]; then
   ok "State file found: $STATE_FILE"
@@ -194,20 +194,20 @@ if [[ -f "$STATE_FILE" ]]; then
   if $RESUME; then
     echo ""
     echo "  Resume instructions:"
-    echo "  The JEO workflow was in phase: $PHASE"
-    echo "  Check .omc/plans/jeo-plan.md for the approved plan"
+    echo "  The OMG workflow was in phase: $PHASE"
+    echo "  Check .omc/plans/omg-plan.md for the approved plan"
   fi
 else
-  warn "No active JEO state (no workflow in progress)"
+  warn "No active OMG state (no workflow in progress)"
   if $RESUME && command -v python3 >/dev/null 2>&1; then
-    info "Initializing fresh JEO state file for new session..."
+    info "Initializing fresh OMG state file for new session..."
     mkdir -p "$GIT_ROOT/.omc/state" "$GIT_ROOT/.omc/plans"
     GIT_ROOT="$GIT_ROOT" python3 - <<'PYEOF'
 import json, datetime, os, uuid
 now = datetime.datetime.utcnow().isoformat() + "Z"
 git_root = os.environ["GIT_ROOT"]
 state = {
-    "mode": "jeo",
+    "mode": "omg",
     "phase": "plan",
     "session_id": str(uuid.uuid4()),
     "task": "resumed session",
@@ -240,10 +240,10 @@ state = {
 }
 os.makedirs(os.path.join(git_root, ".omc", "state"), exist_ok=True)
 os.makedirs(os.path.join(git_root, ".omc", "plans"), exist_ok=True)
-state_path = os.path.join(git_root, ".omc", "state", "jeo-state.json")
+state_path = os.path.join(git_root, ".omc", "state", "omg-state.json")
 with open(state_path, "w") as f:
     json.dump(state, f, indent=2)
-print(f"✓ Fresh JEO state initialized at {state_path} (phase: plan)")
+print(f"✓ Fresh OMG state initialized at {state_path} (phase: plan)")
 PYEOF
   elif [[ -z "${1:-}" ]]; then
     echo "     Tip: Run with --resume to initialize state for a new session"
@@ -274,6 +274,6 @@ elif [[ $WARN -gt 0 ]]; then
   echo "  bash scripts/setup-gemini.sh"
   echo "  bash scripts/setup-opencode.sh"
 else
-  echo -e "${GREEN}All checks passed! JEO is fully configured.${NC}"
+  echo -e "${GREEN}All checks passed! OMG is fully configured.${NC}"
 fi
 echo ""

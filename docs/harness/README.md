@@ -46,11 +46,11 @@ git clone https://github.com/obra/superpowers ~/.superpowers
 
 ### Integration with Agent Skills
 
-`superpowers` composable skill definitions can be loaded alongside Agent Skills. Use `jeo` for the orchestration layer and `superpowers` skills as composable primitives:
+`superpowers` composable skill definitions can be loaded alongside Agent Skills. Use `omg` for the orchestration layer and `superpowers` skills as composable primitives:
 
 ```bash
 # Load superpowers skill context alongside Agent Skills
-jeo "build a REST API using superpowers skill contracts"
+omg "build a REST API using superpowers skill contracts"
 ```
 
 ---
@@ -144,7 +144,7 @@ A Claude Code plugin implementing the Plan-Do-Check-Act (PDCA) quality cycle wit
 
 ```bash
 # Example: bmad for structure + bkit PDCA for quality loop
-jeo "implement user authentication" --harness=pdca
+omg "implement user authentication" --harness=pdca
 ```
 
 ---
@@ -260,5 +260,5 @@ pip install "smolagents[all]"
 | Agent Skills main docs | [../../README.md](../../README.md) |
 | omc — Claude Code multi-agent orchestration | [../omc/README.md](../omc/README.md) |
 | ralph — specification-first development loop | [../ralph/README.md](../ralph/README.md) |
-| jeo — integrated orchestration skill | [../../.agent-skills/jeo/SKILL.md](../../.agent-skills/jeo/SKILL.md) |
+| omg — integrated orchestration skill | [../../.agent-skills/omg/SKILL.md](../../.agent-skills/omg/SKILL.md) |
 | bmad — phase-based development | [../bmad/README.md](../bmad/README.md) |

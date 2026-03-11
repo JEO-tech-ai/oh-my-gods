@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# JEO Skill — OpenCode Plugin Registration
+# OMG Skill — OpenCode Plugin Registration
 # Configures: opencode.json plugin entry + agentation MCP + slash commands
 # Usage: bash setup-opencode.sh [--dry-run]
 
@@ -23,7 +23,7 @@ for candidate in "./opencode.json" "${HOME}/.config/opencode/opencode.json" "${H
 done
 
 echo ""
-echo "JEO — OpenCode Plugin Setup"
+echo "OMG — OpenCode Plugin Setup"
 echo "==========================="
 
 # ── 1. Check OpenCode ────────────────────────────────────────────────────────
@@ -50,11 +50,11 @@ if [[ -z "$OPENCODE_JSON" ]]; then
 fi
 
 if $DRY_RUN; then
-  echo -e "${YELLOW}[DRY-RUN]${NC} Would configure $OPENCODE_JSON with JEO plugin"
+  echo -e "${YELLOW}[DRY-RUN]${NC} Would configure $OPENCODE_JSON with OMG plugin"
 else
   # Backup
   mkdir -p "$(dirname "$OPENCODE_JSON")"
-  [[ -f "$OPENCODE_JSON" ]] && cp "$OPENCODE_JSON" "${OPENCODE_JSON}.jeo.bak"
+  [[ -f "$OPENCODE_JSON" ]] && cp "$OPENCODE_JSON" "${OPENCODE_JSON}.omg.bak"
 
   OPENCODE_JSON_PATH="$OPENCODE_JSON" python3 - <<'PYEOF'
 import json, os
@@ -106,51 +106,51 @@ if isinstance(legacy_instructions, str):
 elif legacy_instructions is not None and not isinstance(legacy_instructions, list):
     config["instructions"] = [str(legacy_instructions)]
 
-# Register JEO slash commands in OpenCode's "command" table
+# Register OMG slash commands in OpenCode's "command" table
 commands = config.setdefault("command", {})
-jeo_commands = {
-    "jeo-plan": {
-        "description": "JEO planning workflow (ralph + plannotator)",
+omg_commands = {
+    "omg-plan": {
+        "description": "OMG planning workflow (ralph + plannotator)",
         "template": (
             "Write plan.md, then run mandatory PLAN gate: "
-            "bash .agent-skills/jeo/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3. "
+            "bash .agent-skills/omg/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3. "
             "If plannotator is missing, the PLAN gate auto-installs it first. "
             "This waits for approve/feedback, restarts dead sessions up to 3 times, "
             "and asks whether to stop PLAN after repeated failures."
         ),
     },
-    "jeo-exec": {
-        "description": "JEO execute workflow (team/bmad)",
+    "omg-exec": {
+        "description": "OMG execute workflow (team/bmad)",
         "template": (
             "Execute approved plan using team agents if available; otherwise use BMAD workflow phases."
         ),
     },
-    "jeo-annotate": {
+    "omg-annotate": {
         "description": "Process agentation annotations (VERIFY_UI loop)",
         "template": (
             "Run agentation watch loop: acknowledge, implement fix, resolve, and repeat until pending count is 0."
         ),
     },
-    "jeo-verify": {
+    "omg-verify": {
         "description": "Verify browser behavior with agent-browser",
         "template": "Run agent-browser snapshot and verify the UI/flow for the current task.",
     },
-    "jeo-cleanup": {
-        "description": "Cleanup worktrees after JEO completion",
-        "template": "Run: bash .agent-skills/jeo/scripts/worktree-cleanup.sh",
+    "omg-cleanup": {
+        "description": "Cleanup worktrees after OMG completion",
+        "template": "Run: bash .agent-skills/omg/scripts/worktree-cleanup.sh",
     },
 }
 
 added = 0
-for name, spec in jeo_commands.items():
+for name, spec in omg_commands.items():
     if name not in commands:
         commands[name] = spec
         added += 1
 
 if added:
-    print(f"\u2713 Added {added} JEO command(s) to opencode.json")
+    print(f"\u2713 Added {added} OMG command(s) to opencode.json")
 else:
-    print("\u2713 JEO commands already present")
+    print("\u2713 OMG commands already present")
 
 with open(config_path, "w") as f:
     json.dump(config, f, indent=2)
@@ -162,11 +162,11 @@ fi
 
 echo ""
 echo "OpenCode slash commands after setup:"
-echo "  /jeo-plan      ← Start planning workflow"
-echo "  /jeo-exec      \u2190 Execute task"
-echo "  /jeo-annotate  \u2190 agentation watch loop (VERIFY_UI); /jeo-agentui is deprecated alias"
-echo "  /jeo-verify    \u2190 Verify UI with agent-browser"
-echo "  /jeo-cleanup   ← Clean worktrees"
+echo "  /omg-plan      ← Start planning workflow"
+echo "  /omg-exec      \u2190 Execute task"
+echo "  /omg-annotate  \u2190 agentation watch loop (VERIFY_UI); /omg-agentui is deprecated alias"
+echo "  /omg-verify    \u2190 Verify UI with agent-browser"
+echo "  /omg-cleanup   ← Clean worktrees"
 echo "  /plannotator-review ← Code review UI"
 echo ""
 echo "If OpenCode shows 'readonly database', run:"

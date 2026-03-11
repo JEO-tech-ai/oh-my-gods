@@ -1,6 +1,6 @@
-N:jeo
-D:[jeo] Integrated AI orchestration. ralph+plannotator planning -> team/bmad execution -> agent-browser browser verification -> agentation submit-gated UI feedback -> automatic worktree cleanup. PLAN never reopens for the same reviewed hash. Supports all platforms: Claude/Codex/Gemini/OpenCode. Installation: omc omx ohmg bmad ralph plannotator agent-browser agentation.
-G:jeo orchestration ralph plannotator agentation annotate agentui team bmad omc omx ohmg agent-browser multi-agent workflow worktree cleanup browser-verification ui-feedback submit-gate onsubmit plan-hash 오케스튤 계획 실행 검증 정리
+N:omg
+D:[omg] Integrated AI orchestration. ralph+plannotator planning -> team/bmad execution -> agent-browser browser verification -> agentation submit-gated UI feedback -> automatic worktree cleanup. PLAN never reopens for the same reviewed hash. Supports all platforms: Claude/Codex/Gemini/OpenCode. Installation: omc omx ohmg bmad ralph plannotator agent-browser agentation.
+G:omg orchestration ralph plannotator agentation annotate agentui team bmad omc omx ohmg agent-browser multi-agent workflow worktree cleanup browser-verification ui-feedback submit-gate onsubmit plan-hash 오케스튤 계획 실행 검증 정리
 
 U[5]:
   Automate the full flow for multi-agent tasks: plan -> execute -> browser verification -> UI feedback (agentui) -> cleanup
@@ -12,10 +12,10 @@ U[5]:
 S[8]{n,action,details}:
   1,Install,bash scripts/install.sh --all (install all: ralph omc omx ohmg bmad plannotator agent-browser)
   2,Setup-Claude,bash scripts/setup-claude.sh (/plugin install oh-my-claudecode + plannotator hook setup)
-  3,Setup-Codex,bash scripts/setup-codex.sh (~/.codex/config.toml developer_instructions + /prompts:jeo)
+  3,Setup-Codex,bash scripts/setup-codex.sh (~/.codex/config.toml developer_instructions + /prompts:omg)
   4,Setup-Gemini,bash scripts/setup-gemini.sh (~/.gemini/settings.json hook + GEMINI.md instructions)
   5,Setup-OpenCode,bash scripts/setup-opencode.sh (opencode.json plugin registration + slash commands)
-  6,Plan,ralph+plannotator planning: /ralph "jeo-plan: <task>" -> run plannotator in blocking mode (no `&`) -> same reviewed hash skips re-entry -> Approve("approved":true) or Feedback -> replanning loop
+  6,Plan,ralph+plannotator planning: /ralph "omg-plan: <task>" -> run plannotator in blocking mode (no `&`) -> same reviewed hash skips re-entry -> Approve("approved":true) or Feedback -> replanning loop
   7,Execute,team first: /omc:team 3:executor "<task>" / if team unavailable: /workflow-init (BMAD)
   8,Verify-Cleanup,agent-browser snapshot <url> -> UI verification -> wait for Send Annotations/onSubmit -> agentation ack->fix->resolve -> bash scripts/worktree-cleanup.sh
 
@@ -25,9 +25,9 @@ R[5]:
   annotate/agentui behavior: wait for explicit Send Annotations/onSubmit, then run blocking `agentation_watch_annotations` or HTTP fallback
   Claude+omc: team first / Codex·Gemini·OpenCode: use bmad fallback
   For browser-related work, verify UI behavior with `agent-browser snapshot` (default)
-  Persist state across sessions in {worktree}/.omc/state/jeo-state.json
+  Persist state across sessions in {worktree}/.omc/state/omg-state.json
 
 E[3]{desc,in,out}:
   "Full install","bash scripts/install.sh --all && bash scripts/check-status.sh","All components installed + all AI tool integrations verified"
-  "Plan->Execute->Verify","jeo 'implement new feature' -> ralph plan -> Approve -> team execution -> agent-browser snapshot","Browser behavior verification complete and screenshot saved"
+  "Plan->Execute->Verify","omg 'implement new feature' -> ralph plan -> Approve -> team execution -> agent-browser snapshot","Browser behavior verification complete and screenshot saved"
   "Cleanup","bash scripts/worktree-cleanup.sh","git worktree prune completed"

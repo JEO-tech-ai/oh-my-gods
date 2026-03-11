@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# JEO Skill — Gemini CLI Hook & GEMINI.md Setup
-# Configures: ExitPlanMode hook in ~/.gemini/settings.json + JEO instructions in GEMINI.md
+# OMG Skill — Gemini CLI Hook & GEMINI.md Setup
+# Configures: ExitPlanMode hook in ~/.gemini/settings.json + OMG instructions in GEMINI.md
 # Usage: bash setup-gemini.sh [--dry-run] [--hook-only] [--md-only]
 
 set -euo pipefail
@@ -15,13 +15,13 @@ for arg in "$@"; do
   case $arg in --dry-run) DRY_RUN=true ;; --hook-only) HOOK_ONLY=true ;; --md-only) MD_ONLY=true ;; esac
 done
 
-JEO_SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+OMG_SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 GEMINI_SETTINGS="${HOME}/.gemini/settings.json"
 GEMINI_MD="${HOME}/.gemini/GEMINI.md"
 
 echo ""
-echo "JEO — Gemini CLI Setup"
+echo "OMG — Gemini CLI Setup"
 echo "======================"
 
 # ── 1. Check Gemini CLI ───────────────────────────────────────────────────────
@@ -32,7 +32,7 @@ fi
 # NOTE: Gemini CLI uses AfterAgent hook (not ExitPlanMode, which is Claude Code-only).
 # The primary method is agent direct blocking call — do NOT use & (background).
 # Manual blocking call (same-turn feedback, auto-installs plannotator if missing):
-#   bash .agent-skills/jeo/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3
+#   bash .agent-skills/omg/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3
 
 # ── 2. Configure ~/.gemini/settings.json ─────────────────────────────────────
 if ! $MD_ONLY; then
@@ -42,25 +42,25 @@ if ! $MD_ONLY; then
     echo -e "${YELLOW}[DRY-RUN]${NC} Would add AfterAgent hook to $GEMINI_SETTINGS"
   else
     mkdir -p "$(dirname "$GEMINI_SETTINGS")"
-    [[ -f "$GEMINI_SETTINGS" ]] && cp "$GEMINI_SETTINGS" "${GEMINI_SETTINGS}.jeo.bak"
+    [[ -f "$GEMINI_SETTINGS" ]] && cp "$GEMINI_SETTINGS" "${GEMINI_SETTINGS}.omg.bak"
 
     # Create hook helper script (avoids plannotator plan - hanging on empty stdin)
     GEMINI_HOOK_DIR="${HOME}/.gemini/hooks"
     mkdir -p "$GEMINI_HOOK_DIR"
-    cat > "${GEMINI_HOOK_DIR}/jeo-plannotator.sh" << 'HOOKEOF'
+    cat > "${GEMINI_HOOK_DIR}/omg-plannotator.sh" << 'HOOKEOF'
 #!/usr/bin/env bash
-# JEO AfterAgent backup hook — runs plannotator if plan.md exists in cwd
+# OMG AfterAgent backup hook — runs plannotator if plan.md exists in cwd
 # Phase guard: only fire during PLAN phase to prevent conflict with agentation.
 # Repeat guard: same plan hash + terminal gate status must not reopen plannotator.
 
-JEO_STATE="${PWD}/.omc/state/jeo-state.json"
-if [[ ! -f "$JEO_STATE" ]]; then
-  exit 0  # JEO is not active — no state file
+OMG_STATE="${PWD}/.omc/state/omg-state.json"
+if [[ ! -f "$OMG_STATE" ]]; then
+  exit 0  # OMG is not active — no state file
 fi
 PHASE=$(python3 -c "
 import json, sys
 try:
-    d = json.load(open('$JEO_STATE'))
+    d = json.load(open('$OMG_STATE'))
     print(d.get('phase', 'unknown'))
 except Exception:
     print('unknown')
@@ -72,7 +72,7 @@ if [[ "$PHASE" != "plan" ]]; then
 fi
 
 # AfterAgent 이중 실행 방지: 에이전트가 직접 호출한 턴이면 건너뜀
-LOCK_FILE="/tmp/jeo-plannotator-direct.lock"
+LOCK_FILE="/tmp/omg-plannotator-direct.lock"
 if [[ -f "$LOCK_FILE" ]]; then
   rm -f "$LOCK_FILE"
   exit 0
@@ -81,9 +81,9 @@ fi
 PLAN_FILE="$(pwd)/plan.md"
 test -f "$PLAN_FILE" || exit 0
 LOOP_SCRIPT_CANDIDATES=(
-  "$(pwd)/.agent-skills/jeo/scripts/plannotator-plan-loop.sh"
-  "$HOME/.codex/skills/jeo/scripts/plannotator-plan-loop.sh"
-  "$HOME/.agent-skills/jeo/scripts/plannotator-plan-loop.sh"
+  "$(pwd)/.agent-skills/omg/scripts/plannotator-plan-loop.sh"
+  "$HOME/.codex/skills/omg/scripts/plannotator-plan-loop.sh"
+  "$HOME/.agent-skills/omg/scripts/plannotator-plan-loop.sh"
 )
 
 LOOP_SCRIPT=""
@@ -100,15 +100,15 @@ if [[ -n "$LOOP_SCRIPT" ]]; then
   LOOP_RC=$?
   set -e
   if [[ "$LOOP_RC" -eq 0 ]]; then
-    echo "[JEO] plannotator approved=true (written to jeo-state.json)"
+    echo "[OMG] plannotator approved=true (written to omg-state.json)"
   elif [[ "$LOOP_RC" -eq 10 ]]; then
-    echo "[JEO] plannotator approved=false — feedback written to jeo-state.json"
+    echo "[OMG] plannotator approved=false — feedback written to omg-state.json"
   elif [[ "$LOOP_RC" -eq 32 ]]; then
-    echo "[JEO] plannotator unavailable: localhost bind blocked (sandbox/CI)." >&2
-    echo "[JEO] run PLAN gate in local TTY to use manual fallback approve/feedback." >&2
+    echo "[OMG] plannotator unavailable: localhost bind blocked (sandbox/CI)." >&2
+    echo "[OMG] run PLAN gate in local TTY to use manual fallback approve/feedback." >&2
   fi
 else
-  PLANNOTATOR_RUNTIME_HOME="/tmp/jeo-$(python3 -c "import hashlib,os; print(f'/tmp/jeo-{hashlib.md5(os.getcwd().encode()).hexdigest()[:8]}')")/.plannotator"
+  PLANNOTATOR_RUNTIME_HOME="/tmp/omg-$(python3 -c "import hashlib,os; print(f'/tmp/omg-{hashlib.md5(os.getcwd().encode()).hexdigest()[:8]}')")/.plannotator"
   mkdir -p "$PLANNOTATOR_RUNTIME_HOME"
   python3 -c "
 import json, sys
@@ -117,19 +117,19 @@ sys.stdout.write(json.dumps({'tool_input': {'plan': plan, 'permission_mode': 'ac
 " "$PLAN_FILE" | env HOME="$PLANNOTATOR_RUNTIME_HOME" PLANNOTATOR_HOME="$PLANNOTATOR_RUNTIME_HOME" plannotator > /tmp/plannotator_feedback.txt 2>&1 || true
 fi
 HOOKEOF
-    chmod +x "${GEMINI_HOOK_DIR}/jeo-plannotator.sh"
+    chmod +x "${GEMINI_HOOK_DIR}/omg-plannotator.sh"
 
     # Create agentation AfterAgent hook (phase-guarded + submit-gated)
-    cat > "${GEMINI_HOOK_DIR}/jeo-agentation.sh" << 'AGENTHOOKEOF'
+    cat > "${GEMINI_HOOK_DIR}/omg-agentation.sh" << 'AGENTHOOKEOF'
 #!/usr/bin/env bash
-# JEO AfterAgent hook — check pending agentation annotations during VERIFY_UI phase
+# OMG AfterAgent hook — check pending agentation annotations during VERIFY_UI phase
 # Submit gate: only process annotations after explicit Send Annotations / onSubmit confirmation.
 
 # Phase guard: only fire during verify_ui phase
-JEO_STATE="${PWD}/.omc/state/jeo-state.json"
-if [[ -f "$JEO_STATE" ]]; then
-  PHASE=$(python3 -c "import json; print(json.load(open('$JEO_STATE')).get('phase',''))" 2>/dev/null || echo "")
-  SUBMIT_GATE=$(python3 -c "import json; print(json.load(open('$JEO_STATE')).get('agentation',{}).get('submit_gate_status',''))" 2>/dev/null || echo "")
+OMG_STATE="${PWD}/.omc/state/omg-state.json"
+if [[ -f "$OMG_STATE" ]]; then
+  PHASE=$(python3 -c "import json; print(json.load(open('$OMG_STATE')).get('phase',''))" 2>/dev/null || echo "")
+  SUBMIT_GATE=$(python3 -c "import json; print(json.load(open('$OMG_STATE')).get('agentation',{}).get('submit_gate_status',''))" 2>/dev/null || echo "")
   if [[ "$PHASE" != "verify_ui" ]]; then
     exit 0
   fi
@@ -137,7 +137,7 @@ if [[ -f "$JEO_STATE" ]]; then
     exit 0
   fi
 else
-  exit 0  # No state file means JEO is not active
+  exit 0  # No state file means OMG is not active
 fi
 
 # Check agentation server and report pending annotations
@@ -157,13 +157,13 @@ for i, a in enumerate(d.get('annotations', [])):
   echo "=== END ==="
 fi
 AGENTHOOKEOF
-    chmod +x "${GEMINI_HOOK_DIR}/jeo-agentation.sh"
+    chmod +x "${GEMINI_HOOK_DIR}/omg-agentation.sh"
 
     python3 - <<PYEOF
 import json, os
 
 settings_path = os.path.expanduser("~/.gemini/settings.json")
-hook_path = os.path.expanduser("~/.gemini/hooks/jeo-plannotator.sh")
+hook_path = os.path.expanduser("~/.gemini/hooks/omg-plannotator.sh")
 try:
     with open(settings_path) as f:
         settings = json.load(f)
@@ -200,10 +200,10 @@ if migrated:
         json.dump(settings, f, indent=2)
     print("\\u2713 AfterAgent hooks migrated to new matcher format with timeouts")
 
-# Check if jeo plannotator hook already exists (old or new form)
+# Check if omg plannotator hook already exists (old or new form)
 planno_exists = any(
     any(
-        h.get("command", "").startswith("plannotator") or "jeo-plannotator" in h.get("command", "")
+        h.get("command", "").startswith("plannotator") or "omg-plannotator" in h.get("command", "")
         for h in entry.get("hooks", [])
     )
     for entry in after_agent
@@ -227,10 +227,10 @@ else:
     print("\u2713 plannotator hook already present")
 
 # Add agentation AfterAgent hook (phase-guarded + submit-gated)
-agentation_hook_path = os.path.expanduser("~/.gemini/hooks/jeo-agentation.sh")
+agentation_hook_path = os.path.expanduser("~/.gemini/hooks/omg-agentation.sh")
 agentation_exists = any(
     any(
-        "jeo-agentation" in h.get("command", "")
+        "omg-agentation" in h.get("command", "")
         for h in entry.get("hooks", [])
     )
     for entry in after_agent
@@ -273,19 +273,19 @@ fi
 if ! $HOOK_ONLY; then
   info "Updating ~/.gemini/GEMINI.md..."
 
-  JEO_SECTION='
-## JEO Orchestration Workflow
+  OMG_SECTION='
+## OMG Orchestration Workflow
 
-Keyword: `jeo` | Tool: Gemini CLI
+Keyword: `omg` | Tool: Gemini CLI
 
-JEO provides integrated AI agent orchestration across all AI tools.
+OMG provides integrated AI agent orchestration across all AI tools.
 
 ### Workflow Phases
 
 **PLAN** (plannotator — 직접 blocking 호출 필수):
 1. `plan.md` 작성 (목표, 단계, 리스크, 완료 기준 포함)
 2. PLAN gate 실행 (& 절대 금지, plannotator 없으면 자동 설치 후 계속 진행):
-  bash .agent-skills/jeo/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3
+  bash .agent-skills/omg/scripts/plannotator-plan-loop.sh plan.md /tmp/plannotator_feedback.txt 3
   # 동작 보장:
   # - approve/feedback 입력까지 반드시 대기
   # - 같은 plan hash 에 이미 approved/feedback/infrastructure_blocked가 기록돼 있으면 재실행 금지
@@ -309,11 +309,11 @@ NEVER skip plannotator. NEVER proceed to EXECUTE without approved=true.
 - UI/기능 정상 여부 확인
 
 **CLEANUP** (worktree):
-- After all work: `bash '"${JEO_SKILL_DIR}"'/scripts/worktree-cleanup.sh`
+- After all work: `bash '"${OMG_SKILL_DIR}"'/scripts/worktree-cleanup.sh`
 
 **ANNOTATE** (agentation watch loop — HTTP API 폴백):
 When user says "annotate" or "agentui" (deprecated alias) or asks to process UI annotations:
-1. Set `.omc/state/jeo-state.json` → `phase="verify_ui"` and `agentation.submit_gate_status="waiting_for_submit"`
+1. Set `.omc/state/omg-state.json` → `phase="verify_ui"` and `agentation.submit_gate_status="waiting_for_submit"`
 2. Wait for the human to click **Send Annotations** / trigger `onSubmit`
 3. Only after that explicit submit signal, reply `ANNOTATE_READY` and update `agentation.submit_gate_status="submitted"`
 4. Then GET http://localhost:4747/pending — check count
@@ -330,28 +330,28 @@ bunx oh-my-ag           # Initialize ohmg
 '
 
   if $DRY_RUN; then
-    echo -e "${YELLOW}[DRY-RUN]${NC} Would append JEO section to $GEMINI_MD"
+    echo -e "${YELLOW}[DRY-RUN]${NC} Would append OMG section to $GEMINI_MD"
   else
     mkdir -p "$(dirname "$GEMINI_MD")"
-    [[ -f "$GEMINI_MD" ]] && cp "$GEMINI_MD" "${GEMINI_MD}.jeo.bak"
+    [[ -f "$GEMINI_MD" ]] && cp "$GEMINI_MD" "${GEMINI_MD}.omg.bak"
 
-    if [[ -f "$GEMINI_MD" ]] && grep -q "^## JEO Orchestration Workflow" "$GEMINI_MD"; then
-      GEMINI_MD="$GEMINI_MD" JEO_SECTION="$JEO_SECTION" python3 - <<'PYEOF'
+    if [[ -f "$GEMINI_MD" ]] && grep -q "^## OMG Orchestration Workflow" "$GEMINI_MD"; then
+      GEMINI_MD="$GEMINI_MD" OMG_SECTION="$OMG_SECTION" python3 - <<'PYEOF'
 import os
 import re
 
 path = os.environ["GEMINI_MD"]
-section = os.environ["JEO_SECTION"].strip()
+section = os.environ["OMG_SECTION"].strip()
 text = open(path, encoding="utf-8").read()
-pattern = re.compile(r"\n## JEO Orchestration Workflow\n.*?\Z", re.S)
+pattern = re.compile(r"\n## OMG Orchestration Workflow\n.*?\Z", re.S)
 updated = pattern.sub("\n" + section + "\n", text.rstrip() + "\n")
 with open(path, "w", encoding="utf-8") as f:
     f.write(updated)
 PYEOF
-      ok "JEO section synced in ~/.gemini/GEMINI.md"
+      ok "OMG section synced in ~/.gemini/GEMINI.md"
     else
-      echo "$JEO_SECTION" >> "$GEMINI_MD"
-      ok "JEO instructions added to ~/.gemini/GEMINI.md"
+      echo "$OMG_SECTION" >> "$GEMINI_MD"
+      ok "OMG instructions added to ~/.gemini/GEMINI.md"
     fi
   fi
 fi
