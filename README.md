@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Skills](https://img.shields.io/badge/Skills-80%2B-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMiAxNWwtNS01IDEuNDEtMS40MUwxMCAxNC4xN2w3LjU5LTcuNTlMMTkgOGwtOSA5eiIvPjwvc3ZnPg==)](https://github.com/JEO-tech-ai/oh-my-gods)
+[![Skills](https://img.shields.io/badge/Skills-70%2B-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMiAxNWwtNS01IDEuNDEtMS40MUwxMCAxNC4xN2w3LjU5LTcuNTlMMTkgOGwtOSA5eiIvPjwvc3ZnPg==)](https://github.com/JEO-tech-ai/oh-my-gods)
 [![Platform](https://img.shields.io/badge/Platform-Claude%20%7C%20Gemini%20%7C%20Codex%20%7C%20OpenCode-orange?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-2.0.0-purple?style=for-the-badge)](CHANGELOG.md)
@@ -68,7 +68,7 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
 
 ## 🎯 What is oh-my-gods?
 
-`oh-my-gods` is a curated collection of **80+ AI agent skills** designed for LLM-based development workflows. Built around the `omg` orchestration protocol, it provides:
+`oh-my-gods` is a curated collection of **70+ AI agent skills** designed for LLM-based development workflows. Built around the `omg` orchestration protocol, it provides:
 
 - **Unified orchestration** across Claude Code, Gemini CLI, OpenAI Codex, and OpenCode
 - **Plan → Execute → Verify → Cleanup** automated pipelines
@@ -304,6 +304,7 @@ graph TD
 | `database-schema-design` | SQL/NoSQL schema design and optimization |
 | `deployment-automation` | CI/CD, Docker/Kubernetes, cloud infrastructure |
 | `environment-setup` | Dev/staging/production environment config |
+| `firebase-cli` | Firebase CLI — Hosting, Cloud Functions, Firestore, Emulator Suite |
 | `monitoring-observability` | Health checks, metrics, log aggregation |
 | `security-best-practices` | OWASP Top 10, RBAC, API security |
 
@@ -359,7 +360,7 @@ npm install -g skills
 # One-liner (recommended)
 curl -fsSL https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/install.sh | bash
 
-# Or manually — install all skills (70 skills)
+# Or manually — install all skills (71 skills)
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill agent-browser --skill agent-configuration \
   --skill agent-development-principles --skill agent-evaluation \
@@ -374,12 +375,12 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill debugging --skill deployment-automation \
   --skill design-system --skill environment-setup \
   --skill fabric --skill file-organization \
-  --skill firebase-ai-logic --skill frontend-design-system \
-  --skill genkit --skill git-submodule \
-  --skill git-workflow --skill langextract \
-  --skill log-analysis --skill marketing-automation \
-  --skill monitoring-observability --skill ohmg \
-  --skill omc --skill omg \
+  --skill firebase-ai-logic --skill firebase-cli \
+  --skill frontend-design-system --skill genkit \
+  --skill git-submodule --skill git-workflow \
+  --skill langextract --skill log-analysis \
+  --skill marketing-automation --skill monitoring-observability \
+  --skill ohmg --skill omc --skill omg \
   --skill omx --skill opencontext \
   --skill pattern-detection --skill performance-optimization \
   --skill plannotator --skill playwriter \

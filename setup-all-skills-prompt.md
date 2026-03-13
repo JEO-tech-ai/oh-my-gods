@@ -123,7 +123,7 @@ gemini extensions install https://github.com/JEO-tech-ai/oh-my-gods
 
 ---
 
-### Step 2: Full 70-Skill Installation (Default Execution Step)
+### Step 2: Full 71-Skill Installation (Default Execution Step)
 
 > **Existing skills are preserved — new skills are added and updated files are overwritten. No skills are deleted.**
 
@@ -142,12 +142,12 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill debugging --skill deployment-automation \
   --skill design-system --skill environment-setup \
   --skill fabric --skill file-organization \
-  --skill firebase-ai-logic --skill frontend-design-system \
-  --skill genkit --skill git-submodule \
-  --skill git-workflow --skill langextract \
-  --skill log-analysis --skill marketing-automation \
-  --skill monitoring-observability --skill ohmg \
-  --skill omc --skill omg \
+  --skill firebase-ai-logic --skill firebase-cli \
+  --skill frontend-design-system --skill genkit \
+  --skill git-submodule --skill git-workflow \
+  --skill langextract --skill log-analysis \
+  --skill marketing-automation --skill monitoring-observability \
+  --skill ohmg --skill omc --skill omg \
   --skill omx --skill opencontext \
   --skill pattern-detection --skill performance-optimization \
   --skill plannotator --skill playwriter \
@@ -334,6 +334,7 @@ gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&
 | `playwriter` | `playwriter` | Playwright automation connecting to your running browser (cookies/logins preserved) |
 | `langextract` | `langextract`, `extract from text`, `entity extraction` | LLM-powered structured extraction from unstructured text — source grounding, interactive HTML visualization, parallel chunking, multi-pass recall. Supports Gemini, OpenAI, Ollama, Vertex AI batch. Google open-source (34.7k ⭐). |
 | `scrapling` | `scrapling`, `web scraping`, `scrape website`, `bypass cloudflare`, `adaptive scraping`, `dynamic scraping`, `stealthy fetch` | Adaptive web scraping framework — static/dynamic/stealth fetchers, Scrapy-like spiders, adaptive CSS/XPath selectors that auto-relocate after site changes, MCP server, CLI. Cloudflare Turnstile bypass. |
+| `firebase-cli` | `firebase deploy`, `firebase init`, `firebase emulators`, `firebase hosting`, `firebase functions`, `firebase firestore` | Firebase CLI (firebase-tools) for all Firebase services — Hosting, Cloud Functions, Firestore, Realtime Database, Emulator Suite, App Distribution, Extensions, App Hosting. |
 
 ---
 

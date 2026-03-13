@@ -143,6 +143,14 @@
       "sourceType": "github",
       "computedHash": "14cb798a599fba2c7513ca7d4345e711ea9d5ce389f12da0b2e88d9af08ca6ed"
     },
+    "firebase-cli": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "keyword": "firebase-cli",
+      "description": "Install, configure, and operate the Firebase CLI (firebase-tools) for all Firebase services including Hosting, Cloud Functions, Firestore, Emulator Suite.",
+      "tags": ["firebase", "firebase-cli", "firebase-tools", "deploy", "hosting", "functions", "firestore", "emulators"],
+      "addedAt": "2026-03-13T00:00:00Z"
+    },
     "file-organization": {
       "source": "JEO-tech-ai/oh-my-gods",
       "sourceType": "github",

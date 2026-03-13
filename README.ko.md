@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![스킬](https://img.shields.io/badge/스킬-80개%2B-blue?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
+[![스킬](https://img.shields.io/badge/스킬-70개%2B-blue?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
 [![플랫폼](https://img.shields.io/badge/플랫폼-Claude%20%7C%20Gemini%20%7C%20Codex%20%7C%20OpenCode-orange?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
 [![라이선스](https://img.shields.io/badge/라이선스-MIT-green?style=for-the-badge)](LICENSE)
 [![버전](https://img.shields.io/badge/버전-2.0.0-purple?style=for-the-badge)](CHANGELOG.md)
@@ -68,7 +68,7 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
 
 ## 🎯 oh-my-gods란?
 
-`oh-my-gods`는 LLM 기반 개발 워크플로우를 위한 **80개 이상의 AI 에이전트 스킬** 모음입니다. `omg` 오케스트레이션 프로토콜을 중심으로 구성되어 있으며 다음을 제공합니다:
+`oh-my-gods`는 LLM 기반 개발 워크플로우를 위한 **70개 이상의 AI 에이전트 스킬** 모음입니다. `omg` 오케스트레이션 프로토콜을 중심으로 구성되어 있으며 다음을 제공합니다:
 
 - **통합 오케스트레이션** — Claude Code, Gemini CLI, OpenAI Codex, OpenCode 전 플랫폼 지원
 - **Plan → Execute → Verify → Cleanup** 자동화 파이프라인
@@ -304,6 +304,7 @@ graph TD
 | `database-schema-design` | SQL/NoSQL 스키마 설계 및 최적화 |
 | `deployment-automation` | CI/CD, Docker/Kubernetes, 클라우드 인프라 |
 | `environment-setup` | 개발/스테이징/프로덕션 환경 설정 |
+| `firebase-cli` | Firebase CLI — Hosting, Cloud Functions, Firestore, Emulator Suite |
 | `monitoring-observability` | 헬스 체크, 메트릭, 로그 집계 |
 | `security-best-practices` | OWASP Top 10, RBAC, API 보안 |
 
@@ -359,7 +360,7 @@ npm install -g skills
 # 원라인 설치 (권장)
 curl -fsSL https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/install.sh | bash
 
-# 또는 수동 설치 (70개 스킬)
+# 또는 수동 설치 (71개 스킬)
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill agent-browser --skill agent-configuration \
   --skill agent-development-principles --skill agent-evaluation \
@@ -374,12 +375,12 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill debugging --skill deployment-automation \
   --skill design-system --skill environment-setup \
   --skill fabric --skill file-organization \
-  --skill firebase-ai-logic --skill frontend-design-system \
-  --skill genkit --skill git-submodule \
-  --skill git-workflow --skill langextract \
-  --skill log-analysis --skill marketing-automation \
-  --skill monitoring-observability --skill ohmg \
-  --skill omc --skill omg \
+  --skill firebase-ai-logic --skill firebase-cli \
+  --skill frontend-design-system --skill genkit \
+  --skill git-submodule --skill git-workflow \
+  --skill langextract --skill log-analysis \
+  --skill marketing-automation --skill monitoring-observability \
+  --skill ohmg --skill omc --skill omg \
   --skill omx --skill opencontext \
   --skill pattern-detection --skill performance-optimization \
   --skill plannotator --skill playwriter \
