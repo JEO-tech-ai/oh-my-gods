@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![스킬](https://img.shields.io/badge/스킬-85개%2B-blue?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
+[![스킬](https://img.shields.io/badge/스킬-80개%2B-blue?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
 [![플랫폼](https://img.shields.io/badge/플랫폼-Claude%20%7C%20Gemini%20%7C%20Codex%20%7C%20OpenCode-orange?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
 [![라이선스](https://img.shields.io/badge/라이선스-MIT-green?style=for-the-badge)](LICENSE)
 [![버전](https://img.shields.io/badge/버전-2.0.0-purple?style=for-the-badge)](CHANGELOG.md)
@@ -68,7 +68,7 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
 
 ## 🎯 oh-my-gods란?
 
-`oh-my-gods`는 LLM 기반 개발 워크플로우를 위한 **85개 이상의 AI 에이전트 스킬** 모음입니다. `omg` 오케스트레이션 프로토콜을 중심으로 구성되어 있으며 다음을 제공합니다:
+`oh-my-gods`는 LLM 기반 개발 워크플로우를 위한 **80개 이상의 AI 에이전트 스킬** 모음입니다. `omg` 오케스트레이션 프로토콜을 중심으로 구성되어 있으며 다음을 제공합니다:
 
 - **통합 오케스트레이션** — Claude Code, Gemini CLI, OpenAI Codex, OpenCode 전 플랫폼 지원
 - **Plan → Execute → Verify → Cleanup** 자동화 파이프라인
@@ -334,15 +334,16 @@ graph TD
 | `ai-tool-compliance` | 내부 AI 도구 컴플라이언스 자동화 (P0/P1) |
 | `opencontext` | 세션 간 영속적 메모리 및 컨텍스트 관리 |
 | `prompt-repetition` | 프롬프트 반복 기법으로 LLM 정확도 향상 |
+| `langextract` | LLM 기반 비정형 텍스트 구조화 추출 (Google 오픈소스, 34.7k ⭐) |
+| `scrapling` | 적응형 웹 스크래핑 — Cloudflare 우회, 정적/동적/스텔스 페처 |
 
 ### 콘텐츠 & 미디어
 
 | 스킬 | 설명 |
 |------|------|
 | `presentation-builder` | `slides-grab`으로 HTML 슬라이드 제작, PPTX/PDF 내보내기 |
-| `video-production` | Remotion 기반 프로그래밍형 영상 제작 |
-| `image-generation` | Gemini/호환 API를 통한 이미지 생성 |
-| `pollinations-ai` | API 키 없이 무료 이미지 생성 |
+| `video-production` | 영상 제작 워크플로우 |
+| `remotion-video-production` | Remotion 기반 프로그래밍형 영상 제작 |
 | `marketing-automation` | 23개 서브스킬: CRO, 카피라이팅, SEO, 성장 |
 
 ---
@@ -358,42 +359,43 @@ npm install -g skills
 # 원라인 설치 (권장)
 curl -fsSL https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/install.sh | bash
 
-# 또는 수동 설치
+# 또는 수동 설치 (70개 스킬)
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
-  --skill agent-configuration --skill agent-evaluation \
-  --skill agent-development-principles --skill agent-principles \
-  --skill agent-workflow --skill bmad \
-  --skill bmad-gds --skill bmad-idea \
-  --skill prompt-repetition --skill api-design \
+  --skill agent-browser --skill agent-configuration \
+  --skill agent-development-principles --skill agent-evaluation \
+  --skill agent-principles --skill agent-workflow \
+  --skill agentation --skill api-design \
   --skill api-documentation --skill authentication-setup \
-  --skill backend-testing --skill database-schema-design \
-  --skill design-system --skill frontend-design-system \
-  --skill react-best-practices --skill vercel-react-best-practices \
-  --skill responsive-design --skill state-management \
-  --skill ui-component-patterns --skill web-accessibility \
-  --skill web-design-guidelines --skill code-refactoring \
-  --skill code-review --skill debugging \
-  --skill performance-optimization --skill testing-strategies \
-  --skill deployment-automation --skill firebase-ai-logic \
-  --skill genkit --skill monitoring-observability \
-  --skill security-best-practices --skill environment-setup \
-  --skill vercel-deploy --skill changelog-maintenance \
-  --skill presentation-builder --skill technical-writing \
-  --skill user-guide-writing --skill sprint-retrospective \
-  --skill standup-meeting --skill task-estimation \
-  --skill task-planning --skill codebase-search \
-  --skill data-analysis --skill log-analysis \
-  --skill pattern-detection --skill llm-monitoring-dashboard \
-  --skill image-generation --skill pollinations-ai \
-  --skill video-production --skill marketing-automation \
-  --skill agent-browser --skill agentation \
-  --skill ai-tool-compliance --skill file-organization \
-  --skill git-submodule --skill git-workflow --skill omg \
-  --skill ohmg --skill omx --skill omc \
-  --skill opencontext --skill plannotator --skill playwriter \
-  --skill ralph --skill ralphmode --skill skill-standardization \
-  --skill survey --skill vibe-kanban --skill workflow-automation \
-  --skill fabric --skill autoresearch
+  --skill autoresearch --skill backend-testing \
+  --skill bmad --skill bmad-idea \
+  --skill changelog-maintenance --skill code-refactoring \
+  --skill code-review --skill codebase-search \
+  --skill data-analysis --skill database-schema-design \
+  --skill debugging --skill deployment-automation \
+  --skill design-system --skill environment-setup \
+  --skill fabric --skill file-organization \
+  --skill firebase-ai-logic --skill frontend-design-system \
+  --skill genkit --skill git-submodule \
+  --skill git-workflow --skill langextract \
+  --skill log-analysis --skill marketing-automation \
+  --skill monitoring-observability --skill ohmg \
+  --skill omc --skill omg \
+  --skill omx --skill opencontext \
+  --skill pattern-detection --skill performance-optimization \
+  --skill plannotator --skill playwriter \
+  --skill presentation-builder --skill prompt-repetition \
+  --skill ralph --skill ralphmode \
+  --skill react-best-practices --skill remotion-video-production \
+  --skill responsive-design --skill scrapling \
+  --skill security-best-practices --skill skill-standardization \
+  --skill sprint-retrospective --skill standup-meeting \
+  --skill state-management --skill survey \
+  --skill task-estimation --skill task-planning \
+  --skill technical-writing --skill testing-strategies \
+  --skill ui-component-patterns --skill user-guide-writing \
+  --skill vercel-deploy --skill vercel-react-best-practices \
+  --skill vibe-kanban --skill video-production \
+  --skill web-design-guidelines --skill workflow-automation
 
 # LangChain 스킬 (선택 사항)
 npx skills add langchain-ai/langchain-skills --skill '*' --yes
@@ -453,7 +455,7 @@ oh-my-gods가 도움이 되셨다면 프로젝트를 후원해 주세요!
 
 | 컴포넌트 | 출처 | 라이선스 |
 |----------|------|---------|
-| `jeo` | [JEO-tech-ai/oh-my-gods](https://github.com/JEO-tech-ai/oh-my-gods) | MIT |
+| `omg` | [JEO-tech-ai/oh-my-gods](https://github.com/JEO-tech-ai/oh-my-gods) | MIT |
 | `omc` | [Yeachan-Heo/oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) | MIT |
 | `ralph` | [Q00/ouroboros](https://github.com/Q00/ouroboros) | MIT |
 | `plannotator` | [backnotprop/plannotator](https://plannotator.ai) | MIT |

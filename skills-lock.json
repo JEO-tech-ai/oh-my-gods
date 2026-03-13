@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "agent-browser": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "784ea5d1fa8812a4023284b48dea0e283991b33775175af122abab846468a525"
+    },
     "agent-configuration": {
       "source": "JEO-tech-ai/oh-my-gods",
       "sourceType": "github",
@@ -26,6 +31,11 @@
       "sourceType": "github",
       "computedHash": "822dc448421fb83ee3cb8527b2f873a013394fda83100fe74983dadc28d11f50"
     },
+    "agentation": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "e32d0b3d685e4bcb6a9cc04e50437ec0982d42b4588c9571b32b0c1bc5d0a1c6"
+    },
     "ai-tool-compliance": {
       "source": "supercent-io/skills-template",
       "sourceType": "github",
@@ -43,10 +53,125 @@
       ],
       "addedAt": "2026-03-03T00:00:00Z"
     },
+    "api-design": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "dafbff951f8f1c29336fe9f6cd1e1f2ad9f203b36fcdc8b5a0c1c9cea500e6d5"
+    },
+    "api-documentation": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "0e161c4a4f3a3f5bd6949a1ebc833fd61d29f35a4fed307567a8114d003a95fc"
+    },
+    "authentication-setup": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "13509b82ca5815c5df801a522091263d4034c44a20a50c0b9db49135b2c29d3a"
+    },
+    "autoresearch": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "d288d1ca7111d7040037770f02c1a0478050c5fdc473665048ee32b731e41900"
+    },
+    "backend-testing": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "5359a83e79545ec290cfe1a6e7063b12c0ca4f8c4dd95e806a4621fc528df1f6"
+    },
     "bmad": {
       "source": "JEO-tech-ai/oh-my-gods",
       "sourceType": "github",
       "computedHash": "bd200bc06b97ad6286254aeb23552b70260662a4b81217c7b50554a26ea95f37"
+    },
+    "bmad-idea": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "362e1355237e3dcc650f31a81b967fd4dd24818d1083ed59d89d5c369f178d35"
+    },
+    "changelog-maintenance": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "1700614a8a35135a4b7fa466797b224a76a7a34e7a70497ecee4c69ecadc12e3"
+    },
+    "code-refactoring": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "18da189464fd9a53133a1372599369ac4b7f3a9da653a907762e20e89cdb2102"
+    },
+    "code-review": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "ac61353e7ec0c8b98660accf0c9688bf5183044b7fa1ee1e189c680ff1a083c6"
+    },
+    "codebase-search": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "e0c9dd7e2f99574d78109db2bad6475801b4748e2f91a8fce7e736f5efa15923"
+    },
+    "data-analysis": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "d380eb6230b7a285a63b11e18c6c7eeae37f2dd502610ec390975ae1b8627b29"
+    },
+    "database-schema-design": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "c3193721f3420d8e669ad42f33de538acc1ddaeacfceb58309f80eafb0b00752"
+    },
+    "debugging": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "8fe16be685f8d27839ed2c0607f612e066d24ad04e1cd65e52b3deeba5426837"
+    },
+    "deployment-automation": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "6a1fe3ca9bd90c6f25a716e40c4e28f230ddbb94811d689fb206a84eaa26d917"
+    },
+    "design-system": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "0287495f76aa41c39c48463190ca7c3345868154b9be5a60439e67d0db15b770"
+    },
+    "environment-setup": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "a760a9d691b4d20f6f8d5d6cc4243a20e311958c1ba7dc16c35d99b57a9babad"
+    },
+    "fabric": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "14cb798a599fba2c7513ca7d4345e711ea9d5ce389f12da0b2e88d9af08ca6ed"
+    },
+    "file-organization": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "f533c6859ba8ab8bb1c91bfb2c0d82ee9e71b5b43dc5776dc9d42a2d3f9c6203"
+    },
+    "firebase-ai-logic": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "f8135b9cb5bf9cc622f161134c4b18cc642d586bb235e76ef8861d30df15b80d"
+    },
+    "frontend-design-system": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "5c20c46162ec89c01473e55f66d9b79f5c8f0ec38d8b3d5386a0c47634ff239e"
+    },
+    "genkit": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "376cc0b642901c3497fb4f9eb5b90c1d6f0e22176c77637e240f84941f8b3da3"
+    },
+    "git-submodule": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "8c4749f8e10ae9b56a1f660c21d1cba02ee3aa3482e484172b07e29591d7bc2a"
+    },
+    "git-workflow": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "a8f2d356cee50a0c64eeded9762de58d5227ba3a47b91cdd9889ba84dff9d020"
     },
     "jeo": {
       "source": "supercent-io/skills-template",
@@ -75,6 +200,14 @@
         "1.0.0": "초기 릴리스 — PLAN/EXECUTE/VERIFY/VERIFY_UI/CLEANUP 전체 플로우"
       }
     },
+    "langextract": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "keyword": "langextract",
+      "description": "LLM-powered structured extraction from unstructured text — source grounding, interactive HTML visualization, parallel chunking. Supports Gemini, OpenAI, Ollama, Vertex AI batch.",
+      "tags": ["nlp", "extraction", "llm", "gemini", "structured-output", "document-processing"],
+      "addedAt": "2026-03-13T00:00:00Z"
+    },
     "llm-monitoring-dashboard": {
       "source": "supercent-io/skills-template",
       "sourceType": "github",
@@ -92,32 +225,198 @@
       ],
       "addedAt": "2026-03-03T00:00:00Z"
     },
+    "log-analysis": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "ddb7887f71ae4730fccc90a3430b3b24303f112d23c499cfa069d070c5c3f52c"
+    },
+    "marketing-automation": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "9faeba2296cd2696b5c2407392fced5524812da07d0a2ec259b524d97bec8aae"
+    },
+    "monitoring-observability": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "65abdcee441fa3710c077cbb7ef74d7843bd0163ba3551c27ebe7fdedbdd3953"
+    },
+    "ohmg": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "448e1e263c912ddf20efc20a6ad91364f54dc3da13c03c53fc434f931701252a"
+    },
+    "omc": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "a51a4146782b8f8caeed924b89ec7d94f9daf6d226a71f76896ebbe41463c910"
+    },
     "omg": {
       "source": "JEO-tech-ai/oh-my-gods",
       "sourceType": "github",
       "computedHash": "d4eabd4e84f4916daa0ec1aaceb0da3ec9220375c61afdd1c0a0877e1f1013b2"
     },
-    "survey": {
-      "source": "supercent-io/skills-template",
+    "omx": {
+      "source": "JEO-tech-ai/oh-my-gods",
       "sourceType": "github",
-      "version": "1.0.0",
-      "keyword": "survey",
-      "description": "계획이나 구현 전에 문제공간을 조사하는 전 플랫폼 리서치 스킬. 결과물을 .survey/{slug}/에 저장하고 Claude/Codex/Gemini 차이를 settings/rules/hooks로 정규화.",
-      "tags": [
-        "survey",
-        "research",
-        "landscape-scan",
-        "groundwork",
-        "omc",
-        "omx",
-        "ohmg",
-        "hooks",
-        "rules",
-        "settings"
-      ],
-      "installCommand": "npx skills add https://github.com/supercent-io/skills-template --skill survey",
-      "addedAt": "2026-03-10T00:00:00Z",
-      "updatedAt": "2026-03-10T00:00:00Z"
+      "computedHash": "03241df2400cf774a9bbbba3e9eb61264adfc5347dfcd1d20207462b8b04e9c5"
+    },
+    "opencontext": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "140fbb9f140eb8503142df1aa5969bae4e909dc0b2077e6ae074edb4b6aad670"
+    },
+    "pattern-detection": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "62a6ffcfb9ff5bb3a0280f0845dec7437e06619409ed722ce2b1b7d8a9eea669"
+    },
+    "performance-optimization": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "5cbae5d5e98c89e02b18cb43d9f7b9175fd95cf3957b2eaafb0f5a32b53205b1"
+    },
+    "plannotator": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "1b29ff24177e11cfcbff39e708cd016fe929fcb3e94d3e7fbee79265bca4a537"
+    },
+    "playwriter": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "9ee409ec74e606bdde0d08b4c02d703737b5c4a338545a8bf227f8e8c3e20b6e"
+    },
+    "presentation-builder": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "ff3ce30f4fe86aa233c5cd2461db042b82c7c79ce20afc691637bf468f74ed93"
+    },
+    "prompt-repetition": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "8b5a30de49789d8a51dbd4f39f9cc9f6ff71e929d2e47cda0029cac58eefac4c"
+    },
+    "ralph": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "81363817f0730bcdc7979e29040ac0bab5a0cb1acdbe83333ffb093f54afb09b"
+    },
+    "ralphmode": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "aba75aa77481f5b8d5660d0f9252529933899d26789cf8f9f08b0136376fbe33"
+    },
+    "react-best-practices": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "60b47b608052eeb5bbedd91aac23e301009d90e2f5de5a15ddb79a370cb5267d"
+    },
+    "remotion-video-production": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "57a768e22090235b93527de493523723769ecda0a4ea5ee24d3663011daef354"
+    },
+    "responsive-design": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "f9378e731deb2b131442973c55fcc9d5e80f5515c55200a8c86f63bb97410b37"
+    },
+    "scrapling": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "keyword": "scrapling",
+      "description": "Adaptive web scraping framework with static/dynamic/stealth fetchers, Scrapy-like spiders, adaptive CSS/XPath selectors, MCP server, and CLI. Handles Cloudflare bypass and site restructuring.",
+      "tags": ["web-scraping", "crawling", "adaptive", "playwright", "anti-bot", "mcp", "python"],
+      "addedAt": "2026-03-13T00:00:00Z"
+    },
+    "security-best-practices": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "a8c825eb0f2d2d3381f93dad83ea531579445c5646b38be0170f4a782689cf4b"
+    },
+    "skill-standardization": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "59cb325b08959d6731f042632cec1e90202f8bc2417b72a7615d64687a07ff81"
+    },
+    "sprint-retrospective": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "7c5ff58b00edfa7bb90baf85975be0f4d2f3635792b3b902eac30b072e9df2d5"
+    },
+    "standup-meeting": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "9bb2b517b2d64d893e9681580eb44c37404a779fdd9184cc1a6afe52842ae1f3"
+    },
+    "state-management": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "d18d3cf33673ce37523183860b5aaf8ff1a37c5c1ceed6da167b950704353e5c"
+    },
+    "survey": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "cf2c78ba667a6cd776540c10c407aeb74e8f67892de61955d87d17b7f8b2a083"
+    },
+    "task-estimation": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "5166ae0e4efc5fb8ec47e9484762895be86eec68ad177acd75555fddc0b81b45"
+    },
+    "task-planning": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "1459a31d3c87df7fd601a99479363a7f66da1cd2089f08405a7d4854d0da3a93"
+    },
+    "technical-writing": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "0f4fb1976596822509e3ef98546250d89337bce036c99b0bae1f6598fe0a156c"
+    },
+    "testing-strategies": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "a270840ba3ba30e3cef5d267eea62497cbd6b3a58de57c41b785524a60015490"
+    },
+    "ui-component-patterns": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "6903616a42c711d7cee7ddc2a34233c8dfda67868dd47905edd3c6374fc49ba9"
+    },
+    "user-guide-writing": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "e396b8378c0c98b92fb849ec7a94d5adb902b9f33b37188c8942073112ae8558"
+    },
+    "vercel-deploy": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "86762b088a1920638d38479e146087e28dbe991210da1f8814f666859481e858"
+    },
+    "vercel-react-best-practices": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "774b05c367f1a659353008f6377df6400bc7eca1baf7568b47d5717e08622b86"
+    },
+    "vibe-kanban": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "58df407b28043a930c55dfcce37a93d7c4610dd8f93001e4b023ed216b681bf2"
+    },
+    "video-production": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "1c1a34e711af0b53a54ed519afcfa0d6eda492978bd85e7fa496b87dfc93d312"
+    },
+    "web-design-guidelines": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "036c9cfa69ffc2ffd6abd0025d80cd02809f7b61d8ffd1742cc6cbb23f75bc57"
+    },
+    "workflow-automation": {
+      "source": "JEO-tech-ai/oh-my-gods",
+      "sourceType": "github",
+      "computedHash": "fca71b96f0070be7c89412ae05df0ca3e8457980e2e6494de5d61a05a2e9245d"
     }
   }
 }

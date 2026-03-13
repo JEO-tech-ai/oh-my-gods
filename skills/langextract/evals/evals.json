@@ -1,0 +1,49 @@
+{
+  "skill_name": "langextract",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use langextract to extract medication names and dosages from the following clinical note: 'Patient is prescribed metformin 500mg twice daily and lisinopril 10mg once daily.'",
+      "expected_output": "Agent installs langextract, defines a prompt and ExampleData with Extraction objects, calls lx.extract() with a Gemini model, and prints the extracted medication entities with their dosages.",
+      "assertions": [
+        "lx.extract() is called with prompt_description and examples arguments",
+        "ExampleData and Extraction classes from lx.data are used",
+        "Output contains at least two extractions: one for metformin, one for lisinopril",
+        "extraction_class and extraction_text fields are set on each Extraction"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Extract named entities from a long document at https://www.gutenberg.org/files/1513/1513-0.txt using langextract with 3 passes and 20 workers, then save results and generate an HTML visualization.",
+      "expected_output": "Agent calls lx.extract() with extraction_passes=3, max_workers=20, then calls lx.io.save_annotated_documents() to produce a JSONL file, then calls lx.visualize() and writes the HTML output to disk.",
+      "assertions": [
+        "lx.extract() called with extraction_passes=3 and max_workers=20",
+        "lx.io.save_annotated_documents() is called with the result",
+        "lx.visualize() is called on the saved JSONL path",
+        "An HTML file is written to disk"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Run langextract using a local Ollama model gemma2:2b instead of Gemini to extract entities from a text string.",
+      "expected_output": "Agent calls lx.extract() with model_id='gemma2:2b', model_url='http://localhost:11434', fence_output=False, and use_schema_constraints=False.",
+      "assertions": [
+        "model_id set to 'gemma2:2b'",
+        "model_url set to 'http://localhost:11434'",
+        "use_schema_constraints=False is passed",
+        "fence_output=False is passed"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I need to process 50 clinical reports stored as a list of strings with langextract and save to JSONL.",
+      "expected_output": "Agent creates a list of lx.data.Document objects (one per report), passes them to lx.extract() as text_or_documents, collects the list of AnnotatedDocument results, and calls lx.io.save_annotated_documents() on the results.",
+      "assertions": [
+        "lx.data.Document objects are created for each report",
+        "text_or_documents receives a list of Document objects",
+        "lx.io.save_annotated_documents() is called on the list of results",
+        "Output JSONL file is created"
+      ]
+    }
+  ]
+}

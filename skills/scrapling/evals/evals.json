@@ -1,0 +1,54 @@
+{
+  "skill_name": "scrapling",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use scrapling to scrape the quotes from https://quotes.toscrape.com/ — extract quote text and author names, print each pair.",
+      "expected_output": "Agent installs scrapling, imports Fetcher, calls Fetcher().get() with the URL, uses .css() with appropriate selectors to extract quote text and authors from the page, and prints each quote-author pair.",
+      "assertions": [
+        "Fetcher is imported from scrapling.fetchers",
+        "Fetcher().get() is called with the URL",
+        ".css() is used with a selector that matches quote text elements",
+        "At least one quote-author pair is printed",
+        "No browser install is required (static fetcher is used)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Scrape a JavaScript-rendered React SPA at https://example-spa.com/products using scrapling. The product titles load dynamically and appear inside .product-card h2 elements. Wait for the products container to load, then extract all titles.",
+      "expected_output": "Agent uses DynamicFetcher with wait_selector='.product-card' (or similar), calls .fetch() with the URL and disable_resources=True for speed, then uses .css('.product-card h2').getall() to extract all product titles.",
+      "assertions": [
+        "DynamicFetcher is imported and used instead of Fetcher",
+        "fetch() is called (not get())",
+        "wait_selector is set to a CSS selector matching loaded content",
+        "disable_resources=True is passed for speed",
+        ".css() or .xpath() is used to extract titles"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The site https://cf-protected-site.com is behind Cloudflare protection. Use scrapling to bypass it and extract the main article content.",
+      "expected_output": "Agent installs 'scrapling[fetchers]' and 'cairosvg' (stealth prerequisite), uses StealthyFetcher with headless=True, network_idle=True, and optionally os_randomize=True to fetch the page, then extracts article content with .css('article') or .css('main').",
+      "assertions": [
+        "StealthyFetcher is imported from scrapling.fetchers",
+        "StealthyFetcher().fetch() is called with the URL",
+        "headless=True is passed",
+        "network_idle=True or os_randomize=True is set",
+        "Article content is extracted via CSS or XPath selector"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Build a spider using scrapling to crawl https://blog.example.com/, follow pagination links, and extract all blog post titles and dates. The spider should pause and resume if interrupted.",
+      "expected_output": "Agent creates a Spider subclass with start_urls, implements parse() method that yields title/date dicts and follows pagination via Request objects, sets crawldir for pause/resume, and runs with asyncio.run(spider.start()).",
+      "assertions": [
+        "Spider, Request, Response are imported from scrapling.spiders",
+        "A Spider subclass is defined with start_urls",
+        "parse() method yields title and date dicts",
+        "Pagination link is followed via yield Request(url=..., callback=self.parse)",
+        "crawldir is set to a local directory",
+        "asyncio.run(spider.start()) or spider.stream() is used to run the crawl"
+      ]
+    }
+  ]
+}

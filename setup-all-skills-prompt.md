@@ -49,7 +49,7 @@ else
 fi
 ```
 
-3. **Declare installation path standardization variables and wipe existing paths**
+3. **Declare installation path and ensure directories exist**
 
 ```bash
 # Canonical path (recommended default)
@@ -63,15 +63,13 @@ SKILL_DESTS=(
   "${HOME}/.config/opencode/skills" "${PWD}/.config/opencode/skills"
 )
 
-# Always wipe existing skill paths to guarantee a clean install
-echo "Wiping existing skill paths for clean install..."
-rm -rf "${SKILLS_CANONICAL}"
+# Ensure all skill directories exist (no wipe — existing skills are preserved)
+mkdir -p "${SKILLS_CANONICAL}"
 for dest in "${SKILL_DESTS[@]}"; do
-  rm -rf "${dest}"
+  mkdir -p "${dest}"
 done
 
-mkdir -p "${SKILLS_CANONICAL}"
-echo "✅ Skill paths cleared"
+echo "✅ Skill directories ready"
 ```
 
 ---
@@ -125,25 +123,9 @@ gemini extensions install https://github.com/JEO-tech-ai/oh-my-gods
 
 ---
 
-### Step 2: Full 68-Skill Installation (Default Execution Step)
+### Step 2: Full 70-Skill Installation (Default Execution Step)
 
-> **Always wipe existing skill directories before running — ensures no stale skills from previous installs or Step 1 partial install remain.**
-
-```bash
-# Wipe all skill paths before full install (unconditional — always required)
-_SKILLS_CANONICAL="${HOME}/.agent-skills"
-for _dest in \
-  "${_SKILLS_CANONICAL}" \
-  "${HOME}/.claude/skills"  "${PWD}/.claude/skills" \
-  "${HOME}/.codex/skills"   "${PWD}/.codex/skills" \
-  "${HOME}/.gemini/skills"  "${PWD}/.gemini/skills" \
-  "${HOME}/.opencode/skills" "${PWD}/.opencode/skills" \
-  "${HOME}/.config/opencode/skills" "${PWD}/.config/opencode/skills"; do
-  rm -rf "${_dest}"
-done
-mkdir -p "${_SKILLS_CANONICAL}"
-echo "✅ All skill directories wiped — ready for clean install"
-```
+> **Existing skills are preserved — new skills are added and updated files are overwritten. No skills are deleted.**
 
 ```bash
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
@@ -162,16 +144,17 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill fabric --skill file-organization \
   --skill firebase-ai-logic --skill frontend-design-system \
   --skill genkit --skill git-submodule \
-  --skill git-workflow --skill log-analysis \
-  --skill marketing-automation --skill monitoring-observability \
-  --skill ohmg --skill omc \
-  --skill omg --skill omx \
-  --skill opencontext --skill pattern-detection \
-  --skill performance-optimization --skill plannotator \
-  --skill playwriter --skill presentation-builder \
-  --skill prompt-repetition --skill ralph \
-  --skill ralphmode --skill react-best-practices \
-  --skill remotion-video-production --skill responsive-design \
+  --skill git-workflow --skill langextract \
+  --skill log-analysis --skill marketing-automation \
+  --skill monitoring-observability --skill ohmg \
+  --skill omc --skill omg \
+  --skill omx --skill opencontext \
+  --skill pattern-detection --skill performance-optimization \
+  --skill plannotator --skill playwriter \
+  --skill presentation-builder --skill prompt-repetition \
+  --skill ralph --skill ralphmode \
+  --skill react-best-practices --skill remotion-video-production \
+  --skill responsive-design --skill scrapling \
   --skill security-best-practices --skill skill-standardization \
   --skill sprint-retrospective --skill standup-meeting \
   --skill state-management --skill survey \
@@ -262,27 +245,24 @@ fi
 
 echo "Detected skills dir: ${SKILL_SRC}"
 
-# Sync to canonical path (force mirror)
+# Sync to canonical path (overwrite — existing skills not in source are kept)
 mkdir -p "${HOME}/.agent-skills"
 if command -v rsync >/dev/null 2>&1; then
-  rsync -a --delete "${SKILL_SRC}/" "${HOME}/.agent-skills/"
+  rsync -a "${SKILL_SRC}/" "${HOME}/.agent-skills/"
 else
-  rm -rf "${HOME}/.agent-skills"
-  mkdir -p "${HOME}/.agent-skills"
   cp -R "${SKILL_SRC}/." "${HOME}/.agent-skills/"
 fi
 
-# Remove existing platform-specific skill directories and force copy
+# Overwrite platform-specific skill directories (preserve existing, overwrite updated)
 for dest in \
     "${HOME}/.claude/skills" "${PWD}/.claude/skills" \
     "${HOME}/.codex/skills" "${PWD}/.codex/skills" \
     "${HOME}/.gemini/skills" "${PWD}/.gemini/skills" \
     "${HOME}/.opencode/skills" "${PWD}/.opencode/skills" \
     "${HOME}/.config/opencode/skills" "${PWD}/.config/opencode/skills"; do
-  rm -rf "${dest}"
   mkdir -p "${dest}"
   if command -v rsync >/dev/null 2>&1; then
-    rsync -a --delete "${HOME}/.agent-skills/" "${dest}/"
+    rsync -a "${HOME}/.agent-skills/" "${dest}/"
   else
     cp -R "${HOME}/.agent-skills"/. "${dest}/"
   fi
@@ -352,6 +332,8 @@ gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&
 | `agent-workflow` | — | Daily workflow optimization: shortcuts, Git, MCP, session management |
 | `fabric` | `fabric` | AI prompt patterns — YouTube summaries, doc analysis, content extraction |
 | `playwriter` | `playwriter` | Playwright automation connecting to your running browser (cookies/logins preserved) |
+| `langextract` | `langextract`, `extract from text`, `entity extraction` | LLM-powered structured extraction from unstructured text — source grounding, interactive HTML visualization, parallel chunking, multi-pass recall. Supports Gemini, OpenAI, Ollama, Vertex AI batch. Google open-source (34.7k ⭐). |
+| `scrapling` | `scrapling`, `web scraping`, `scrape website`, `bypass cloudflare`, `adaptive scraping`, `dynamic scraping`, `stealthy fetch` | Adaptive web scraping framework — static/dynamic/stealth fetchers, Scrapy-like spiders, adaptive CSS/XPath selectors that auto-relocate after site changes, MCP server, CLI. Cloudflare Turnstile bypass. |
 
 ---
 

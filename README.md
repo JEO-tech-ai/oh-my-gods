@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Skills](https://img.shields.io/badge/Skills-85%2B-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMiAxNWwtNS01IDEuNDEtMS40MUwxMCAxNC4xN2w3LjU5LTcuNTlMMTkgOGwtOSA5eiIvPjwvc3ZnPg==)](https://github.com/JEO-tech-ai/oh-my-gods)
+[![Skills](https://img.shields.io/badge/Skills-80%2B-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMiAxNWwtNS01IDEuNDEtMS40MUwxMCAxNC4xN2w3LjU5LTcuNTlMMTkgOGwtOSA5eiIvPjwvc3ZnPg==)](https://github.com/JEO-tech-ai/oh-my-gods)
 [![Platform](https://img.shields.io/badge/Platform-Claude%20%7C%20Gemini%20%7C%20Codex%20%7C%20OpenCode-orange?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-2.0.0-purple?style=for-the-badge)](CHANGELOG.md)
@@ -68,7 +68,7 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
 
 ## 🎯 What is oh-my-gods?
 
-`oh-my-gods` is a curated collection of **85+ AI agent skills** designed for LLM-based development workflows. Built around the `omg` orchestration protocol, it provides:
+`oh-my-gods` is a curated collection of **80+ AI agent skills** designed for LLM-based development workflows. Built around the `omg` orchestration protocol, it provides:
 
 - **Unified orchestration** across Claude Code, Gemini CLI, OpenAI Codex, and OpenCode
 - **Plan → Execute → Verify → Cleanup** automated pipelines
@@ -259,7 +259,7 @@ graph TD
 
 | Skill | Keyword | Platform | Description |
 |-------|---------|----------|-------------|
-|  | `omg` |  | `omg` | All | Integrated orchestration: PLAN→EXECUTE→VERIFY→CLEANUP |
+| `omg` | `omg` | All | Integrated orchestration: PLAN→EXECUTE→VERIFY→CLEANUP |
 | `omc` | `omc`, `autopilot` | Claude Code | 32-agent multi-agent orchestration layer |
 | `omx` | `omx` | Codex CLI | 40+ workflow skills, tmux team orchestration |
 | `ohmg` | `ohmg` | Gemini CLI | Antigravity multi-agent framework |
@@ -334,15 +334,16 @@ graph TD
 | `ai-tool-compliance` | Internal AI tool compliance automation (P0/P1) |
 | `opencontext` | Persistent memory and context management |
 | `prompt-repetition` | LLM accuracy via prompt repetition technique |
+| `langextract` | LLM-powered structured extraction from unstructured text (Google open-source, 34.7k ⭐) |
+| `scrapling` | Adaptive web scraping — Cloudflare bypass, static/dynamic/stealth fetchers |
 
 ### Content & Media
 
 | Skill | Description |
 |-------|-------------|
 | `presentation-builder` | HTML slides with `slides-grab`, export to PPTX/PDF |
-| `video-production` | Remotion-based programmable video production |
-| `image-generation` | Image generation via Gemini/compatible APIs |
-| `pollinations-ai` | Free image generation (no API key needed) |
+| `video-production` | Video production workflow |
+| `remotion-video-production` | Remotion-based programmable video production |
 | `marketing-automation` | 23 sub-skills: CRO, copywriting, SEO, growth |
 
 ---
@@ -358,42 +359,43 @@ npm install -g skills
 # One-liner (recommended)
 curl -fsSL https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/install.sh | bash
 
-# Or manually — install all skills
+# Or manually — install all skills (70 skills)
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
-  --skill agent-configuration --skill agent-evaluation \
-  --skill agent-development-principles --skill agent-principles \
-  --skill agent-workflow --skill bmad \
-  --skill bmad-gds --skill bmad-idea \
-  --skill prompt-repetition --skill api-design \
+  --skill agent-browser --skill agent-configuration \
+  --skill agent-development-principles --skill agent-evaluation \
+  --skill agent-principles --skill agent-workflow \
+  --skill agentation --skill api-design \
   --skill api-documentation --skill authentication-setup \
-  --skill backend-testing --skill database-schema-design \
-  --skill design-system --skill frontend-design-system \
-  --skill react-best-practices --skill vercel-react-best-practices \
-  --skill responsive-design --skill state-management \
-  --skill ui-component-patterns --skill web-accessibility \
-  --skill web-design-guidelines --skill code-refactoring \
-  --skill code-review --skill debugging \
-  --skill performance-optimization --skill testing-strategies \
-  --skill deployment-automation --skill firebase-ai-logic \
-  --skill genkit --skill monitoring-observability \
-  --skill security-best-practices --skill environment-setup \
-  --skill vercel-deploy --skill changelog-maintenance \
-  --skill presentation-builder --skill technical-writing \
-  --skill user-guide-writing --skill sprint-retrospective \
-  --skill standup-meeting --skill task-estimation \
-  --skill task-planning --skill codebase-search \
-  --skill data-analysis --skill log-analysis \
-  --skill pattern-detection --skill llm-monitoring-dashboard \
-  --skill image-generation --skill pollinations-ai \
-  --skill video-production --skill marketing-automation \
-  --skill agent-browser --skill agentation \
-  --skill ai-tool-compliance --skill file-organization \
-  --skill git-submodule --skill git-workflow --skill omg \
-  --skill ohmg --skill omx --skill omc \
-  --skill opencontext --skill plannotator --skill playwriter \
-  --skill ralph --skill ralphmode --skill skill-standardization \
-  --skill survey --skill vibe-kanban --skill workflow-automation \
-  --skill fabric --skill autoresearch
+  --skill autoresearch --skill backend-testing \
+  --skill bmad --skill bmad-idea \
+  --skill changelog-maintenance --skill code-refactoring \
+  --skill code-review --skill codebase-search \
+  --skill data-analysis --skill database-schema-design \
+  --skill debugging --skill deployment-automation \
+  --skill design-system --skill environment-setup \
+  --skill fabric --skill file-organization \
+  --skill firebase-ai-logic --skill frontend-design-system \
+  --skill genkit --skill git-submodule \
+  --skill git-workflow --skill langextract \
+  --skill log-analysis --skill marketing-automation \
+  --skill monitoring-observability --skill ohmg \
+  --skill omc --skill omg \
+  --skill omx --skill opencontext \
+  --skill pattern-detection --skill performance-optimization \
+  --skill plannotator --skill playwriter \
+  --skill presentation-builder --skill prompt-repetition \
+  --skill ralph --skill ralphmode \
+  --skill react-best-practices --skill remotion-video-production \
+  --skill responsive-design --skill scrapling \
+  --skill security-best-practices --skill skill-standardization \
+  --skill sprint-retrospective --skill standup-meeting \
+  --skill state-management --skill survey \
+  --skill task-estimation --skill task-planning \
+  --skill technical-writing --skill testing-strategies \
+  --skill ui-component-patterns --skill user-guide-writing \
+  --skill vercel-deploy --skill vercel-react-best-practices \
+  --skill vibe-kanban --skill video-production \
+  --skill web-design-guidelines --skill workflow-automation
 
 # Also install LangChain skills
 npx skills add langchain-ai/langchain-skills --skill '*' --yes
