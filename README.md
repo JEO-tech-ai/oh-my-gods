@@ -139,13 +139,15 @@ OMG orchestrates a complete, automated development pipeline across all AI agent 
 stateDiagram-v2
     [*] --> plan : omg keyword detected
     plan --> execute : plan_approved = true
-    plan --> plan : feedback received
+    plan --> plan : feedback received\n(revise plan.md → hash must change)
     execute --> verify : execution complete
     verify --> verify_ui : annotate keyword
     verify --> cleanup : no annotate
     verify_ui --> cleanup : annotations resolved
     cleanup --> [*] : done
 ```
+
+> **PLAN feedback loop guard**: after "Send Feedback", plan.md content must change before re-entry. If unchanged (same hash), re-entry is blocked with `⚠️ PLAN_LOOP` until revisions are applied — prevents false approval and skipped feedback.
 
 ### Platform Support
 
@@ -192,7 +194,7 @@ stateDiagram-v2
 | `autoresearch` | `autoresearch`, `val_bpb` | Karpathy-style autonomous GPU overnight experiments with git ratchet | Karpathy methodology |
 | `fabric` | `fabric` | AI prompt orchestration via reusable Patterns; YouTube summaries, doc analysis | [fabric](https://github.com/danielmiessler/fabric) |
 | `agentation` | `annotate`, `UI검토` | Click UI elements → AI applies targeted code fixes via CSS selectors | [agentation](https://github.com/benjitaylor/agentation) |
-| `plannotator` | `plan` | Visual browser UI for reviewing AI-generated plans; approve or send feedback | [plannotator](https://plannotator.ai) |
+| `plannotator` | `plan` | Visual browser UI for reviewing AI-generated plans; approve or send feedback. **Feedback loop guard**: if plan.md is unchanged after feedback, re-entry is blocked until content is revised (prevents false approval). | [plannotator](https://plannotator.ai) |
 | `agent-browser` | `agent-browser` | Headless browser snapshot & verification for AI agents | npm:agent-browser |
 | `playwriter` | `playwriter` | Playwright automation connecting to your *running* browser (preserves cookies/logins) | Internal |
 

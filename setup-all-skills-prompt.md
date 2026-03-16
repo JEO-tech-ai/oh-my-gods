@@ -93,6 +93,8 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill plannotator --s
 > **omg Agent Protocol**: When omg runs, it automatically creates `omg-state.json` and proceeds sequentially through PLAN → EXECUTE → VERIFY → CLEANUP phases.
 > The PLAN phase uses `plannotator`, and the VERIFY_UI phase (`annotate` keyword) uses `agentation`, so both skills are required.
 >
+> **PLAN feedback loop behavior**: When plannotator returns `exit 10` (feedback received), the agent must revise `plan.md` (content must change so hash differs) and re-enter STEP 1. If `plan.md` is unchanged, re-entry is blocked with `⚠️ PLAN_LOOP` until revisions are applied. On Claude Code, `claude-plan-gate.py` returns `exit 1` (not 0) for `feedback_required` + same hash, preventing false plan approval.
+>
 > **agentation MCP install (recommended)**: `npx add-mcp "npx -y agentation-mcp server"` — auto-detects 9+ agents including Claude/Gemini/Codex/OpenCode.
 > **agentation Claude Code Official Skill**: Install with `npx skills add benjitaylor/agentation` then run `/agentation` in conversation to auto-launch browser UI.
 
@@ -313,11 +315,11 @@ gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&
 
 | Skill | Activation Keyword | Description |
 |-------|-------------------|-------------|
-| `omg` | `omg` | Integrated orchestration (recommended starting point) — built-in agent execution protocol (STEP 0: state bootstrap → PLAN/plannotator → EXECUTE → VERIFY → CLEANUP). PLAN auto-installs `plannotator` if missing. **Claude Code**: requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`; EXECUTE must use `/omc:team`. Requires: plannotator, agentation |
+| `omg` | `omg` | Integrated orchestration (recommended starting point) — built-in agent execution protocol (STEP 0: state bootstrap → PLAN/plannotator → EXECUTE → VERIFY → CLEANUP). PLAN auto-installs `plannotator` if missing. **Claude Code**: requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`; EXECUTE must use `/omc:team`. **PLAN feedback loop**: `exit 10` = feedback received → revise plan.md (content must change) → re-enter STEP 1. Never proceed to EXECUTE on `exit 10`. Requires: plannotator, agentation |
 | `omc` | `omc`, `autopilot` | Claude Code multi-agent orchestration |
 | `ralph` | `ralph`, `ooo`, `ooo ralph`, `ooo interview` | Ouroboros specification-first development (Interview→Seed→Execute→Evaluate→Evolve) + persistent completion loop |
 | `ralphmode` | `ralphmode` | Ralph automation permission profiles for Claude Code, Codex CLI, Gemini CLI. Repo boundary enforcement, sandbox-first, secret denylist focused |
-| `plannotator` | `plan` | Plan review + feedback loop |
+| `plannotator` | `plan` | Plan review + feedback loop. **Feedback loop guard**: after "Send Feedback", plan.md content must change (hash must differ) before plannotator re-opens. If unchanged → `⚠️ PLAN_LOOP` blocks re-entry. `feedback_required` + same hash returns `exit 1` (not 0) to prevent false approval on Claude Code. |
 | `vibe-kanban` | `kanbanview` | Kanban board |
 | `bmad` | `bmad` | Structured phase-based development |
 | `bmad-idea` | `bmad-idea` | Creative ideas · design thinking · innovation strategy |

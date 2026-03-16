@@ -122,6 +122,13 @@ def main() -> int:
 
     if should_skip(state, current_hash):
         status = state.get("plan_gate_status", "unknown")
+        if status == "feedback_required":
+            print(
+                "[OMG][PLAN] Plan unchanged since feedback was sent (same hash). "
+                "Revise plan.md to incorporate the feedback, then re-enter plan mode.",
+                file=sys.stderr,
+            )
+            return 1  # non-zero: revision required — do NOT treat as approved
         print(
             f"[OMG][PLAN] Claude hook skipped: plan gate already recorded for current hash ({status}).",
             file=sys.stderr,

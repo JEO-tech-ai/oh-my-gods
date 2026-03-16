@@ -31,6 +31,8 @@ The key OMG rules are:
 
 - do not reopen the PLAN gate when the current plan hash already has a terminal result
 - only a revised plan resets `plan_gate_status` to `pending`
+- `feedback_required` + same plan hash is NOT an approval signal — agent must revise plan.md before re-entry
+- on `exit 10` from plannotator: loop back to STEP 1 (never proceed to EXECUTE)
 - do not process agentation annotations before explicit submit/onSubmit opens the submit gate
 
 The authoritative state is `.omc/state/omg-state.json`. Hooks may help advance the workflow, but they must obey the state file.
@@ -266,8 +268,33 @@ PLAN_RC=$?
 if [ "$PLAN_RC" -eq 0 ]; then
   echo "✅ Plan approved"
 elif [ "$PLAN_RC" -eq 10 ]; then
-  echo "❌ Plan not approved — apply feedback, revise plan.md, and retry"
-  exit 1
+  # Distinguish SKIP_FEEDBACK (plan.md unchanged) from new feedback
+  SKIP_FEEDBACK_STATE=$(python3 -c "
+import json,os,subprocess
+try:
+    root=subprocess.check_output(['git','rev-parse','--show-toplevel'],stderr=subprocess.DEVNULL).decode().strip()
+except Exception:
+    root=os.getcwd()
+try:
+    s=json.load(open(os.path.join(root,'.omc/state/omg-state.json')))
+    import hashlib
+    ph=hashlib.sha256(open('plan.md','rb').read()).hexdigest() if os.path.exists('plan.md') else ''
+    lh=s.get('last_reviewed_plan_hash','')
+    gs=s.get('plan_gate_status','')
+    print('SKIP' if gs=='feedback_required' and ph==lh else 'NEW_FEEDBACK')
+except Exception:
+    print('NEW_FEEDBACK')
+" 2>/dev/null || echo "NEW_FEEDBACK")
+  if [[ "$SKIP_FEEDBACK_STATE" == "SKIP" ]]; then
+    echo "⚠️  PLAN_LOOP: plan.md unchanged since last feedback — must revise content before re-entering"
+    echo "   1. Read feedback from omg-state.json (.plannotator_feedback) or \$FEEDBACK_FILE"
+    echo "   2. Apply ALL annotations to plan.md (content must change — hash must differ)"
+    echo "   3. Re-enter STEP 1 (do NOT skip to EXECUTE)"
+  else
+    echo "📝 PLAN_LOOP: feedback received — read \$FEEDBACK_FILE, revise plan.md, re-enter STEP 1"
+    echo "   Feedback written to: $FEEDBACK_FILE"
+  fi
+  exit 10  # Agent must loop: revise plan.md → re-enter STEP 1. Never proceed to EXECUTE.
 elif [ "$PLAN_RC" -eq 32 ]; then
   echo "⚠️ plannotator UI unavailable (sandbox/CI). Entering Conversation Approval Mode:"
   echo "   1. Output plan.md content to user in conversation"
@@ -300,7 +327,13 @@ mkdir -p .omc/plans .omc/logs
      If `plannotator` is missing, OMG must auto-run `bash "${_OMG_SCRIPTS}/ensure-plannotator.sh"` first and continue only after the CLI is available.
 3. Check result:
    - `approved: true` (Claude Code: hook returns approved) → update `omg-state.json` `phase` to `"execute"` and `plan_approved` to `true` → **enter STEP 2**
-   - Not approved (Claude Code: hook returns feedback; others: `exit 10`) → read feedback, revise `plan.md` → repeat step 2
+   - Not approved / `exit 10` (feedback received):
+     1. Read feedback — Claude Code: `omg-state.json` `.plannotator_feedback` 필드 / Others: `$FEEDBACK_FILE`
+     2. Apply ALL annotation items to `plan.md` — content MUST change (hash must differ from `last_reviewed_plan_hash`)
+     3. Reset `plan_gate_status` to `"pending"` in `omg-state.json` if not auto-reset
+     4. Re-enter STEP 1 from the top — never skip to EXECUTE
+     - **SKIP_FEEDBACK guard**: if plan.md is unchanged (same hash), plannotator blocks re-entry with `exit 10` and a `⚠️ PLAN_LOOP` message. Fix: ensure at least one annotation is applied before re-entry.
+     - **Claude Code**: `claude-plan-gate.py` returns `exit 1` (not 0) when `feedback_required` + same hash — prevents false approval signal
    - Infrastructure blocked (`exit 32`) → localhost bind unavailable (e.g., sandbox/CI). Use manual gate in TTY; confirm with user and retry outside sandbox in non-TTY
    - Session exited 3 times (`exit 30/31`) → ask user whether to end PLAN and decide to abort or resume
 
