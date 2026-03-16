@@ -171,8 +171,8 @@ stateDiagram-v2
 ║  omc         ║  Claude Code 32개 에이전트 오케스트레이션         ║
 ║  omx         ║  OpenAI Codex 멀티에이전트 오케스트레이션         ║
 ║  ohmg        ║  Gemini / Antigravity 워크플로우 (Google AI)     ║
-║  bmad        ║  단계 기반 구조적 개발 (BMAD 방법론)              ║
-║  bmad-idea   ║  창의적 AI — 5개 전문 아이디에이션 에이전트       ║
+║  bmad        ║  BMAD+TEA=SSD: 단계별 TEA 마이크로사이클 + 아키텍트 자동 검증  ║
+║  bmad-idea   ║  SDD 창의적 프론트엔드 — 5개 전문 에이전트 → bmad SSD 핸드오프  ║
 ║  survey      ║  구현 전 환경 분석 스캔                           ║
 ║  autoresearch║  자율 야간 ML 실험 (Karpathy 방법론)              ║
 ║  fabric      ║  재사용 패턴 기반 AI 프롬프트 오케스트레이션 CLI  ║
@@ -188,8 +188,8 @@ stateDiagram-v2
 | `omc` | `omc`, `autopilot` | 32개 특화 에이전트, 스마트 모델 라우팅, 실시간 HUD | [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) |
 | `omx` | `omx` | 40개+ 워크플로우 스킬, tmux 팀 오케스트레이션 | 내부 |
 | `ohmg` | `ohmg` | Google Antigravity/Gemini 멀티에이전트 프레임워크 | 내부 |
-| `bmad` | `bmad`, `/workflow-init` | 분석→계획→솔루션→구현 구조화 단계 | [BMAD Method](https://github.com/bmad-dev/BMAD-METHOD) |
-| `bmad-idea` | `bmad-idea` | 5개 창의적 전문 에이전트 — 디자인 씽킹, 혁신, 스토리텔링 | 내부 |
+| `bmad` | `bmad`, `/workflow-init` | **BMAD + TEA = SSD**: 분석→계획→솔루션→구현 각 단계에 TEA(Task→Execute→Architect) 마이크로 사이클 내장 — 자동 아키텍트 검증 후 plannotator 인간 리뷰. SDD의 실행 레이어. | [BMAD Method](https://github.com/bmad-dev/BMAD-METHOD) |
+| `bmad-idea` | `bmad-idea` | SDD 창의적 프론트엔드 — 5개 전문 에이전트(브레인스토밍, 디자인씽킹, 혁신, 문제해결, 스토리텔링) → 제품 브리프 → `bmad` SSD로 핸드오프 | 내부 |
 | `survey` | `survey` | 구현 전 크로스 플랫폼 환경 분석; `.survey/`에 결과물 저장 | 내부 |
 | `autoresearch` | `autoresearch`, `val_bpb` | Karpathy 스타일 자율 GPU 야간 실험 및 git 래칫 | Karpathy 방법론 |
 | `fabric` | `fabric` | 재사용 패턴 AI 프롬프트; YouTube 요약, 문서 분석 | [fabric](https://github.com/danielmiessler/fabric) |
@@ -267,8 +267,8 @@ graph TD
 | `ohmg` | `ohmg` | Gemini CLI | Antigravity 멀티에이전트 프레임워크 |
 | `ralph` | `ralph`, `ooo` | 전체 | Ouroboros 명세 우선 + 영속 완료 루프 |
 | `ralphmode` | `ralphmode` | 전체 | 자동화 권한 프로파일 (샌드박스 우선, 저장소 경계) |
-| `bmad` | `bmad`, `/workflow-init` | 전체 | 단계 기반 AI 구조적 개발 |
-| `bmad-idea` | `bmad-idea` | 전체 | 창의적 지능 — 5개 전문 아이디에이션 에이전트 |
+| `bmad` | `bmad`, `/workflow-init` | 전체 | **BMAD + TEA (SSD)**: 4단계 구조적 개발 + 단계별 TEA(Task→Execute→Architect) 사이클 — SDD 스택의 수렴·실행 레이어 |
+| `bmad-idea` | `bmad-idea` | 전체 | SDD 창의적 프론트엔드 — 5개 전문 에이전트 → 제품 브리프 → `bmad` SSD 핸드오프 |
 | `survey` | `survey` | 전체 | 구현 전 환경 분석 스캔 |
 
 ### 계획 & 리뷰

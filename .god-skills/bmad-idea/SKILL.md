@@ -1,12 +1,12 @@
 ---
 name: bmad-idea
-description: Creative Intelligence Suite for AI-driven ideation, design thinking, innovation strategy, problem-solving, and storytelling. 5 named specialist agents with distinct methodologies — no setup required, all workflows available immediately.
+description: "Creative Intelligence Suite — creative front-end of the BMAD SDD pipeline. 5 specialist agents (brainstorming, design thinking, innovation, problem-solving, storytelling) produce product briefs that hand off directly to bmad SSD (Structured System Design) for structured execution."
 allowed-tools: Read Write Bash Grep Glob
 metadata:
-  tags: bmad, cis, creative, ideation, brainstorming, design-thinking, innovation, problem-solving, storytelling, multi-agent
+  tags: bmad, cis, creative, ideation, brainstorming, design-thinking, innovation, problem-solving, storytelling, multi-agent, sdd
   platforms: Claude, Gemini, Codex, OpenCode
   keyword: bmad-idea
-  version: 1.0.0
+  version: 1.1.0
   source: user-installed skill
 ---
 
@@ -120,3 +120,31 @@ Configure image generation preferences on setup:
 | Solve a hard problem | `bmad-cis-problem-solving` or `/cis-problem-solving` |
 | Tell a compelling story | `bmad-cis-storytelling` or `/cis-storytelling` |
 | Full creative session | `creative squad` |
+
+---
+
+## Next: Hand off to BMAD SSD
+
+`bmad-idea` is the **creative diverge** phase of the SDD (Structured Design Development) pipeline. Once a product brief or concept is validated, hand it to `bmad` for structured convergent execution:
+
+```
+bmad-idea output          →    bmad SSD input
+─────────────────────────────────────────────────
+Product Brief / GDD            /workflow-init --ssd
+Concept Validation             Phase 1: Analysis (TEA cycle)
+Narrative / Story Arc          Phase 2: Planning (TEA cycle)
+Innovation Framework           Phase 3: Solutioning (TEA cycle)
+                               Phase 4: Implementation (TEA cycle)
+```
+
+```bash
+# After bmad-idea produces a validated product brief:
+# 1. Save the output as docs/product-brief-<project>.md
+# 2. Initialize BMAD SSD
+/workflow-init --ssd
+
+# 3. Run the first TEA cycle (Analysis)
+/ssd-cycle
+```
+
+The full SDD stack: `bmad-idea` (diverge) → `bmad` (converge/execute) → `omg` (verify/ship).

@@ -188,8 +188,8 @@ stateDiagram-v2
 | `omc` | `omc`, `autopilot` | 32 specialized Claude Code agents with smart model routing, persistent loops, real-time HUD | [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) |
 | `omx` | `omx` | 40+ workflow skills, team orchestration in tmux for OpenAI Codex CLI | Internal |
 | `ohmg` | `ohmg` | Google Antigravity/Gemini multi-agent framework with 6 specialist agents | Internal |
-| `bmad` | `bmad`, `/workflow-init` | Analysis → Planning → Solutioning → Implementation structured phases | [BMAD Method](https://github.com/bmad-dev/BMAD-METHOD) |
-| `bmad-idea` | `bmad-idea` | 5 creative specialist agents — design thinking, innovation, storytelling | Internal |
+| `bmad` | `bmad`, `/workflow-init` | **BMAD + TEA = SSD**: Analysis→Planning→Solutioning→Implementation, each phase runs a TEA (Task→Execute→Architect) cycle — automated architect validation before human plannotator review. SDD foundation. | [BMAD Method](https://github.com/bmad-dev/BMAD-METHOD) |
+| `bmad-idea` | `bmad-idea` | Creative front-end of SDD pipeline — 5 specialist agents (brainstorming, design thinking, innovation, problem-solving, storytelling) → product brief → hands off to `bmad` SSD | Internal |
 | `survey` | `survey` | Cross-platform landscape scan before planning; saves artifacts to `.survey/` | Internal |
 | `autoresearch` | `autoresearch`, `val_bpb` | Karpathy-style autonomous GPU overnight experiments with git ratchet | Karpathy methodology |
 | `fabric` | `fabric` | AI prompt orchestration via reusable Patterns; YouTube summaries, doc analysis | [fabric](https://github.com/danielmiessler/fabric) |
@@ -267,8 +267,8 @@ graph TD
 | `ohmg` | `ohmg` | Gemini CLI | Antigravity multi-agent framework |
 | `ralph` | `ralph`, `ooo` | All | Ouroboros specification-first + persistent completion loop |
 | `ralphmode` | `ralphmode` | All | Automation permission profiles (sandbox-first, repo boundary) |
-| `bmad` | `bmad`, `/workflow-init` | All | Structured phase-based AI development |
-| `bmad-idea` | `bmad-idea` | All | Creative intelligence — 5 specialist ideation agents |
+| `bmad` | `bmad`, `/workflow-init` | All | **BMAD + TEA (SSD)**: 4-phase structured development with TEA (Task→Execute→Architect) micro-cycles per phase — the convergent execution layer of the SDD stack |
+| `bmad-idea` | `bmad-idea` | All | SDD creative front-end — 5 specialist ideation agents → product brief → hands off to `bmad` SSD |
 | `survey` | `survey` | All | Pre-implementation landscape scan |
 
 ### Planning & Review

@@ -321,8 +321,8 @@ gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&
 | `ralphmode` | `ralphmode` | Ralph automation permission profiles for Claude Code, Codex CLI, Gemini CLI. Repo boundary enforcement, sandbox-first, secret denylist focused |
 | `plannotator` | `plan` | Plan review + feedback loop. **Feedback loop guard**: after "Send Feedback", plan.md content must change (hash must differ) before plannotator re-opens. If unchanged → `⚠️ PLAN_LOOP` blocks re-entry. `feedback_required` + same hash returns `exit 1` (not 0) to prevent false approval on Claude Code. |
 | `vibe-kanban` | `kanbanview` | Kanban board |
-| `bmad` | `bmad` | Structured phase-based development |
-| `bmad-idea` | `bmad-idea` | Creative ideas · design thinking · innovation strategy |
+| `bmad` | `bmad`, `/workflow-init`, `/workflow-init --ssd` | **BMAD + TEA = SSD** (Structured System Design). Each of the 4 BMAD phases (Analysis→Planning→Solutioning→Implementation) runs a TEA micro-cycle: **T**ask decomposition → **E**xecute via `/team` → **A**rchitect validation (fabric `bmad_ssd_phase_review` or `architect` agent). Only after architect `PASS`/`PASS_WITH_WARNINGS` does plannotator human review open. SDD convergent execution layer. Use `/workflow-init --ssd` to enable; `/ssd-cycle` to run a full TEA cycle; `/ssd-advance` to move phases. |
+| `bmad-idea` | `bmad-idea` | **SDD creative diverge layer** — 5 specialist agents (Carson/brainstorming, Maya/design-thinking, Victor/innovation, Dr.Quinn/problem-solving, Sophia/storytelling) produce a product brief that hands off directly to `bmad` SSD for structured execution. Use before `/workflow-init`. |
 | `agent-browser` | `agent-browser` | Headless browser automation |
 | `survey` | `survey` | Cross-platform landscape scan before planning or implementation |
 | `autoresearch` | `autoresearch`, `autonomous ml experiments`, `val_bpb` | Karpathy autonomous ML experimentation — AI agent runs overnight GPU experiments, ratchets improvements via git |
