@@ -123,7 +123,7 @@ gemini extensions install https://github.com/JEO-tech-ai/oh-my-gods
 
 ---
 
-### Step 2: Full 71-Skill Installation (Default Execution Step)
+### Step 2: Full 72-Skill Installation (Default Execution Step)
 
 > **Existing skills are preserved — new skills are added and updated files are overwritten. No skills are deleted.**
 
@@ -139,7 +139,7 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill changelog-maintenance --skill code-refactoring \
   --skill code-review --skill codebase-search \
   --skill data-analysis --skill database-schema-design \
-  --skill debugging --skill deployment-automation \
+  --skill debugging --skill deepagents --skill deployment-automation \
   --skill design-system --skill environment-setup \
   --skill fabric --skill file-organization \
   --skill firebase-ai-logic --skill firebase-cli \
@@ -335,6 +335,7 @@ gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&
 | `langextract` | `langextract`, `extract from text`, `entity extraction` | LLM-powered structured extraction from unstructured text — source grounding, interactive HTML visualization, parallel chunking, multi-pass recall. Supports Gemini, OpenAI, Ollama, Vertex AI batch. Google open-source (34.7k ⭐). |
 | `scrapling` | `scrapling`, `web scraping`, `scrape website`, `bypass cloudflare`, `adaptive scraping`, `dynamic scraping`, `stealthy fetch` | Adaptive web scraping framework — static/dynamic/stealth fetchers, Scrapy-like spiders, adaptive CSS/XPath selectors that auto-relocate after site changes, MCP server, CLI. Cloudflare Turnstile bypass. |
 | `firebase-cli` | `firebase deploy`, `firebase init`, `firebase emulators`, `firebase hosting`, `firebase functions`, `firebase firestore` | Firebase CLI (firebase-tools) for all Firebase services — Hosting, Cloud Functions, Firestore, Realtime Database, Emulator Suite, App Distribution, Extensions, App Hosting. |
+| `deepagents` | `deep agent`, `create_deep_agent`, `deepagents middleware`, `SubAgentMiddleware`, `FilesystemMiddleware`, `MemoryMiddleware`, `LangGraph agent harness`, `agentic harness` | Batteries-included LangGraph agent harness. `create_deep_agent()` returns a compiled LangGraph graph with composable middleware (Filesystem, Memory, SubAgent, HITL), multi-provider model support (`provider:model`), and sub-agent orchestration. `pip install deepagents`. Source: [langchain-ai/deepagents](https://github.com/langchain-ai/deepagents). |
 
 ---
 

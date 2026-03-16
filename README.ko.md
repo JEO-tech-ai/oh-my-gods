@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![스킬](https://img.shields.io/badge/스킬-70개%2B-blue?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
+[![스킬](https://img.shields.io/badge/스킬-72개%2B-blue?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
 [![플랫폼](https://img.shields.io/badge/플랫폼-Claude%20%7C%20Gemini%20%7C%20Codex%20%7C%20OpenCode-orange?style=for-the-badge)](https://github.com/JEO-tech-ai/oh-my-gods)
 [![라이선스](https://img.shields.io/badge/라이선스-MIT-green?style=for-the-badge)](LICENSE)
 [![버전](https://img.shields.io/badge/버전-2.0.0-purple?style=for-the-badge)](CHANGELOG.md)
@@ -68,7 +68,7 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
 
 ## 🎯 oh-my-gods란?
 
-`oh-my-gods`는 LLM 기반 개발 워크플로우를 위한 **70개 이상의 AI 에이전트 스킬** 모음입니다. `omg` 오케스트레이션 프로토콜을 중심으로 구성되어 있으며 다음을 제공합니다:
+`oh-my-gods`는 LLM 기반 개발 워크플로우를 위한 **72개 이상의 AI 에이전트 스킬** 모음입니다. `omg` 오케스트레이션 프로토콜을 중심으로 구성되어 있으며 다음을 제공합니다:
 
 - **통합 오케스트레이션** — Claude Code, Gemini CLI, OpenAI Codex, OpenCode 전 플랫폼 지원
 - **Plan → Execute → Verify → Cleanup** 자동화 파이프라인
@@ -337,6 +337,7 @@ graph TD
 | `prompt-repetition` | 프롬프트 반복 기법으로 LLM 정확도 향상 |
 | `langextract` | LLM 기반 비정형 텍스트 구조화 추출 (Google 오픈소스, 34.7k ⭐) |
 | `scrapling` | 적응형 웹 스크래핑 — Cloudflare 우회, 정적/동적/스텔스 페처 |
+| `deepagents` | 배터리 포함 LangGraph 에이전트 하네스 (`create_deep_agent`): 컴포저블 미들웨어, 서브에이전트, HITL, 백엔드 · [langchain-ai/deepagents](https://github.com/langchain-ai/deepagents) |
 
 ### 콘텐츠 & 미디어
 
@@ -360,7 +361,7 @@ npm install -g skills
 # 원라인 설치 (권장)
 curl -fsSL https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/install.sh | bash
 
-# 또는 수동 설치 (71개 스킬)
+# 또는 수동 설치 (72개 스킬)
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill agent-browser --skill agent-configuration \
   --skill agent-development-principles --skill agent-evaluation \
@@ -372,7 +373,7 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill changelog-maintenance --skill code-refactoring \
   --skill code-review --skill codebase-search \
   --skill data-analysis --skill database-schema-design \
-  --skill debugging --skill deployment-automation \
+  --skill debugging --skill deepagents --skill deployment-automation \
   --skill design-system --skill environment-setup \
   --skill fabric --skill file-organization \
   --skill firebase-ai-logic --skill firebase-cli \

@@ -1,0 +1,59 @@
+{
+  "skill_name": "deepagents",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build a Python AI agent using deepagents that can read files and run shell commands",
+      "expected_output": "Python code using create_deep_agent() — the default setup already includes filesystem and execute tools",
+      "assertions": [
+        "Response includes create_deep_agent() call",
+        "Response includes pip install deepagents or uv add deepagents",
+        "Code is valid Python 3.11+ syntax",
+        "Response notes that file and execute tools are built-in by default"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "How do I add a sub-agent to a deepagents setup for web research?",
+      "expected_output": "Example using SubAgentMiddleware with SubAgent TypedDict showing name, description, system_prompt, and tools",
+      "assertions": [
+        "Response imports SubAgentMiddleware and SubAgent",
+        "SubAgent definition includes name, description, system_prompt fields",
+        "SubAgentMiddleware is passed via middleware parameter in create_deep_agent()",
+        "Response mentions that SubAgentMiddleware adds a `task` tool to the main agent"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Configure deepagents with human-in-the-loop approval before running shell commands",
+      "expected_output": "Code using interrupt_on parameter with a checkpointer, and explanation of how to resume",
+      "assertions": [
+        "Response uses interrupt_on={'execute': True}",
+        "Response includes a checkpointer (e.g., MemorySaver) — required for HITL",
+        "Response shows thread_id config for state persistence",
+        "Response explains how to resume by calling agent.invoke(None, config=...)"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I want my deepagents agent to return structured JSON output as a Pydantic model",
+      "expected_output": "Code using response_format parameter with a Pydantic BaseModel subclass",
+      "assertions": [
+        "Response imports BaseModel from pydantic",
+        "Response passes response_format=MyModel to create_deep_agent()",
+        "Response shows how to access the structured output from result"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "What is the difference between deepagents and LangGraph?",
+      "expected_output": "Clear explanation: deepagents is a batteries-included harness built ON TOP of LangGraph. Use deepagents for task-oriented agents, use LangGraph directly for complex custom control flow.",
+      "assertions": [
+        "Response explains deepagents uses LangGraph internally and returns a CompiledGraph",
+        "Response recommends deepagents for multi-step tasks with file/tool access",
+        "Response recommends raw LangGraph for complex loops, branching, parallelization",
+        "Response mentions the framework-selection guide"
+      ]
+    }
+  ]
+}
