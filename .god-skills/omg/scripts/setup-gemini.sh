@@ -72,7 +72,9 @@ if [[ "$PHASE" != "plan" ]]; then
 fi
 
 # AfterAgent 이중 실행 방지: 에이전트가 직접 호출한 턴이면 건너뜀
-LOCK_FILE="/tmp/omg-plannotator-direct.lock"
+# Include a per-project SESSION_KEY so concurrent projects don't share the same lock file.
+_SESSION_KEY_GH="$(python3 -c "import hashlib,os; print(hashlib.md5(os.getcwd().encode()).hexdigest()[:8])" 2>/dev/null || echo "default")"
+LOCK_FILE="${_TMPDIR:-${TMPDIR:-/tmp}}/omg-plannotator-direct-${_SESSION_KEY_GH}.lock"
 if [[ -f "$LOCK_FILE" ]]; then
   rm -f "$LOCK_FILE"
   exit 0
@@ -108,7 +110,8 @@ if [[ -n "$LOOP_SCRIPT" ]]; then
     echo "[OMG] run PLAN gate in local TTY to use manual fallback approve/feedback." >&2
   fi
 else
-  PLANNOTATOR_RUNTIME_HOME="/tmp/omg-$(python3 -c "import hashlib,os; print(f'/tmp/omg-{hashlib.md5(os.getcwd().encode()).hexdigest()[:8]}')")/.plannotator"
+  _SESSION_KEY_RT="$(python3 -c "import hashlib,os; print(hashlib.md5(os.getcwd().encode()).hexdigest()[:8])" 2>/dev/null || echo "default")"
+  PLANNOTATOR_RUNTIME_HOME="${_TMPDIR:-${TMPDIR:-/tmp}}/omg-${_SESSION_KEY_RT}/.plannotator"
   mkdir -p "$PLANNOTATOR_RUNTIME_HOME"
   python3 -c "
 import json, sys

@@ -8,6 +8,16 @@
 > curl -s https://raw.githubusercontent.com/JEO-tech-ai/oh-my-gods/main/setup-all-skills-prompt.md
 > ```
 
+> Direct install patterns from an LLM shell:
+>
+> ```bash
+> # Single skill
+> npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill survey
+>
+> # Multiple selected skills
+> npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill survey --skill jeo --skill harness
+> ```
+
 ---
 
 ## Agent Instructions
@@ -25,6 +35,7 @@ AI agents receiving this file should execute the following steps **in order**.
 - **Default execution**: Run `Step 1`, then continue to `Step 2` (default is full installation)
 - **Exception**: Only skip `Step 2` if the user explicitly requests `core only` or `minimal install`
 - **Prohibited**: Stopping to ask additional confirmation questions before executing `Step 2`
+- **Direct install rule**: If the user explicitly names one or more skills, install those skills immediately with `npx skills add ... --skill ...` instead of forcing the full catalog
 
 ---
 
@@ -33,11 +44,11 @@ AI agents receiving this file should execute the following steps **in order**.
 Before installation, confirm:
 
 1. **Which AI platform are you using?**
-   - Claude Code → recommend `omc`, `plannotator`, `ralph`, `ralphmode`, `bmad`
-   - Gemini CLI → recommend `ohmg`, `ralph`, `ralphmode`, `omg`
-   - OpenAI Codex CLI → recommend `omx`, `ralph`, `ralphmode`, `omg`
+   - Claude Code → recommend `omc`, `plannotator`, `ralph`, `ralphmode`, `bmad-orchestrator`
+   - Gemini CLI → recommend `ohmg`, `ralph`, `ralphmode`, `jeo`
+   - OpenAI Codex CLI → recommend `omx`, `ralph`, `ralphmode`, `jeo`
    - OpenCode → requires oh-my-opencode installation (see Step 3)
-   - All / Unsure → install `omg` + `survey` (`survey` for discovery, `omg` for delivery)
+   - All / Unsure → install `jeo` + `survey` (`survey` for discovery, `jeo` for delivery)
 
 2. **Is the `skills` CLI installed?**
 
@@ -49,7 +60,7 @@ else
 fi
 ```
 
-3. **Declare installation path and ensure directories exist**
+3. **Declare installation path standardization variables and wipe existing paths**
 
 ```bash
 # Canonical path (recommended default)
@@ -61,15 +72,18 @@ SKILL_DESTS=(
   "${HOME}/.gemini/skills" "${PWD}/.gemini/skills"
   "${HOME}/.opencode/skills" "${PWD}/.opencode/skills"
   "${HOME}/.config/opencode/skills" "${PWD}/.config/opencode/skills"
+  "${HOME}/.agents/skills"          # npx skills add -g actual install path
 )
 
-# Ensure all skill directories exist (no wipe — existing skills are preserved)
-mkdir -p "${SKILLS_CANONICAL}"
+# Always wipe existing skill paths to guarantee a clean install
+echo "Wiping existing skill paths for clean install..."
+rm -rf "${SKILLS_CANONICAL}"
 for dest in "${SKILL_DESTS[@]}"; do
-  mkdir -p "${dest}"
+  rm -rf "${dest}"
 done
 
-echo "✅ Skill directories ready"
+mkdir -p "${SKILLS_CANONICAL}"
+echo "✅ Skill paths cleared"
 ```
 
 ---
@@ -83,17 +97,15 @@ Execute based on Step 0 results:
 # research-first survey skill
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill survey
 
-# omg core skill
-npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill omg
+# jeo core skill
+npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill jeo
 
-# omg dependency skills (recommended to install together)
+# jeo dependency skills (recommended to install together)
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods --skill plannotator --skill agentation
 ```
 
-> **omg Agent Protocol**: When omg runs, it automatically creates `omg-state.json` and proceeds sequentially through PLAN → EXECUTE → VERIFY → CLEANUP phases.
+> **jeo Agent Protocol**: When jeo runs, it automatically creates `jeo-state.json` and proceeds sequentially through PLAN → EXECUTE → VERIFY → CLEANUP phases.
 > The PLAN phase uses `plannotator`, and the VERIFY_UI phase (`annotate` keyword) uses `agentation`, so both skills are required.
->
-> **PLAN feedback loop behavior**: When plannotator returns `exit 10` (feedback received), the agent must revise `plan.md` (content must change so hash differs) and re-enter STEP 1. If `plan.md` is unchanged, re-entry is blocked with `⚠️ PLAN_LOOP` until revisions are applied. On Claude Code, `claude-plan-gate.py` returns `exit 1` (not 0) for `feedback_required` + same hash, preventing false plan approval.
 >
 > **agentation MCP install (recommended)**: `npx add-mcp "npx -y agentation-mcp server"` — auto-detects 9+ agents including Claude/Gemini/Codex/OpenCode.
 > **agentation Claude Code Official Skill**: Install with `npx skills add benjitaylor/agentation` then run `/agentation` in conversation to auto-launch browser UI.
@@ -104,7 +116,7 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
   --skill omc --skill plannotator --skill ralph --skill ralphmode --skill vibe-kanban
 ```
 
-> **Claude Code + omg**: omg EXECUTE phase requires `/omc:team` and will **not** fall back to single-agent execution. Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` before running omg.
+> **Claude Code + jeo**: jeo EXECUTE phase requires `/omc:team` and will **not** fall back to single-agent execution. Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` before running jeo.
 
 **Gemini CLI only:**
 ```bash
@@ -125,47 +137,65 @@ gemini extensions install https://github.com/JEO-tech-ai/oh-my-gods
 
 ---
 
-### Step 2: Full 72-Skill Installation (Default Execution Step)
+### Step 2: Full 80-Skill Installation (Default Execution Step)
 
-> **Existing skills are preserved — new skills are added and updated files are overwritten. No skills are deleted.**
+> **Always wipe existing skill directories before running — ensures no stale skills from previous installs or Step 1 partial install remain.**
+
+```bash
+# Wipe all skill paths before full install (unconditional — always required)
+_SKILLS_CANONICAL="${HOME}/.agent-skills"
+for _dest in \
+  "${_SKILLS_CANONICAL}" \
+  "${HOME}/.agents/skills" \
+  "${HOME}/.claude/skills"  "${PWD}/.claude/skills" \
+  "${HOME}/.codex/skills"   "${PWD}/.codex/skills" \
+  "${HOME}/.gemini/skills"  "${PWD}/.gemini/skills" \
+  "${HOME}/.opencode/skills" "${PWD}/.opencode/skills" \
+  "${HOME}/.config/opencode/skills" "${PWD}/.config/opencode/skills"; do
+  rm -rf "${_dest}"
+done
+mkdir -p "${_SKILLS_CANONICAL}"
+echo "✅ All skill directories wiped — ready for clean install"
+```
 
 ```bash
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
-  --skill agent-browser --skill agent-configuration \
-  --skill agent-development-principles --skill agent-evaluation \
-  --skill agent-principles --skill agent-workflow \
-  --skill agentation --skill api-design \
-  --skill api-documentation --skill authentication-setup \
-  --skill autoresearch --skill backend-testing \
-  --skill bmad --skill bmad-idea \
-  --skill changelog-maintenance --skill code-refactoring \
-  --skill code-review --skill codebase-search \
-  --skill data-analysis --skill database-schema-design \
-  --skill debugging --skill deepagents --skill deployment-automation \
-  --skill design-system --skill environment-setup \
-  --skill fabric --skill file-organization \
-  --skill firebase-ai-logic --skill firebase-cli \
-  --skill frontend-design-system --skill genkit \
-  --skill git-submodule --skill git-workflow \
-  --skill langextract --skill log-analysis \
-  --skill marketing-automation --skill monitoring-observability \
-  --skill ohmg --skill omc --skill omg \
-  --skill omx --skill opencontext \
-  --skill pattern-detection --skill performance-optimization \
-  --skill plannotator --skill playwriter \
-  --skill presentation-builder --skill prompt-repetition \
-  --skill ralph --skill ralphmode \
-  --skill react-best-practices --skill remotion-video-production \
-  --skill responsive-design --skill scrapling \
-  --skill security-best-practices --skill skill-standardization \
+  --skill bmad-orchestrator --skill bmad-gds --skill bmad-idea \
+  --skill prompt-repetition --skill skill-standardization --skill skill-autoresearch \
+  --skill api-design --skill api-documentation --skill authentication-setup \
+  --skill backend-testing --skill database-schema-design \
+  --skill design-system --skill frontend-design-system \
+  --skill react-best-practices --skill react-grab --skill vercel-react-best-practices \
+  --skill responsive-design --skill state-management \
+  --skill ui-component-patterns --skill web-accessibility \
+  --skill web-design-guidelines --skill code-refactoring \
+  --skill code-review --skill debugging \
+  --skill performance-optimization --skill testing-strategies \
+  --skill deployment-automation \
+  --skill firebase-cli --skill genkit --skill looker-studio-bigquery \
+  --skill monitoring-observability --skill security-best-practices \
+  --skill system-environment-setup --skill vercel-deploy \
+  --skill changelog-maintenance --skill presentation-builder \
+  --skill technical-writing --skill user-guide-writing \
   --skill sprint-retrospective --skill standup-meeting \
-  --skill state-management --skill survey \
   --skill task-estimation --skill task-planning \
-  --skill technical-writing --skill testing-strategies \
-  --skill ui-component-patterns --skill user-guide-writing \
-  --skill vercel-deploy --skill vercel-react-best-practices \
-  --skill vibe-kanban --skill video-production \
-  --skill web-design-guidelines --skill workflow-automation
+  --skill codebase-search --skill data-analysis \
+  --skill log-analysis --skill pattern-detection \
+  --skill llm-monitoring-dashboard \
+  --skill remotion-video-production --skill video-production \
+  --skill marketing-automation --skill marketing-skills-collection \
+  --skill agent-browser --skill agentation --skill copilot-coding-agent \
+  --skill ai-tool-compliance \
+  --skill environment-setup --skill file-organization \
+  --skill git-submodule --skill git-workflow --skill jeo \
+  --skill npm-git-install --skill ohmg --skill omx \
+  --skill omc --skill opencontext --skill plannotator --skill playwriter \
+  --skill ralph --skill ralphmode --skill survey --skill harness \
+  --skill vibe-kanban --skill workflow-automation \
+  --skill fabric --skill autoresearch \
+  --skill google-workspace --skill langsmith \
+  --skill firebase-ai-logic \
+  --skill obsidian-plugin --skill research-paper-writing
 ```
 
 > Skip condition is only allowed when the user explicitly requests (`core only`, `minimal install`, `quick install`).
@@ -185,12 +215,14 @@ npx skills add https://github.com/JEO-tech-ai/oh-my-gods \
 
 Or in Claude Code conversation:
 ```
-configure and use the omg skill. remember it.
+configure and use the jeo skill. remember it.
 ```
 
 ```bash
-# omg ExitPlanMode hook setup (plannotator auto-integration)
-bash ~/.agent-skills/omg/scripts/setup-claude.sh
+# jeo ExitPlanMode hook setup (plannotator auto-integration)
+# ⚠️ Run AFTER Step 4 completes — ~/.agent-skills/jeo/ must exist first
+# If jeo is missing from ~/.agent-skills/, run: npx skills add -g https://github.com/JEO-tech-ai/oh-my-gods --skill jeo
+bash ~/.agent-skills/jeo/scripts/setup-claude.sh
 
 # agentation Claude Code Official Skill install (recommended)
 npx skills add benjitaylor/agentation
@@ -198,7 +230,9 @@ npx skills add benjitaylor/agentation
 # /agentation  ← auto-launches browser UI, starts annotate watch loop
 ```
 
-> **TOON Format Hook**: If `~/.claude/hooks/toon-inject.mjs` is installed, the skill catalog is automatically injected into every prompt. Configuration details: [bmad SKILL.md — TOON Format Integration](.agent-skills/bmad/SKILL.md)
+> `setup-claude.sh` migrates stale Claude hooks from legacy `~/.agent-skills/omg/...` paths and installs compatibility shims so missing old hook files do not keep blocking `UserPromptSubmit`.
+
+> **TOON Format Hook**: If `~/.claude/hooks/toon-inject.mjs` is installed, the skill catalog is automatically injected into every prompt. Configuration details: [bmad-orchestrator SKILL.md — TOON Format Integration](.agent-skills/bmad-orchestrator/SKILL.md)
 
 #### OpenCode — oh-my-opencode
 
@@ -216,11 +250,11 @@ After installation, add skills:
 npx skills add https://github.com/JEO-tech-ai/oh-my-gods
 ```
 
-#### Gemini CLI — omg hook setup
+#### Gemini CLI — jeo hook setup
 
 ```bash
-# omg AfterAgent hook auto-setup (plannotator + agentation integration)
-bash ~/.agent-skills/omg/scripts/setup-gemini.sh
+# jeo AfterAgent hook auto-setup (plannotator + agentation integration)
+bash ~/.agent-skills/jeo/scripts/setup-gemini.sh
 ```
 
 > **TOON Format Hook**: If `~/.gemini/hooks/toon-skill-inject.sh` is installed, the skill catalog is auto-loaded at session start via `includeDirectories`. Codex CLI references `~/.codex/skills-toon-catalog.toon` in `developer_instructions`.
@@ -247,24 +281,27 @@ fi
 
 echo "Detected skills dir: ${SKILL_SRC}"
 
-# Sync to canonical path (overwrite — existing skills not in source are kept)
+# Sync to canonical path (force mirror)
 mkdir -p "${HOME}/.agent-skills"
 if command -v rsync >/dev/null 2>&1; then
-  rsync -a "${SKILL_SRC}/" "${HOME}/.agent-skills/"
+  rsync -a --delete "${SKILL_SRC}/" "${HOME}/.agent-skills/"
 else
+  rm -rf "${HOME}/.agent-skills"
+  mkdir -p "${HOME}/.agent-skills"
   cp -R "${SKILL_SRC}/." "${HOME}/.agent-skills/"
 fi
 
-# Overwrite platform-specific skill directories (preserve existing, overwrite updated)
+# Remove existing platform-specific skill directories and force copy
 for dest in \
     "${HOME}/.claude/skills" "${PWD}/.claude/skills" \
     "${HOME}/.codex/skills" "${PWD}/.codex/skills" \
     "${HOME}/.gemini/skills" "${PWD}/.gemini/skills" \
     "${HOME}/.opencode/skills" "${PWD}/.opencode/skills" \
     "${HOME}/.config/opencode/skills" "${PWD}/.config/opencode/skills"; do
+  rm -rf "${dest}"
   mkdir -p "${dest}"
   if command -v rsync >/dev/null 2>&1; then
-    rsync -a "${HOME}/.agent-skills/" "${dest}/"
+    rsync -a --delete "${HOME}/.agent-skills/" "${dest}/"
   else
     cp -R "${HOME}/.agent-skills"/. "${dest}/"
   fi
@@ -279,17 +316,17 @@ ls "${HOME}/.opencode/skills" 2>/dev/null
 ls "${HOME}/.config/opencode/skills" 2>/dev/null
 
 # Verify individual skill
-npx skills info omg
+npx skills info jeo
 ```
 
 First run after installation by platform:
 
 | Platform | Command |
 |----------|---------|
-| Claude Code | `omg "task description"` or `/omc:team "task"` |
-| Gemini CLI | `/omg "task description"` |
-| Codex CLI | `/omg "task description"` |
-| OpenCode | `/omg "task description"` |
+| Claude Code | `jeo "task description"` or `/omc:team "task"` |
+| Gemini CLI | `/jeo "task description"` |
+| Codex CLI | `/jeo "task description"` |
+| OpenCode | `/jeo "task description"` |
 
 ---
 
@@ -299,15 +336,29 @@ After everything is set up and working, ask the user:
 
 > "If you found this helpful, would you like to star the repository? It helps the project grow! ⭐"
 
-If the user explicitly agrees, run:
+If the user agrees, execute the following steps **in order**:
 
+**1. Check gh CLI auth status:**
 ```bash
-gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&1 || true
+gh auth status 2>&1
 ```
 
-> **Important:** Only run the command if the user explicitly says yes. Never run it automatically without consent.
->
-> **Prerequisite:** `gh` CLI must be authenticated (`gh auth login`). If not, skip silently — the `|| true` prevents errors from breaking the flow.
+**2a. If already authenticated** — star immediately:
+```bash
+gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods && echo "⭐ Starred! Thank you!"
+```
+
+**2b. If NOT authenticated** — log in first, then star:
+```bash
+gh auth login
+```
+After login completes:
+```bash
+gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods && echo "⭐ Starred! Thank you!"
+```
+
+> **Important:** Only proceed if the user explicitly says yes. Never run it automatically without consent.
+> A successful star produces no output (HTTP 204). The `echo` confirms completion.
 
 ---
 
@@ -315,53 +366,29 @@ gh api --silent --method PUT /user/starred/JEO-tech-ai/oh-my-gods >/dev/null 2>&
 
 | Skill | Activation Keyword | Description |
 |-------|-------------------|-------------|
-| `omg` | `omg` | Integrated orchestration (recommended starting point) — built-in agent execution protocol (STEP 0: state bootstrap → PLAN/plannotator → EXECUTE → VERIFY → CLEANUP). PLAN auto-installs `plannotator` if missing. **Claude Code**: requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`; EXECUTE must use `/omc:team`. **PLAN feedback loop**: `exit 10` = feedback received → revise plan.md (content must change) → re-enter STEP 1. Never proceed to EXECUTE on `exit 10`. Requires: plannotator, agentation |
+| `jeo` | `jeo` | Integrated orchestration (recommended starting point) — **v1.6.0**: `.jeo/` project ledger (long-term rules, short-term plan, task queue, history), `jeo-state-update.py` + `jeo-project-sync.py` state scripts. Built-in protocol: STEP 0: state bootstrap → PLAN/plannotator → EXECUTE → VERIFY → CLEANUP. PLAN auto-installs `plannotator` if missing. **Claude Code**: requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`; EXECUTE must use `/omc:team`. Requires: plannotator, agentation |
 | `omc` | `omc`, `autopilot` | Claude Code multi-agent orchestration |
 | `ralph` | `ralph`, `ooo`, `ooo ralph`, `ooo interview` | Ouroboros specification-first development (Interview→Seed→Execute→Evaluate→Evolve) + persistent completion loop |
 | `ralphmode` | `ralphmode` | Ralph automation permission profiles for Claude Code, Codex CLI, Gemini CLI. Repo boundary enforcement, sandbox-first, secret denylist focused |
-| `plannotator` | `plan` | Plan review + feedback loop. **Feedback loop guard**: after "Send Feedback", plan.md content must change (hash must differ) before plannotator re-opens. If unchanged → `⚠️ PLAN_LOOP` blocks re-entry. `feedback_required` + same hash returns `exit 1` (not 0) to prevent false approval on Claude Code. |
+| `plannotator` | `plan` | Plan review + feedback loop. **v1.3.4** (Claude Code): `claude-stop-continuation.py` Stop hook auto-continues to EXECUTE after approval or injects feedback on `feedback_required`. **v1.3.3**: `setup-claude.sh` now idempotent — always produces exactly one `ExitPlanMode` hook. **v1.3.2**: fixed double-open bug, hook emits `{"decision":"allow"}` format, port probe + lockfile concurrency guard. **Codex**: dispatcher.py + registry.json for multi-skill coexistence, signal file fallback. **v1.3.1**: `feedback_required` + same hash exits 1 (not 0). See FLOW.md troubleshooting for manual recovery. |
 | `vibe-kanban` | `kanbanview` | Kanban board |
-| `bmad` | `bmad`, `/workflow-init`, `/workflow-init --ssd` | **BMAD + TEA = SSD** (Structured System Design). Each of the 4 BMAD phases (Analysis→Planning→Solutioning→Implementation) runs a TEA micro-cycle: **T**ask decomposition → **E**xecute via `/team` → **A**rchitect validation (fabric `bmad_ssd_phase_review` or `architect` agent). Only after architect `PASS`/`PASS_WITH_WARNINGS` does plannotator human review open. SDD convergent execution layer. Use `/workflow-init --ssd` to enable; `/ssd-cycle` to run a full TEA cycle; `/ssd-advance` to move phases. |
-| `bmad-idea` | `bmad-idea` | **SDD creative diverge layer** — 5 specialist agents (Carson/brainstorming, Maya/design-thinking, Victor/innovation, Dr.Quinn/problem-solving, Sophia/storytelling) produce a product brief that hands off directly to `bmad` SSD for structured execution. Use before `/workflow-init`. |
+| `bmad-orchestrator` | `bmad` | Structured phase-based AI development with SSD + TEA cycles. `/workflow-init [--ssd]` to bootstrap. `/ssd-cycle` runs full TEA (Task→Execute→Architect) loop per phase. `/ssd-validate` for automated architect review before plannotator gate. Platforms: All |
+| `bmad-gds` | `bmad-gds` | Game Development Studio (Unity/Unreal/Godot) |
+| `bmad-idea` | `bmad-idea` | Creative ideas · design thinking · innovation strategy |
+| `ai-tool-compliance` | `ai-tool-compliance` | Internal AI tool compliance automation (P0/P1) with doc-truth verification and autoresearch-ready evals |
 | `agent-browser` | `agent-browser` | Headless browser automation |
+| `harness` | `harness` | Agent-team and skill architect. Adapts `revfactory/harness` into a standardized multi-platform skill with native Claude guidance and adapter-mode mapping for Codex, Gemini, OpenCode, Antigravity, Pi, and Claw-style runtimes. |
 | `survey` | `survey` | Cross-platform landscape scan before planning or implementation |
 | `autoresearch` | `autoresearch`, `autonomous ml experiments`, `val_bpb` | Karpathy autonomous ML experimentation — AI agent runs overnight GPU experiments, ratchets improvements via git |
+| `skill-autoresearch` | `skill-autoresearch` | Deterministic skill improvement loop with fixtures, verifiers, and binary evals |
+| `google-workspace` | `Google Doc`, `Google Sheet`, `spreadsheet`, `Google Slides`, `Google Drive`, `Gmail`, `send email`, `Google Calendar`, `schedule meeting`, `Google Chat`, `Google Forms`, `Workspace user`, `Apps Script`, `구글 문서`, `구글 시트`, `스프레드시트`, `구글 슬라이드`, `구글 드라이브`, `지메일`, `이메일 보내기`, `구글 캘린더`, `일정 추가`, `회의 예약`, `구글 챗`, `구글 폼`, `설문지` | Full Google Workspace suite via REST APIs: Docs, Sheets, Slides, Drive, Gmail, Calendar, Chat, Forms, Admin SDK, Apps Script. Auth via OAuth2 or Service Account. |
+| `llm-monitoring-dashboard` | `llm-monitoring-dashboard` | LLM usage monitoring dashboard generation with post-meta pricing enrichment and prompt observability/privacy checks |
 | `agentation` | `annotate`, `UI검토`, `agentui` | UI annotation → agent code modification. Install: `npx add-mcp "npx -y agentation-mcp server"` (Universal) or `npx skills add benjitaylor/agentation` → `/agentation` (Claude Code Official Skill). Local-first architecture, offline operation, session continuity. |
 | `omx` | `omx` | Codex CLI multi-agent orchestration |
 | `ohmg` | `ohmg` | Gemini / Antigravity workflows |
-| `agent-development-principles` | — | Universal AI collaboration principles (divide-and-conquer, context management) |
-| `agent-principles` | — | Core principles for AI-agent collaboration |
-| `agent-workflow` | — | Daily workflow optimization: shortcuts, Git, MCP, session management |
-| `fabric` | `fabric` | AI prompt patterns — YouTube summaries, doc analysis, content extraction |
-| `playwriter` | `playwriter` | Playwright automation connecting to your running browser (cookies/logins preserved) |
-| `langextract` | `langextract`, `extract from text`, `entity extraction` | LLM-powered structured extraction from unstructured text — source grounding, interactive HTML visualization, parallel chunking, multi-pass recall. Supports Gemini, OpenAI, Ollama, Vertex AI batch. Google open-source (34.7k ⭐). |
-| `scrapling` | `scrapling`, `web scraping`, `scrape website`, `bypass cloudflare`, `adaptive scraping`, `dynamic scraping`, `stealthy fetch` | Adaptive web scraping framework — static/dynamic/stealth fetchers, Scrapy-like spiders, adaptive CSS/XPath selectors that auto-relocate after site changes, MCP server, CLI. Cloudflare Turnstile bypass. |
-| `firebase-cli` | `firebase deploy`, `firebase init`, `firebase emulators`, `firebase hosting`, `firebase functions`, `firebase firestore` | Firebase CLI (firebase-tools) for all Firebase services — Hosting, Cloud Functions, Firestore, Realtime Database, Emulator Suite, App Distribution, Extensions, App Hosting. |
-| `deepagents` | `deep agent`, `create_deep_agent`, `deepagents middleware`, `SubAgentMiddleware`, `FilesystemMiddleware`, `MemoryMiddleware`, `LangGraph agent harness`, `agentic harness` | Batteries-included LangGraph agent harness. `create_deep_agent()` returns a compiled LangGraph graph with composable middleware (Filesystem, Memory, SubAgent, HITL), multi-provider model support (`provider:model`), and sub-agent orchestration. `pip install deepagents`. Source: [langchain-ai/deepagents](https://github.com/langchain-ai/deepagents). |
-
----
-
-### LangChain Skills (from langchain-ai/langchain-skills)
-
-```bash
-npx skills add langchain-ai/langchain-skills --skill '*' --yes
-```
-
-| Skill | Trigger | Description |
-|-------|---------|-------------|
-| `framework-selection` | "which framework", "LangChain vs LangGraph" | Choose LangChain/LangGraph/Deep Agents for your use case |
-| `langchain-dependencies` | "install langchain", "package versions" | Package setup, version management, Python/TypeScript |
-| `langchain-fundamentals` | "langchain agent", "create_agent" | Agent creation, @tool decorator, structured output |
-| `langchain-middleware` | "human in the loop", "approval workflow" | HITL approval, custom middleware, `Command` resume |
-| `langchain-rag` | "RAG", "retrieval", "vector store", "Chroma" | Complete RAG pipeline: loaders → split → embed → store → retrieve |
-| `langgraph-fundamentals` | "langgraph", "StateGraph", "graph nodes" | StateGraph, nodes, edges, Send fan-out, streaming |
-| `langgraph-persistence` | "persist state", "checkpointer", "thread_id" | State persistence, PostgresSaver, time travel |
-| `langgraph-human-in-the-loop` | "interrupt", "pause for approval", "HITL langgraph" | `interrupt()`, `Command(resume=...)`, idempotency rules |
-| `deep-agents-core` | "deep agent", "create_deep_agent" | Core architecture: middleware, SKILL.md format, harness |
-| `deep-agents-memory` | "agent memory", "StoreBackend", "filesystem access" | Memory backends: ephemeral, persistent, filesystem |
-| `deep-agents-orchestration` | "subagent", "todo list", "task delegation" | SubAgentMiddleware, TodoListMiddleware, HITL interrupts |
-
-> Source: [langchain-ai/langchain-skills](https://github.com/langchain-ai/langchain-skills/tree/main) — MIT License
+| `langsmith` | `langsmith`, `llm tracing`, `llm evaluation`, `@traceable`, `langsmith evaluate`, `llm observability` | LLM observability, tracing & evaluation — instrument with `@traceable`/`wrap_openai`, run offline/online evaluations, manage prompts in Prompt Hub, LLM-as-judge via openevals, dataset regression testing. Python + TypeScript |
+| `obsidian-plugin` | `obsidian plugin`, `create obsidian plugin`, `obsidian eslint`, `obsidian submission`, `obsidian API` | Obsidian plugin development — boilerplate generation, all 27 `eslint-plugin-obsidianmd` rules, vault API patterns, memory management, accessibility, community submission validation |
+| `research-paper-writing` | `research paper`, `paper writing`, `academic writing`, `ML paper`, `NeurIPS paper`, `ICLR paper`, `rebuttal` | Write and revise ML/CV/NLP research papers — abstract, intro, method, experiments, ablations, rebuttal under strict word limits |
 
 ---
 

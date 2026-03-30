@@ -1,4 +1,4 @@
-N:bmad
+N:bmad-orchestrator
 D:Orchestrates BMAD Method workflows (Analysis → Planning → Solutioning → Implementation). Detects project state, routes to the right phase command, and uses plannotator as a phase gate review tool to approve deliverables before phase transitions.
 G:bmad orchestrator workflow planning phase-gate plannotator review implementation
 

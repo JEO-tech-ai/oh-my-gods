@@ -384,6 +384,11 @@ plan = open(sys.argv[1]).read()
 sys.stdout.write(json.dumps({'tool_input': {'plan': plan, 'permission_mode': 'acceptEdits'}}))
 " "$PLAN_FILE" > "$PLAN_JSON_FILE"
 
+  # Write the Gemini AfterAgent lock file so the safety-net hook knows plannotator
+  # was launched directly by the agent and should not be double-launched.
+  # Includes SESSION_KEY (project hash) so concurrent projects don't share the file.
+  touch "${_TMPDIR:-${TMPDIR:-/tmp}}/omg-plannotator-direct-${SESSION_KEY}.lock"
+
   # Launch plannotator with the dedicated port so we can monitor its binding state.
   PORT="$PLANNOTATOR_PORT" env HOME="$RUNTIME_HOME" PLANNOTATOR_HOME="$RUNTIME_HOME" \
     plannotator < "$PLAN_JSON_FILE" > "$FEEDBACK_FILE" 2>&1 &
